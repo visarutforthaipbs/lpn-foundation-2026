@@ -50,6 +50,12 @@ export default buildConfig({
       // Use the Neon *pooled* connection string in production (host ends in
       // `-pooler`) — serverless functions exhaust unpooled connections.
       connectionString: process.env.DATABASE_URL || '',
+      // Keep-alive + generous timeouts so Neon's cold-start and idle behaviour
+      // don't drop the socket mid-operation (ETIMEDOUT).
+      keepAlive: true,
+      max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 30000,
     },
   }),
   sharp,

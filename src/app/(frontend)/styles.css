@@ -24,8 +24,8 @@
   --color-sand: #ffffff;
 
   --font-sans:
-    'Noto Sans Thai', 'Sarabun', 'Prompt', 'IBM Plex Sans Thai', ui-sans-serif, system-ui,
-    -apple-system, 'Segoe UI', sans-serif;
+    var(--font-latin), var(--font-thai), 'Noto Sans Thai', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', sans-serif;
 }
 
 html {
@@ -38,9 +38,90 @@ body {
   font-family: var(--font-sans);
 }
 
-img {
-  max-width: 100%;
-  height: auto;
+/*
+ * Thai typography: Thai is a complex script on a connected baseline, so Latin-style
+ * letter-spacing pries glyphs apart and tone marks need a little extra leading.
+ * Kept unlayered so it overrides Tailwind `tracking-*` utilities on Thai pages only.
+ */
+:lang(th) {
+  letter-spacing: normal;
+  line-height: 1.4;
+}
+
+:lang(th) h1,
+:lang(th) h2,
+:lang(th) h3 {
+  line-height: 1.25;
+}
+
+@layer base {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/*
+ * Glassmorphism system (medium intensity) — reusable frosted surfaces that keep the
+ * high-contrast documentary brand while adding translucent depth. Apply these classes
+ * instead of hand-tuning backdrop-blur per element.
+ */
+@layer components {
+  /* Sticky shell bar — frosted dark glass over scrolling content. */
+  .glass-bar {
+    background: color-mix(in srgb, #000 62%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Frosted dark card for use on black / dark spotlight sections. */
+  .glass-dark {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px) saturate(135%);
+    -webkit-backdrop-filter: blur(12px) saturate(135%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 8px 32px rgba(0, 0, 0, 0.25);
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .glass-dark:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+
+  /* Frosted light card for use on white / light sections. */
+  .glass-light {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px) saturate(135%);
+    -webkit-backdrop-filter: blur(12px) saturate(135%);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .glass-light:hover {
+    background: rgba(255, 255, 255, 0.72);
+    border-color: rgba(0, 0, 0, 0.18);
+  }
+
+  /* Frosted tag / pill that floats over hero imagery (eyebrows, stat chips). */
+  .glass-tag {
+    background: color-mix(in srgb, #000 35%, transparent);
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    border: 1px solid rgba(255, 212, 59, 0.55);
+  }
+
+  /* Tinted yellow glass for accent surfaces (e.g. CTA chips on dark). */
+  .glass-yellow {
+    background: color-mix(in srgb, #ffd43b 22%, transparent);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    border: 1px solid rgba(255, 212, 59, 0.45);
+  }
 }
 
 /* Base styling for rendered rich text (Lexical) content */

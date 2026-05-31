@@ -21,7 +21,17 @@ export async function generateMetadata(props: {
 }
 
 // Reserved by their own route folders — never resolve them as a generic page.
-const RESERVED = new Set(['home', 'blog', 'post'])
+const RESERVED = new Set([
+  'home',
+  'blog',
+  'post',
+  'services',
+  'about',
+  'team',
+  'projects',
+  'contact',
+  'donate',
+])
 
 export async function generateStaticParams() {
   const slugs = (await getAllPageSlugs()).filter((s) => !RESERVED.has(s))
