@@ -1,0 +1,70 @@
+@import 'tailwindcss';
+
+/* LPN Foundation brand theme tuned to the live site's black/white documentary look. */
+@theme {
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-brand-yellow: #ffd43b;
+
+  --color-brand-50: #ffffff;
+  --color-brand-100: #ffffff;
+  --color-brand-200: #000000;
+  --color-brand-300: #000000;
+  --color-brand-400: #000000;
+  --color-brand-500: #000000;
+  --color-brand-600: #000000;
+  --color-brand-700: #000000;
+  --color-brand-800: #000000;
+  --color-brand-900: #000000;
+
+  --color-accent-400: #ffd43b;
+  --color-accent-500: #ffd43b;
+  --color-accent-600: #ffd43b;
+
+  --color-sand: #ffffff;
+
+  --font-sans:
+    'Noto Sans Thai', 'Sarabun', 'Prompt', 'IBM Plex Sans Thai', ui-sans-serif, system-ui,
+    -apple-system, 'Segoe UI', sans-serif;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--color-white);
+  color: var(--color-black);
+  font-family: var(--font-sans);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Base styling for rendered rich text (Lexical) content */
+.prose-lpn :where(h2) {
+  @apply mt-10 mb-4 text-2xl font-bold text-black;
+}
+.prose-lpn :where(h3) {
+  @apply mt-8 mb-3 text-xl font-semibold text-black;
+}
+.prose-lpn :where(p) {
+  @apply my-4 leading-relaxed;
+}
+.prose-lpn :where(a) {
+  @apply text-black underline underline-offset-2 hover:text-brand-yellow;
+}
+.prose-lpn :where(ul) {
+  @apply my-4 list-disc pl-6;
+}
+.prose-lpn :where(ol) {
+  @apply my-4 list-decimal pl-6;
+}
+.prose-lpn :where(blockquote) {
+  @apply my-6 border-l-4 border-brand-yellow pl-4 italic text-black;
+}
+.prose-lpn :where(img) {
+  @apply my-6 rounded-lg;
+}

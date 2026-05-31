@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "about": "About Us",
+    "ghostFleet": "Ghost Fleet",
+    "team": "Team",
+    "services": "Services",
+    "projects": "Projects",
+    "blog": "Blog",
+    "news": "News",
+    "contact": "Contact Us",
+    "donate": "Donate"
+  },
+  "home": {
+    "title": "We are modern-day abolitionists, working to end slavery at sea.",
+    "subtitle": "The Labour Rights Promotion Network (LPN) Foundation has protected migrant workers and rescued victims of human trafficking and forced labour for over 15 years.",
+    "ctaDonate": "Support our work",
+    "ctaLearn": "Learn more",
+    "adminNote": "This is the new headless site. Manage content in the admin panel:",
+    "adminLink": "Open admin panel"
+  },
+  "common": {
+    "readMore": "Read more",
+    "languageEnglish": "English",
+    "languageThai": "ไทย"
+  }
+}
