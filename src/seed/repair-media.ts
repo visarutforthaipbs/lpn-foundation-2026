@@ -102,6 +102,12 @@ async function main() {
     const doc = mediaToRepair[i]
     const index = i + 1
 
+    if (!doc.filename) {
+      console.log(`[${index}/${mediaToRepair.length}] Skipping invalid media without filename: ID=${doc.id}`)
+      failedCount++
+      continue
+    }
+
     if (progressList.includes(doc.id)) {
       console.log(`[${index}/${mediaToRepair.length}] Skipping already repaired: ID=${doc.id}, Filename=${doc.filename}`)
       skippedCount++
