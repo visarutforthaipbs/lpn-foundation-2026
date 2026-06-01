@@ -52,6 +52,14 @@ export async function getPosts(locale: Locale, opts: { categorySlug?: string; li
     limit: opts.limit ?? 100,
     sort: '-publishedAt',
     where: { and },
+    select: {
+      title: true,
+      slug: true,
+      excerpt: true,
+      publishedAt: true,
+      category: true,
+      coverImage: true,
+    },
   })
 }
 
