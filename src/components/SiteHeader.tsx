@@ -26,9 +26,9 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
     footer?.hotlines?.[0]
 
   return (
-    <header className="sticky top-0 z-50 text-white">
+    <header className="sticky top-0 z-50 bg-black text-white">
       {/* Top utility strip — emergency hotline + locale */}
-      <div className="glass-bar border-b">
+      <div className="border-b border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em]">
           {primaryHotline ? (
             <a
@@ -49,7 +49,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
       </div>
 
       {/* Main bar */}
-      <div className="glass-bar border-b">
+      <div className="border-b border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4">
           <Link href="/" className="group flex items-center gap-3">
             <img

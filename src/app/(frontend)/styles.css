@@ -24,8 +24,12 @@
   --color-sand: #ffffff;
 
   --font-sans:
-    var(--font-latin), var(--font-thai), 'Noto Sans Thai', ui-sans-serif, system-ui, -apple-system,
-    'Segoe UI', sans-serif;
+    var(--font-latin), var(--font-thai), 'DB Helvethaica X', ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
+
+  --font-heading:
+    var(--font-latin), var(--font-thai), 'DB Helvethaica X', ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
 }
 
 html {
@@ -38,20 +42,32 @@ body {
   font-family: var(--font-sans);
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+button, nav a, .font-heading {
+  font-family: var(--font-heading);
+}
+
 /*
  * Thai typography: Thai is a complex script on a connected baseline, so Latin-style
  * letter-spacing pries glyphs apart and tone marks need a little extra leading.
  * Kept unlayered so it overrides Tailwind `tracking-*` utilities on Thai pages only.
  */
 :lang(th) {
-  letter-spacing: normal;
-  line-height: 1.4;
+  letter-spacing: normal !important;
+  line-height: 1.7; /* Comfortable reading height for Thai body text */
 }
 
 :lang(th) h1,
 :lang(th) h2,
-:lang(th) h3 {
-  line-height: 1.25;
+:lang(th) h3,
+:lang(th) h4,
+:lang(th) h5,
+:lang(th) h6 {
+  line-height: 1.4; /* Perfect height to prevent tone-mark clipping in headings */
+  letter-spacing: normal !important;
 }
 
 @layer base {

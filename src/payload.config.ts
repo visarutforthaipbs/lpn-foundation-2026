@@ -54,8 +54,8 @@ export default buildConfig({
       // don't drop the socket mid-operation (ETIMEDOUT).
       keepAlive: true,
       max: 10,
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 30000,
+      idleTimeoutMillis: 180000,
+      connectionTimeoutMillis: 180000,
     },
   }),
   sharp,

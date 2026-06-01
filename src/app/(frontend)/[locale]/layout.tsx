@@ -1,6 +1,7 @@
 import React from 'react'
 import { notFound } from 'next/navigation'
-import { Noto_Sans, Noto_Sans_Thai } from 'next/font/google'
+import localFont from 'next/font/local'
+import { IBM_Plex_Sans } from 'next/font/google'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { routing, type Locale } from '@/i18n/routing'
@@ -10,18 +11,33 @@ import '../styles.css'
 
 import { SITE_URL } from '@/lib/seo'
 
-// Latin — neutral grotesque that anchors the documentary, high-contrast look.
-const notoSans = Noto_Sans({
+// Latin — clean geometric sans-serif that anchors the documentary, high-contrast look.
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-latin',
   display: 'swap',
 })
 
-// Thai — designed to harmonize with Noto Sans; full weight range incl. 900.
-const notoSansThai = Noto_Sans_Thai({
-  subsets: ['thai'],
-  weight: ['400', '500', '600', '700', '800', '900'],
+// Thai — Premium DB Helvethaica X local font with Regular, Medium, and Bold weights
+const dbHelvethaicaX = localFont({
+  src: [
+    {
+      path: '../../../../public/fonts/dbhelvethaicax-webfont.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../../../public/fonts/dbhelvethaicaxmed-webfont.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../../../public/fonts/dbhelvethaicaxbd-webfont.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: '--font-thai',
   display: 'swap',
 })
@@ -57,7 +73,7 @@ export default async function LocaleLayout(props: {
   const messages = await getMessages()
 
   return (
-    <html lang={locale} className={`${notoSans.variable} ${notoSansThai.variable}`}>
+    <html lang={locale} className={`${ibmPlexSans.variable} ${dbHelvethaicaX.variable}`}>
       <body>
         <NextIntlClientProvider messages={messages}>
           <div className="flex min-h-screen flex-col">

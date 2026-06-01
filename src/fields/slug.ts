@@ -1,7 +1,7 @@
 import type { Field } from 'payload'
 
-export const formatSlug = (val: string): string =>
-  val
+export const formatSlug = (val: string): string => {
+  const formatted = val
     .toLowerCase()
     .trim()
     // Keep Unicode letters/numbers/marks (Thai vowel & tone marks are \p{M}, so
@@ -9,6 +9,10 @@ export const formatSlug = (val: string): string =>
     .replace(/[^\p{L}\p{N}\p{M}\s-]/gu, '')
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '')
+
+  // Truncate to a safe length (24 chars) to prevent ENAMETOOLONG during static folder creation on Vercel
+  return formatted.slice(0, 24).replace(/-+$/, '')
+}
 
 /**
  * Reusable, non-localized slug field. A single canonical slug per document keeps

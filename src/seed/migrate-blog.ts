@@ -59,14 +59,25 @@ async function main() {
 
   const uploadImage = async (wixId: string, alt: string): Promise<number | undefined> => {
     if (mediaCache.has(wixId)) return mediaCache.get(wixId)
+    const filename = `${wixId.replace(/[^\w.]/g, '_')}`
     try {
+      const existing = await payload.find({
+        collection: 'media',
+        where: { filename: { equals: filename } },
+        limit: 1,
+      })
+      if (existing.docs[0]) {
+        mediaCache.set(wixId, existing.docs[0].id)
+        return existing.docs[0].id
+      }
+
       const res = await fetch(wixImageUrl(wixId))
       const buf = Buffer.from(await res.arrayBuffer())
       const ext = wixId.split('.').pop()?.split('~')[0] || 'jpg'
       const media = await payload.create({
         collection: 'media',
         data: { alt: alt || 'LPN Foundation' },
-        file: { data: buf, mimetype: `image/${ext === 'png' ? 'png' : 'jpeg'}`, name: `${wixId.replace(/[^\w.]/g, '_')}`, size: buf.length },
+        file: { data: buf, mimetype: `image/${ext === 'png' ? 'png' : 'jpeg'}`, name: filename, size: buf.length },
       })
       mediaCache.set(wixId, media.id)
       return media.id
@@ -108,8 +119,15 @@ async function main() {
   let ok = 0
   for (const summary of posts) {
     const locale = (summary.language === 'th' ? 'th' : 'en') as 'en' | 'th'
-    const slug = summary.slug
+    const slug = formatSlug(summary.slug)
     try {
+      const existing = await payload.find({ collection: 'posts', where: { slug: { equals: slug } }, limit: 1 })
+      if (existing.docs[0]) {
+        ok++
+        payload.logger.info(`[${ok}/${posts.length}] Skipping existing post: ${slug}`)
+        continue
+      }
+
       const detail = await wix(`/posts/${summary.id}?fieldsToInclude=RICH_CONTENT`)
       const post = detail.post || detail
 
@@ -134,12 +152,7 @@ async function main() {
         _status: 'published' as const,
       }
 
-      const existing = await payload.find({ collection: 'posts', where: { slug: { equals: slug } }, limit: 1 })
-      if (existing.docs[0]) {
-        await payload.update({ collection: 'posts', id: existing.docs[0].id, locale, data })
-      } else {
-        await payload.create({ collection: 'posts', locale, data })
-      }
+      await payload.create({ collection: 'posts', locale, data })
       ok++
       payload.logger.info(`[${ok}/${posts.length}] ${locale} ${slug.slice(0, 50)}`)
     } catch (e) {
