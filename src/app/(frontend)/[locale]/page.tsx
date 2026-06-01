@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
+import Image from 'next/image'
 
 export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
@@ -94,11 +95,14 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     <>
       {/* Stark Full-Bleed Documentary Hero Section */}
       <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-black text-white py-20">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: 'url(/images/trawler-hero.jpg)',
-          }}
+        <Image
+          src="/images/trawler-hero.jpg"
+          alt="Fishing trawler hero background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+          {...({ fetchPriority: 'high' } as any)}
         />
         {/* Cinematic gradient overlays to enforce stark drama and contrast */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.9)_80%)]" />
@@ -161,7 +165,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       </section>
 
       {/* Focus Pillars Section */}
-      <section className="bg-white py-20 text-black border-t border-black">
+      <section className="bg-white py-20 text-black border-t border-black contain-pillars">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-3xl">
@@ -205,7 +209,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       </section>
 
       {/* Rescued Worker Testimony (Layer 3 - Conscious Deep-Dive / The Breath Rule) */}
-      <section className="bg-black py-24 text-white border-y border-white/10">
+      <section className="bg-black py-24 text-white border-y border-white/10 contain-testimony">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <div className="relative inline-block py-12 px-8 border-t border-b border-brand-yellow/40">
             <span className="absolute left-0 top-0 w-4 h-full border-l-2 border-brand-yellow"></span>
@@ -225,7 +229,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       </section>
 
       {/* Emergency Hotline Center (Action Focus) */}
-      <section className="bg-white py-20 text-black border-b border-black">
+      <section className="bg-white py-20 text-black border-b border-black contain-hotline">
         <div className="mx-auto max-w-7xl px-4">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="inline-block rounded bg-brand-yellow px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-black">

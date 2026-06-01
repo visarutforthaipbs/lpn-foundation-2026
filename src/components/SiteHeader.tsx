@@ -1,7 +1,11 @@
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getHeader, getFooter } from '@/lib/api'
-import { LocaleSwitcher } from './LocaleSwitcher'
+import dynamic from 'next/dynamic'
+
+const LocaleSwitcher = dynamic(() => import('./LocaleSwitcher').then((mod) => mod.LocaleSwitcher), {
+  loading: () => <span className="text-white/55 font-semibold text-[10px]">...</span>,
+})
 
 export async function SiteHeader({ locale }: { locale: Locale }) {
   const [header, footer] = await Promise.all([getHeader(locale), getFooter(locale)])

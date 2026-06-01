@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getPosts, getCategories } from '@/lib/api'
 import { MediaImage } from '@/components/MediaImage'
+import Image from 'next/image'
 
 export default async function BlogIndex(props: {
   params: Promise<{ locale: Locale }>
@@ -29,9 +30,14 @@ export default async function BlogIndex(props: {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-white/10 bg-black text-white">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{ backgroundImage: 'url(/images/trawler-hero.jpg)' }}
+        <Image
+          src="/images/trawler-hero.jpg"
+          alt="Fishing trawler hero background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-20"
+          {...({ fetchPriority: 'high' } as any)}
         />
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-black/30" />
         <div className="relative mx-auto max-w-7xl px-4 py-20 md:py-28">

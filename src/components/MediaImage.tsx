@@ -26,6 +26,7 @@ export function MediaImage({
       className={className}
       sizes={sizes}
       priority={priority}
+      {...(priority ? { fetchPriority: 'high' } as any : {})}
     />
   )
 }

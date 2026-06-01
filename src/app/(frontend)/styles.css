@@ -165,3 +165,28 @@ button, nav a, .font-heading {
 .prose-lpn :where(img) {
   @apply my-6 rounded-lg;
 }
+
+/*
+ * CSS Rendering Containment:
+ * Speeds up page rendering by skipping layout and paint for offscreen/below-the-fold components
+ * while utilizing contain-intrinsic-size to prevent layout shift (CLS).
+ */
+.contain-pillars {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 550px;
+}
+
+.contain-testimony {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 350px;
+}
+
+.contain-hotline {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+.contain-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}

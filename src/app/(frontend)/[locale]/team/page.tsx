@@ -5,6 +5,7 @@ import { routing } from '@/i18n/routing'
 import { getPage, getTeam } from '@/lib/api'
 import { MediaImage } from '@/components/MediaImage'
 import { buildMetadata } from '@/lib/seo'
+import Image from 'next/image'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -88,9 +89,14 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
     <>
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-white/10 bg-black text-white">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-25"
-          style={{ backgroundImage: 'url(/images/trawler-hero.jpg)' }}
+        <Image
+          src="/images/trawler-hero.jpg"
+          alt="Fishing trawler hero background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-25"
+          {...({ fetchPriority: 'high' } as any)}
         />
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-black/30" />
         <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-32">

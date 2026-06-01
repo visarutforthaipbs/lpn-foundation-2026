@@ -25,7 +25,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
       ]
 
   return (
-    <footer className="mt-20 bg-black text-white">
+    <footer className="mt-20 bg-black text-white contain-footer">
       {/* Emergency hotline strip */}
       {footer?.hotlines?.length ? (
         <div className="border-y border-brand-yellow/40 bg-brand-yellow text-black">
