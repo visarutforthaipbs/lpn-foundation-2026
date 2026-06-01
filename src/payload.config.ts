@@ -66,6 +66,7 @@ export default buildConfig({
       enabled: Boolean(blobToken),
       collections: { media: true },
       token: blobToken || '',
+      addRandomSuffix: true,
     }),
   ],
 })

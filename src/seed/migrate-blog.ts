@@ -10,7 +10,7 @@
  * Rich content (Ricos) is converted to Lexical; images upload to Payload media.
  * Idempotent: matched by slug.
  */
-import 'dotenv/config'
+import './loadenv'
 import { getPayload, type Payload } from 'payload'
 import config from '../payload.config'
 import { ricosToLexical } from './ricos'

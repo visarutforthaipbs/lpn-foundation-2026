@@ -7,7 +7,7 @@
  * Idempotent: categories matched by slug, pages by slug, globals overwritten.
  * Content is seeded in English; Thai falls back to English until translated in the admin.
  */
-import 'dotenv/config'
+import './loadenv'
 import { getPayload } from 'payload'
 import config from '../payload.config'
 import { lexical, para, heading, bulletList } from './lexical'
