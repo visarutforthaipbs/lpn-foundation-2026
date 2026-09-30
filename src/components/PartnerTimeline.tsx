@@ -30,7 +30,7 @@ export function PartnerTimeline({ locale, projects }: { locale: Locale; projects
         ))}
       </div>
 
-      <p className="mt-5 text-sm text-black/60" aria-live="polite">
+      <p className="mt-5 text-sm text-black/75" aria-live="polite">
         {isThai ? `แสดง ${visible.length} โครงการที่เคยร่วมงาน${year ? ` ในปี ${year + 543}` : ''}` : `Showing ${visible.length} past collaborations${year ? ` active in ${year}` : ''}`}
       </p>
       <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -39,7 +39,7 @@ export function PartnerTimeline({ locale, projects }: { locale: Locale; projects
             <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <span className="t-label text-black/55">{isThai ? project.start + 543 : project.start}–{isThai ? project.end + 543 : project.end}</span>
+                  <span className="t-label text-black/70">{isThai ? project.start + 543 : project.start}–{isThai ? project.end + 543 : project.end}</span>
                   <h3 className="t-h3 mt-2">{project.name}</h3>
                   <p className="mt-2 text-sm text-black/70">{project.focus}</p>
                 </div>

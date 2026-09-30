@@ -9,18 +9,22 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
   const navLinks = isThai
     ? [
+        { label: 'ขอความช่วยเหลือ', href: '/get-help' },
+        { label: 'รู้สิทธิ ติดกระเป๋า', href: 'https://www.lpnrightguide.site/' },
+        { label: 'งานของเรา', href: '/our-work' },
+        { label: 'ผลการทำงานและรายงาน', href: '/impact' },
         { label: 'เกี่ยวกับเรา', href: '/about' },
-        { label: 'บริการ', href: '/services' },
-        { label: 'โครงการ', href: '/projects' },
-        { label: 'ทีม', href: '/team' },
+        { label: 'ข่าวสาร', href: '/blog' },
         { label: 'ติดต่อ', href: '/contact' },
         { label: 'บริจาค', href: '/donate' },
       ]
     : [
+        { label: 'Get Help', href: '/get-help' },
+        { label: 'Rights Guide', href: 'https://www.lpnrightguide.site/' },
+        { label: 'Our Work', href: '/our-work' },
+        { label: 'Impact & Reports', href: '/impact' },
         { label: 'About', href: '/about' },
-        { label: 'Services', href: '/services' },
-        { label: 'Projects', href: '/projects' },
-        { label: 'Team', href: '/team' },
+        { label: 'News', href: '/blog' },
         { label: 'Contact', href: '/contact' },
         { label: 'Donate', href: '/donate' },
       ]
@@ -37,7 +41,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
             </div>
             <p className="mt-2 text-sm leading-relaxed text-black/75">
               {isThai
-                ? 'แจ้งความคดี ขอความช่วยเหลือ ขอข้อมูลแรงงาน กฎหมายหรือขั้นตอนการลงทะเบียนของทางราชการ โปรดติดต่อโดยตรง เสามารติดต่อเราโดยตรงได้ทั้ง ไทย เขมร ลาว และ พม่า'
+                ? 'แจ้งปัญหา ขอความช่วยเหลือ หรือสอบถามข้อมูลกฎหมายแรงงานและการลงทะเบียน โปรดติดต่อ LPN โดยตรงตามหมายเลขภาษาที่ต้องการ'
                 : 'To report a case, request assistance, get information on labor laws or government registration process, get in touch directly. We speak Thai, Khmer, Lao & Burmese.'}
             </p>
             <a
@@ -86,8 +90,8 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
             />
             <p className="mt-5 max-w-md text-sm leading-relaxed text-white/65">
               {isThai
-                ? 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน — ทำงานเพื่อยุติการค้ามนุษย์และแรงงานบังคับมากว่า 15 ปี'
-                : 'Labour Rights Promotion Network Foundation — ending human trafficking and forced labour for over 15 years.'}
+                ? 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน — เคียงข้างแรงงานข้ามชาติและครอบครัว เพื่อการช่วยเหลือในวันนี้และระบบที่ปลอดภัยขึ้นในระยะยาว'
+                : 'Labour Rights Promotion Network Foundation — helping migrant workers and families access protection today and build safer systems for tomorrow.'}
             </p>
             <Link
               href="/donate"
@@ -103,12 +107,11 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
             <ul className="mt-5 grid gap-2.5 text-sm">
               {navLinks.map((l) => (
                 <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow"
-                  >
-                    {l.label}
-                  </Link>
+                  {l.href.startsWith('https://') ? (
+                    <a href={l.href} className="inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow">{l.label}</a>
+                  ) : (
+                    <Link href={l.href} className="inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow">{l.label}</Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -158,11 +161,11 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
       {/* Bottom bar */}
       <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 md:flex-row md:items-center md:justify-between">
-        <span className="t-label text-white/45">
+        <span className="t-label text-white/70">
           © {new Date().getFullYear()}{' '}
           {isThai ? OFFICE.nameTh : OFFICE.nameEn}
         </span>
-        <span className="t-label text-white/45">
+        <span className="t-label text-white/70">
           {isThai ? 'ปทุมธานี · ประเทศไทย' : 'Pathum Thani · Thailand'}
         </span>
       </div>

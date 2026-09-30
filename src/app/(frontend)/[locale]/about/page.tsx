@@ -1,9 +1,10 @@
 import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
-import { getPage } from '@/lib/api'
+import { getPage, getMediaByIds } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
 import { aboutEn, aboutTh, type AboutCopy } from '@/content/about'
+import { MediaImage } from '@/components/MediaImage'
 import {
   Container,
   Section,
@@ -36,18 +37,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
   setRequestLocale(locale)
   const isThai = locale === 'th'
   const copy: AboutCopy = isThai ? aboutTh : aboutEn
-
-  const stats = isThai
-    ? [
-        { value: '5,000+', label: 'แรงงานไทย-ข้ามชาติที่เราช่วยเหลือ' },
-        { value: '2,000+', label: 'ชาวประมงที่ได้รับการช่วยเหลือจากอินโดนีเซีย' },
-        { value: '20+', label: 'ปีของการเคลื่อนไหวเพื่อสิทธิแรงงาน' },
-      ]
-    : [
-        { value: '5,000+', label: 'Thai & migrant workers assisted' },
-        { value: '2,000+', label: 'fishers rescued from Indonesia' },
-        { value: '20+', label: 'years of labour-rights organising' },
-      ]
+  const mediaMap = await getMediaByIds([253, 254])
 
   const leaders = isThai
     ? [
@@ -56,12 +46,14 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
           role: 'ผู้อำนวยการ และผู้ร่วมก่อตั้ง',
           quote: '"เป้าหมายของฉันคือการช่วยชีวิตคน"',
           body: 'หนึ่งในผู้นำการต่อสู้เพื่อยุติการบังคับใช้แรงงานบนเรือประมงในเอเชียตะวันออกเฉียงใต้ ผู้ได้รับการเสนอชื่อชิงรางวัลโนเบลสาขาสันติภาพในปี 2017 และเป็นแกนหลักในการกู้ภัยชาวประมงที่ถูกค้ามนุษย์ไปยังอินโดนีเซีย — เรื่องราวที่ถูกถ่ายทอดในสารคดี Ghost Fleet',
+          media: mediaMap[253],
         },
         {
           name: 'Sompong Srakaew',
           role: 'ผู้ร่วมก่อตั้ง และที่ปรึกษานโยบาย',
           quote: '"งานนี้คือชีวิตของผม"',
           body: 'นักสังคมสงเคราะห์ที่ก่อตั้ง LPN ในปี 2547 หลังจากนำการบุกค้นช่วยเหลือแรงงานเมียนมาจากโรงงานแปรรูปกุ้ง ผลักดันให้เกิดการแก้ไขพระราชบัญญัติป้องกันและปราบปรามการค้ามนุษย์ในปี 2551 และยังคงให้คำปรึกษานโยบายเพื่อยุติการเป็นทาสยุคใหม่',
+          media: mediaMap[254],
         },
       ]
     : [
@@ -70,12 +62,14 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
           role: 'Director & Co-founder',
           quote: '"My goal is to save lives."',
           body: 'A leading figure in the fight to end slavery aboard fishing vessels across Southeast Asia. 2017 Nobel Peace Prize nominee. She led LPN’s rescue operations — work documented in the award-winning film "Ghost Fleet" — freeing over 2,000 fishers trafficked to Indonesia.',
+          media: mediaMap[253],
         },
         {
           name: 'Sompong Srakaew',
           role: 'Co-founder & Policy Advisor',
           quote: '"This work is my life."',
           body: 'A social worker who founded LPN in 2004 after leading a raid that freed 66 Myanmar workers from a shrimp-processing shed. His evidence work drove the 2008 amendment of the Anti-Trafficking in Persons Act and continues to shape Thai labour policy today.',
+          media: mediaMap[254],
         },
       ]
 
@@ -100,8 +94,8 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
   return (
     <>
       {/* ---------------------------------------------------------------- HERO */}
-      <PageHero compact eyebrow={isThai ? 'เกี่ยวกับ LPN' : 'About LPN'} title={copy.hero.title} stats={stats}>
-        <p className="t-label mt-8 text-white/45">{copy.hero.credit}</p>
+      <PageHero compact eyebrow={isThai ? 'เกี่ยวกับ LPN' : 'About LPN'} title={copy.hero.title}>
+        <p className="t-label mt-8 text-white/70">{copy.hero.credit}</p>
       </PageHero>
 
       {/* INTRO + RENAME NOTE */}
@@ -110,7 +104,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
           <div className="max-w-3xl">
             <p className="t-lede text-black/85">{copy.hero.intro}</p>
             <p className="t-lede mt-6 font-semibold text-black">{copy.hero.courage}</p>
-            <p className="mt-8 border-l-2 border-brand-yellow pl-4 text-sm text-black/60 italic">
+            <p className="mt-8 border-l-2 border-brand-yellow pl-4 text-sm text-black/75 italic">
               {copy.hero.footnote}
             </p>
           </div>
@@ -128,7 +122,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
               </p>
             ))}
             <p className="mt-8 text-base font-bold text-black">{copy.why.prey}</p>
-            <p className="t-label mt-4 text-black/45">{copy.why.credit}</p>
+            <p className="t-label mt-4 text-black/70">{copy.why.credit}</p>
           </div>
         </Container>
       </Section>
@@ -199,11 +193,21 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
           />
           <div className="mt-12 grid gap-6 md:grid-cols-2">
             {leaders.map((l) => (
-              <article key={l.name} className="card card-marked p-8">
+              <article key={l.name} className="card card-marked flex flex-col p-8">
+                {l.media && (
+                  <div className="relative mb-6 aspect-16/10 w-full overflow-hidden border border-black/10 bg-black/5">
+                    <MediaImage
+                      media={l.media}
+                      alt={l.name}
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                )}
                 <p className="text-lg font-bold text-black italic leading-snug">{l.quote}</p>
-                <h3 className="t-h3 mt-6">{l.name}</h3>
-                <div className="t-label mt-1.5 text-black/55">{l.role}</div>
-                <p className="mt-5 text-sm leading-relaxed text-black/70">{l.body}</p>
+                <h3 className="t-h3 mt-4">{l.name}</h3>
+                <div className="t-label mt-1.5 text-black/70">{l.role}</div>
+                <p className="mt-4 text-sm leading-relaxed text-black/75">{l.body}</p>
               </article>
             ))}
           </div>

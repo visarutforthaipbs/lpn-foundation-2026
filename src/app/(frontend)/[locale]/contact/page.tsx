@@ -3,7 +3,8 @@ import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
-import { HOTLINES, ALT_LINES, OFFICE, FACEBOOK_URL, telHref } from '@/lib/content'
+import { ALT_LINES, OFFICE, FACEBOOK_URL, telHref } from '@/lib/content'
+import { getHelpChannels } from '@/lib/help-channels'
 import {
   Container,
   Section,
@@ -44,18 +45,7 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
   const { locale } = await props.params
   setRequestLocale(locale)
   const isThai = locale === 'th'
-
-  const stats = isThai
-    ? [
-        { value: '24/7', label: 'สายด่วนรับเรื่อง' },
-        { value: '4', label: 'ภาษาที่ให้บริการ' },
-        { value: '100%', label: 'รักษาความลับ' },
-      ]
-    : [
-        { value: '24/7', label: 'hotline coverage' },
-        { value: '4', label: 'languages supported' },
-        { value: '100%', label: 'confidential' },
-      ]
+  const hotlines = await getHelpChannels(locale)
 
   return (
     <>
@@ -63,13 +53,12 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
       <PageHero
         compact
         eyebrow={isThai ? 'ช่องทางติดต่อเรา' : 'Get in touch'}
-        title={isThai ? 'หากคุณตกอยู่ในอันตราย — โทรหาเรา ตอนนี้' : 'If you are in danger — call us. Right now.'}
+        title={isThai ? 'ติดต่อ LPN โดยตรง' : 'Contact LPN directly.'}
         lede={
           isThai
             ? 'สำหรับความช่วยเหลือเร่งด่วน โปรดติดต่อเราโดยตรงผ่านทางโทรศัพท์หรือส่งข้อความถึงเราบน Facebook สำหรับการสอบถามที่ไม่เร่งด่วน กรุณาใช้อีเมล การทำงานส่วนใหญ่ของเรา มักจะอยู่ในพื้นที่ซึ่งอาจจะทำให้ล้าช้าในการตอบกลับอยู่บ้าง'
             : 'For urgent assistance please call us directly or message us on facebook. For less urgent inquires, please use email. We are often in the field unexpectedly and may take a few days to respond. Thank you for your understanding.'
         }
-        stats={stats}
       />
 
       {/* ------------------------------------------------------ HOTLINE CARDS */}
@@ -85,7 +74,7 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
             }
           />
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {HOTLINES.map((h) => (
+            {hotlines.map((h) => (
               <a key={h.code} href={telHref(h.phone)} className="card card-marked group flex flex-col p-6">
                 <div className="flex items-center justify-between">
                   <span
@@ -94,11 +83,11 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
                   >
                     {h.code}
                   </span>
-                  <span className="t-label text-black/55">{isThai ? 'โทรเลย' : 'Tap to call'}</span>
+                  <span className="t-label text-black/70">{isThai ? 'โทรเลย' : 'Tap to call'}</span>
                 </div>
-                <div className="mt-5 text-xs font-bold text-black/70">{LANG_LABELS[h.code]}</div>
+                <div className="mt-5 text-xs font-bold text-black/80">{LANG_LABELS[h.code]}</div>
                 <div className="tactile-well mt-3 w-full px-3 py-2 text-center">
-                  <span className="font-mono text-base font-black tracking-tight text-black transition-colors group-hover:text-brand-yellow">
+                  <span className="font-mono text-base font-black tracking-tight text-black transition-colors group-hover:underline group-hover:decoration-brand-yellow group-hover:decoration-2 group-hover:underline-offset-4">
                     {h.phone}
                   </span>
                 </div>
@@ -106,7 +95,7 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
             ))}
           </div>
           {/* General lines printed on the live contact page */}
-          <p className="mt-8 text-sm text-black/65">
+          <p className="mt-8 text-sm text-black/75">
             {isThai ? 'โทรศัพท์สำนักงาน: ' : 'Office lines: '}
             <a href={telHref(ALT_LINES.office1)} className="font-mono font-bold text-black underline decoration-brand-yellow underline-offset-4">
               {ALT_LINES.office1}

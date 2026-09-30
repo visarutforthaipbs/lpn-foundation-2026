@@ -13,6 +13,9 @@ import { Categories } from './collections/Categories'
 import { Posts } from './collections/Posts'
 import { TeamMembers } from './collections/TeamMembers'
 import { Pages } from './collections/Pages'
+import { Reports } from './collections/Reports'
+import { ImpactMetrics } from './collections/ImpactMetrics'
+import { Stories } from './collections/Stories'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 
@@ -28,7 +31,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, Posts, Categories, Authors, TeamMembers, Media, Users],
+  collections: [Pages, Posts, Reports, ImpactMetrics, Stories, Categories, Authors, TeamMembers, Media, Users],
   globals: [Header, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

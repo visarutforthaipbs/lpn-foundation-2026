@@ -1,23 +1,25 @@
 import type { Metadata } from 'next'
 import { routing, type Locale } from '@/i18n/routing'
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-
-/**
- * Parsed origin for metadataBase. Falls back to localhost when the env value is
- * missing or malformed so an env mistake degrades to wrong-but-working metadata
- * instead of crashing the build with ERR_INVALID_URL.
- */
-function parseSiteUrl(): URL {
-  try {
-    return new URL(SITE_URL)
-  } catch {
-    console.warn(`[seo] NEXT_PUBLIC_SERVER_URL is not a valid URL (${JSON.stringify(SITE_URL)}); falling back to http://localhost:3000`)
-    return new URL('http://localhost:3000')
+function resolveSiteUrl(): URL {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SERVER_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`,
+    process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`,
+    process.env.NODE_ENV === 'production' ? 'https://lpn-foundation-2026.vercel.app' : 'http://localhost:3000',
+  ]
+  for (const candidate of candidates) {
+    if (!candidate) continue
+    try {
+      const url = new URL(candidate)
+      if (url.protocol === 'https:' || url.hostname === 'localhost') return url
+    } catch { /* Ignore invalid deployment placeholders. */ }
   }
+  return new URL('http://localhost:3000')
 }
 
-export const SITE_URL_OBJ = parseSiteUrl()
+export const SITE_URL_OBJ = resolveSiteUrl()
+export const SITE_URL = SITE_URL_OBJ.origin
 
 /**
  * Builds localized metadata with hreflang alternates.
@@ -43,9 +45,7 @@ export function buildMetadata({
   const ogAlternate = routing.locales
     .filter((l) => l !== locale)
     .map((l) => (l === 'th' ? 'th_TH' : 'en_US'))
-  // Full-bleed documentary hero as the default share card (LINE/FB dominate TH
-  // traffic — always ship a large image). TODO: dedicated 1200x630 brand banner.
-  const shareImage = image ?? `${SITE_URL}/images/trawler-hero.jpg`
+  const shareImage = image ?? `${SITE_URL}/images/lpn-share.png`
 
   return {
     title,

@@ -138,9 +138,9 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
                 <div>
                   <p className="t-lede font-medium text-black/85 italic">{l.quote}</p>
                   <h3 className="t-h3 mt-6">{l.name}</h3>
-                  <div className="t-label mt-2 text-black/55">{l.role}</div>
+                  <div className="t-label mt-2 text-black/70">{l.role}</div>
                 </div>
-                <p className="max-w-2xl text-base leading-relaxed text-black/70 md:pt-1.5">
+                <p className="max-w-2xl text-base leading-relaxed text-black/75 md:pt-1.5">
                   {l.body}
                 </p>
               </article>
@@ -159,7 +159,7 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
           />
 
           {team.length === 0 ? (
-            <p className="mt-10 text-white/55">
+            <p className="mt-10 text-white/75">
               {isThai
                 ? 'ยังไม่มีข้อมูลทีมงานในระบบ — โปรดเพิ่มข้อมูลในแผงควบคุม'
                 : 'No team members yet — add them from the admin panel.'}
@@ -179,7 +179,7 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
                     </div>
                   )}
                   <h3 className="mt-5 text-base font-black tracking-tight text-black">{m.name}</h3>
-                  {m.role && <div className="t-label mt-1 text-black/55">{m.role}</div>}
+                  {m.role && <div className="t-label mt-1 text-black/70">{m.role}</div>}
                 </article>
               ))}
             </div>

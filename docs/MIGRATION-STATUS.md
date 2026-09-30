@@ -32,7 +32,7 @@ was added to both local development and production Payload databases on
 
 | Wix page | New location | Treatment |
 | --- | --- | --- |
-| Home | `/th`, `/en` | Hero, impact, three pillars, trafficking cycle, causes, action cards, emergency contacts, and the latest three Payload articles |
+| Home | `/th`, `/en` | Equal worker and supporter paths, three current workstreams, dated 2024 evidence, direct help, Right Guide, and the latest three Payload articles |
 | About | `/about` | Mission, exploitation mechanisms, theory of change, work streams, and approach combined in one bilingual page |
 | Team | `/team` | Leaders, awards, staff, and migrant youth network, with longer source biographies |
 | Services | `/services` | Rescue, advocacy, education, and programme deep dives combined in one bilingual page |
@@ -40,14 +40,14 @@ was added to both local development and production Payload databases on
 | Ghost Fleet | `/ghost-fleet` | Film summary and attributed review in each language; old screening dates retained only in the source archive |
 | News | `/news` plus `/blog` | Historical press and publications on News; 83 migrated articles in the blog |
 | Contact | `/contact` and site footer | Urgent help, four language hotlines, office location, and email |
-| Donate | `/donate` | Donation purpose, bank transfer details, and partnership contact |
+| Donate | `/donate` | Current workstreams, individual and institutional support, and a contact route. Bank details appear only after named LPN verification is recorded in Payload. |
 | Events | — | Wix page has no editorial copy; historical events remain in articles or source archive where applicable |
 
 Repeated donation and hotline calls to action were merged into the relevant
-pages and persistent footer. Original Wix bank details are visible on the new
-donation page; LPN should confirm the account is still active before public
-domain cutover. Historical partner dates are labelled as past work so they do
-not imply active grants.
+pages and persistent footer. Original Wix bank details remain in the private
+CMS archive; the public donation page withholds account numbers until LPN
+confirms the current account in Payload. Historical partner dates are labelled
+as past work so they do not imply active grants.
 
 The Burmese hotline is `0963812069` in the new site code, footer and contact
 page CMS content. The captured Thai Wix source still contains the earlier

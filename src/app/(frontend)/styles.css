@@ -62,15 +62,19 @@ p {
   word-break: break-word;
 }
 
-/* Focus states — visible on both dark and light surfaces. */
+/* Focus states — high-visibility dual outline across dark, light, yellow, and image surfaces. */
 :focus-visible {
   outline: 2px solid var(--color-brand-yellow);
-  outline-offset: 3px;
-  border-radius: 2px;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.9);
+  border-radius: 3px;
 }
 
-.on-light :focus-visible {
+.on-light :focus-visible,
+.card :focus-visible,
+.tactile-well :focus-visible {
   outline-color: var(--color-black);
+  box-shadow: 0 0 0 3px rgba(255, 212, 59, 0.85);
 }
 
 /* Skip link for keyboard users. */

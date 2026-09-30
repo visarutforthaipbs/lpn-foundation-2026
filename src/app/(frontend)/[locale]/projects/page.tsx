@@ -38,7 +38,7 @@ function PartnerEntry({ p }: { p: Partner }) {
     <article className="card card-marked p-8">
       <h3 className="t-h3">{p.name}</h3>
       {p.tagline && <p className="mt-2 text-sm font-bold text-black/70 italic">{p.tagline}</p>}
-      {p.years && <p className="t-label mt-2 text-black/45">{p.years}</p>}
+      {p.years && <p className="t-label mt-2 text-black/70">{p.years}</p>}
       <p className="mt-4 text-sm leading-relaxed text-black/75">{p.body}</p>
     </article>
   )

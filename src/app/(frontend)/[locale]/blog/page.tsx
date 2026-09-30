@@ -89,7 +89,7 @@ export default async function BlogIndex(props: {
         <Container>
           {posts.length === 0 ? (
             <div className="border border-black/15 bg-paper p-12 text-center">
-              <p className="t-label-lg text-black/55">
+              <p className="t-label-lg text-black/70">
                 {isThai ? 'ยังไม่มีบทความในหมวดนี้' : 'No posts in this category yet.'}
               </p>
             </div>
@@ -119,18 +119,18 @@ export default async function BlogIndex(props: {
                   <div className="flex flex-col justify-between p-8 md:p-10">
                     <div>
                       {featured.category && typeof featured.category !== 'number' && (
-                        <span className="t-label text-black/45">{featured.category.title}</span>
+                        <span className="t-label text-black/70">{featured.category.title}</span>
                       )}
                       <h2 className="t-h2 mt-3">{featured.title}</h2>
                       {featured.excerpt && (
-                        <p className="mt-4 line-clamp-4 text-base leading-relaxed text-black/70">
+                        <p className="mt-4 line-clamp-4 text-base leading-relaxed text-black/75">
                           {featured.excerpt}
                         </p>
                       )}
                     </div>
                     <div className="mt-8 flex items-center justify-between">
                       {featured.publishedAt && (
-                        <span className="t-label text-black/55">{formatDate(featured.publishedAt)}</span>
+                        <span className="t-label text-black/70">{formatDate(featured.publishedAt)}</span>
                       )}
                       <span className="link-mark">
                         {isThai ? 'อ่านบทความ' : 'Read article'} →
@@ -162,17 +162,17 @@ export default async function BlogIndex(props: {
                       </div>
                       <div className="flex flex-1 flex-col p-6">
                         {post.category && typeof post.category !== 'number' && (
-                          <span className="t-label text-black/45">{post.category.title}</span>
+                          <span className="t-label text-black/70">{post.category.title}</span>
                         )}
                         <h3 className="t-h3 mt-2">{post.title}</h3>
                         {post.excerpt && (
-                          <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-black/70">
+                          <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-black/75">
                             {post.excerpt}
                           </p>
                         )}
                         <div className="mt-auto flex items-center justify-between pt-6">
                           {post.publishedAt && (
-                            <span className="t-label text-black/55">{formatDate(post.publishedAt)}</span>
+                            <span className="t-label text-black/70">{formatDate(post.publishedAt)}</span>
                           )}
                           <span className="t-label border-b border-brand-yellow pb-0.5 text-black transition-colors group-hover:border-black">
                             {isThai ? 'อ่าน' : 'Read'} →

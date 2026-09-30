@@ -43,8 +43,27 @@ export const revalidatePage: CollectionAfterChangeHook = ({ doc }) => {
   return doc
 }
 
+export const revalidateEvidence: CollectionAfterChangeHook = ({ doc }) => {
+  if (!inNext()) return doc
+  for (const locale of routing.locales) {
+    safe(`/${locale}`)
+    safe(`/${locale}/impact`)
+    safe(`/${locale}/stories`)
+    if (doc?.slug) safe(`/${locale}/stories/${doc.slug}`)
+  }
+  return doc
+}
+
 // Header/footer appear on every page → revalidate the whole layout.
 export const revalidateLayout: GlobalAfterChangeHook = ({ doc }) => {
-  if (inNext()) safe('/', 'layout')
+  if (inNext()) {
+    safe('/[locale]', 'layout')
+    for (const locale of routing.locales) {
+      safe(`/${locale}`)
+      safe(`/${locale}/get-help`)
+      safe(`/${locale}/contact`)
+      safe(`/${locale}/donate`)
+    }
+  }
   return doc
 }

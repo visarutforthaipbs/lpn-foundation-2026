@@ -49,7 +49,7 @@ export const metadata = {
     template: '%s · LPN Foundation',
   },
   description:
-    'Labour Rights Promotion Network (LPN) Foundation — ending human trafficking and forced labour, protecting migrant workers.',
+    'LPN works alongside migrant workers and families in Thailand to access protection today and build safer systems for tomorrow.',
 }
 
 export function generateStaticParams() {

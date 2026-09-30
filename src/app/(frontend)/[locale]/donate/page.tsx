@@ -1,23 +1,8 @@
-import { WixIntegratedCopy } from '@/components/WixIntegratedCopy'
 import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
-import { routing } from '@/i18n/routing'
-import { getPage } from '@/lib/api'
+import { getFooter, getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
-import { BANK } from '@/lib/content'
-import {
-  Container,
-  Section,
-  SectionHeading,
-  PageHero,
-  CtaBand,
-  ButtonLink,
-  EditorialRow,
-} from '@/components/ui'
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }))
-}
+import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
 
 export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
@@ -25,228 +10,69 @@ export async function generateMetadata(props: { params: Promise<{ locale: Locale
   return buildMetadata({
     locale,
     path: '/donate',
-    title: page?.meta?.title || 'Donate to LPN',
-    description:
-      page?.meta?.description ||
-      'Fund rescue operations, survivor assistance, and prevention programmes at LPN Foundation.',
+    title: page?.meta?.title || (locale === 'th' ? 'สนับสนุน LPN' : 'Support LPN'),
+    description: locale === 'th'
+      ? 'สนับสนุนงานช่วยเหลือแรงงาน การสร้างความรู้ และการเปลี่ยนแปลงระบบของ LPN'
+      : 'Support LPN’s worker assistance, community learning, and systems change.',
   })
 }
 
 export default async function DonatePage(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
   setRequestLocale(locale)
-  const isThai = locale === 'th'
+  const th = locale === 'th'
+  const footer = await getFooter(locale)
+  const bankVerified = Boolean(footer.bankVerifiedAt && footer.bankVerifiedBy && footer.bankAccountName && footer.bankName && footer.bankAccountNumber)
+  const streams = th ? [
+    ['ช่วยเหลือและคุ้มครอง', 'ช่วยให้ LPN รับฟังและประสานความช่วยเหลือสำหรับแรงงานและครอบครัวที่เผชิญปัญหา'],
+    ['ความรู้และชุมชน', 'สนับสนุนการเรียนรู้เรื่องสิทธิ เยาวชน ครอบครัว และเครือข่ายแรงงาน'],
+    ['หลักฐานและการเปลี่ยนระบบ', 'สนับสนุนงานวิจัยและความร่วมมือที่ใช้ประสบการณ์ภาคสนามเพื่อแก้ปัญหาเชิงระบบ'],
+  ] : [
+    ['Respond and protect', 'Help LPN listen and connect workers and families facing problems with appropriate support.'],
+    ['Learn with communities', 'Support rights learning, young people, families, and worker networks.'],
+    ['Build evidence for change', 'Support research and partnerships that use field experience to address systemic barriers.'],
+  ]
 
-  const heroStats = isThai
-    ? [
-        { value: '100%', label: 'ของยอดบริจาคเข้าสู่ภารกิจ' },
-        { value: '24/7', label: 'ทีมตอบสนองภาคสนาม' },
-        { value: '15+', label: 'ปีของผลลัพธ์จริง' },
-      ]
-    : [
-        { value: '100%', label: 'goes to the mission' },
-        { value: '24/7', label: 'field response' },
-        { value: '15+', label: 'years of real outcomes' },
-      ]
+  return <>
+    <Section tone="dark"><Container>
+      <p className="eyebrow text-brand-yellow">{th ? 'ร่วมสนับสนุน' : 'Support LPN'}</p>
+      <h1 className="t-display mt-6 max-w-5xl text-white">{th ? 'ช่วยให้สิทธิและการคุ้มครองเข้าถึงทุกคน' : 'Help make rights and protection reachable.'}</h1>
+      <p className="t-lede mt-7 max-w-3xl text-white/80">{th
+        ? 'การสนับสนุนของคุณช่วยให้งานช่วยเหลือ การสร้างความรู้ และการเปลี่ยนแปลงระบบดำเนินต่อไป'
+        : 'Your support helps sustain direct assistance, community learning, and systems change.'}</p>
+      <div className="mt-9 flex flex-wrap gap-3">
+        <ButtonLink href={bankVerified ? '#bank-details' : '/contact'} variant="primary">{bankVerified ? (th ? 'ดูข้อมูลโอนเงิน' : 'See bank details') : (th ? 'สอบถามการสนับสนุน' : 'Ask about giving')}</ButtonLink>
+        <ButtonLink href="/impact" variant="ghostLight">{th ? 'ดูผลการทำงาน' : 'Explore impact'}</ButtonLink>
+      </div>
+    </Container></Section>
 
-  const tiers = isThai
-    ? [
-        {
-          tag: '฿500',
-          title: 'ชุดช่วยเหลือ',
-          body: 'ค่าเดินทางและอุปกรณ์เบื้องต้นในการเข้าถึงผู้เสียหายในพื้นที่ห่างไกล',
-        },
-        {
-          tag: '฿2,500',
-          title: 'หนึ่งเดือนในบ้านพักปลอดภัย',
-          body: 'อาหาร ที่พัก และการเยียวยาจิตใจหนึ่งเดือนสำหรับผู้รอด',
-        },
-        {
-          tag: '฿10,000',
-          title: 'หนึ่งปฏิบัติการกู้ภัย',
-          body: 'ร่วมสมทบทุนปฏิบัติการกู้ภัยข้ามจังหวัดหรือข้ามพรมแดน',
-        },
-        {
-          tag: '฿25,000',
-          title: 'หนึ่งภาคเรียนของลูกแรงงาน',
-          body: 'ค่าเล่าเรียน อุปกรณ์ และทุนสนับสนุนเด็กข้ามชาติหนึ่งคนต่อเทอม',
-        },
-      ]
-    : [
-        {
-          tag: '$15',
-          title: 'A response kit',
-          body: 'Field transport and supplies to reach a worker in a remote site.',
-        },
-        {
-          tag: '$75',
-          title: 'One month of safe shelter',
-          body: 'Food, lodging, and psychosocial care for a survivor for a month.',
-        },
-        {
-          tag: '$300',
-          title: 'One rescue operation',
-          body: 'Co-funds a cross-province or cross-border rescue operation.',
-        },
-        {
-          tag: '$750',
-          title: 'One semester of school',
-          body: 'Tuition, supplies, and bursary support for a migrant child for one term.',
-        },
-      ]
+    <Section tone="paper"><Container>
+      <SectionHeading eyebrow={th ? 'การสนับสนุนของคุณ' : 'Where support helps'} title={th ? 'สามด้านของงานที่เชื่อมกัน' : 'Three connected parts of the work'} lede={th ? 'ความต้องการปัจจุบันและข้อจำกัดของทุนควรตกลงกับทีม LPN ก่อนสนับสนุนโครงการเฉพาะ' : 'Discuss current needs and any funding restrictions with LPN before supporting a specific programme.'} />
+      <div className="mt-10 grid gap-5 md:grid-cols-3">{streams.map(([title, body], i) => <article key={title} className="border-t-4 border-brand-yellow bg-white p-7">
+        <span className="t-label text-black/70">0{i + 1}</span><h3 className="t-h3 mt-5">{title}</h3><p className="mt-4 text-sm leading-relaxed text-black/75">{body}</p>
+      </article>)}</div>
+    </Container></Section>
 
-  const ways = isThai
-    ? [
-        {
-          title: 'โอนเงินผ่านธนาคาร',
-          body: 'รายละเอียดบัญชีอยู่ด้านล่าง — ใช้ได้ทั้งในและต่างประเทศ',
-        },
-        {
-          title: 'สนับสนุนโครงการเฉพาะ',
-          body: 'ติดต่อเราเพื่อพูดคุยเรื่องการสนับสนุนโครงการกู้ภัย กฎหมาย หรือการศึกษา',
-        },
-        {
-          title: 'ระดมทุนกับชุมชนของคุณ',
-          body: 'จัดกิจกรรมระดมทุนในนามของคุณหรือองค์กร — เราจะช่วยเล่าผลกระทบให้ผู้สนับสนุน',
-        },
-      ]
-    : [
-        {
-          title: 'Bank transfer',
-          body: 'See bank details below — works for domestic and international transfers.',
-        },
-        {
-          title: 'Fund a specific programme',
-          body: 'Talk to us about supporting a rescue, legal, or education programme by name.',
-        },
-        {
-          title: 'Run a community fundraiser',
-          body: 'Host an event or campaign in your name. We’ll help you tell donors the impact.',
-        },
-      ]
+    <Section tone="light"><Container className="grid gap-10 lg:grid-cols-2">
+      <div>
+        <SectionHeading eyebrow={th ? 'บริจาค' : 'Individual giving'} title={th ? 'ร่วมบริจาค' : 'Make a gift'} lede={th ? 'ติดต่อ LPN เพื่อยืนยันช่องทางและรายละเอียดการบริจาคล่าสุด รวมถึงใบเสร็จหรือเอกสารที่ต้องการ' : 'Contact LPN to confirm current payment details and ask about receipts or documentation.'} />
+        <div className="mt-7"><ButtonLink href="/contact" variant="solidDark">{th ? 'ติดต่อ LPN' : 'Contact LPN'}</ButtonLink></div>
+      </div>
+      <div>
+        <SectionHeading eyebrow={th ? 'องค์กรและพันธมิตร' : 'Institutions and partners'} title={th ? 'ร่วมงานอย่างรับผิดชอบ' : 'Partner responsibly'} lede={th ? 'พูดคุยเรื่องทุนวิจัย การศึกษา หรือการคุ้มครองแรงงาน โดยคำนึงถึงความลับ ความปลอดภัยของแรงงาน และความเป็นอิสระในการทำงานของ LPN' : 'Discuss research, education, or worker-protection support while respecting confidentiality, worker safety, and LPN’s independence.'} />
+        <div className="mt-7"><ButtonLink href="/contact" variant="solidDark">{th ? 'คุยเรื่องความร่วมมือ' : 'Discuss a partnership'}</ButtonLink></div>
+      </div>
+    </Container></Section>
 
-  return (
-    <>
-      {/* ---------------------------------------------------------------- HERO */}
-      <PageHero
-        compact
-        eyebrow={isThai ? 'ร่วมบริจาค' : 'Donate'}
-        title={isThai ? 'การบริจาคของคุณคือเชื้อเพลิงของปฏิบัติการกู้ภัย' : 'Your gift is the fuel behind every rescue.'}
-        lede={
-          isThai
-            ? 'ทุกบาททุกสตางค์เข้าสู่งานช่วยเหลือ การคุ้มครองทางกฎหมาย และเครือข่ายแรงงานที่นำไปสู่การเปลี่ยนแปลงระยะยาว'
-            : 'Every dollar funds rescue operations, legal protection, and worker networks that drive lasting change.'
-        }
-        stats={heroStats}
-        actions={
-          <>
-            <ButtonLink href="#bank-details" variant="primary">
-              {isThai ? 'ดูข้อมูลโอนเงิน' : 'Bank transfer details'}
-            </ButtonLink>
-            <ButtonLink href="/contact" variant="ghostLight">
-              {isThai ? 'พูดคุยกับเรา' : 'Talk to us'}
-            </ButtonLink>
-          </>
-        }
-      />
-
-      {/* --------------------------------------------------------- IMPACT TIERS */}
-      <Section tone="light" className="on-light">
-        <Container>
-          <SectionHeading
-            title={isThai ? 'ผลกระทบที่จับต้องได้' : 'Tangible impact'}
-            lede={
-              isThai
-                ? 'ตัวอย่างจริงของสิ่งที่เกิดขึ้นเมื่อการบริจาคของคุณลงสนาม'
-                : 'A snapshot of what your gift actually does in the field.'
-            }
-          />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {tiers.map((t) => (
-              <article key={t.tag} className="card card-marked p-7">
-                <span className="tactile-badge px-4 py-1.5 text-sm font-black text-black">
-                  {t.tag}
-                </span>
-                <h3 className="t-h3 mt-5">{t.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-black/70">{t.body}</p>
-              </article>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* -------------------------------------------------------- BANK DETAILS */}
-      <Section tone="dark" id="bank-details" className="border-y border-white/10 scroll-mt-24">
-        <Container>
-          <div className="grid gap-10 md:grid-cols-[2fr_3fr] md:items-start">
-            <div>
-              <span className="eyebrow text-brand-yellow">{isThai ? 'โอนเงิน' : 'Bank transfer'}</span>
-              <h2 className="t-h2 mt-5 text-white">
-                {isThai ? 'โอนเข้าบัญชีของเราโดยตรง' : 'Send a gift directly.'}
-              </h2>
-              <p className="mt-4 text-sm leading-relaxed text-white/70">
-                {isThai
-                  ? 'ใช้รายละเอียดด้านขวานี้สำหรับการโอนทั้งในและต่างประเทศ หากต้องการใบเสร็จกรุณาแจ้งเราที่อีเมล'
-                  : 'Use the details on the right for domestic or international transfers. Email us for a receipt.'}
-              </p>
-            </div>
-            <div className="glass-dark relative rounded-lg p-8">
-              <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
-              <dl className="grid gap-5">
-                {[
-                  { k: isThai ? 'ชื่อบัญชี' : 'Account name', v: BANK.accountName },
-                  { k: isThai ? 'ธนาคาร' : 'Bank', v: isThai ? BANK.bankTh : BANK.bankEn },
-                  { k: isThai ? 'เลขที่บัญชี' : 'Account number', v: BANK.accountNumber },
-                  { k: 'SWIFT', v: BANK.swift },
-                ].map((row) => (
-                  <div
-                    key={row.k}
-                    className="grid gap-1.5 border-b border-white/10 pb-4 last:border-b-0 last:pb-0"
-                  >
-                    <dt className="t-label text-white/55">{row.k}</dt>
-                    <dd className="tactile-well-dark px-3 py-2 font-mono text-base font-bold text-white md:text-lg">
-                      {row.v}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      {/* ------------------------------------------------------ OTHER WAYS TO GIVE */}
-      <Section tone="light" className="on-light">
-        <Container>
-          <SectionHeading title={isThai ? 'วิธีอื่นในการสนับสนุน' : 'Other ways to give'} />
-          <div className="mt-10">
-            {ways.map((w, i) => (
-              <EditorialRow key={w.title} index={`0${i + 1}`} title={w.title} body={w.body} />
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* ---------------------------------------------------------------- CTA */}
-      <CtaBand
-        heading={isThai ? 'อยากออกแบบการสนับสนุนเฉพาะตัว?' : 'Want a tailored way to give?'}
-        body={
-          isThai
-            ? 'ทีมงานของเรายินดีพูดคุยเรื่องการสนับสนุนโครงการ การให้ทุน หรือการระดมทุนของชุมชน'
-            : 'Our team is happy to talk through programme giving, grants, or community fundraising.'
-        }
-        actions={
-          <>
-            <ButtonLink href="/contact" variant="solidDark">
-              {isThai ? 'ติดต่อทีมระดมทุน' : 'Talk to our team'}
-            </ButtonLink>
-            <ButtonLink href="/projects" variant="ghostDark">
-              {isThai ? 'ดูโครงการ' : 'See projects'}
-            </ButtonLink>
-          </>
-        }
-      />
-      <WixIntegratedCopy slug="donate" locale={locale} />
-    </>
-  )
+    {bankVerified && <Section tone="dark" id="bank-details" className="scroll-mt-24"><Container>
+      <SectionHeading eyebrow={th ? 'รายละเอียดที่ยืนยันแล้ว' : 'Verified details'} title={th ? 'โอนเงินผ่านธนาคาร' : 'Bank transfer'} tone="light" />
+      <dl className="mt-8 grid max-w-2xl gap-4">{[
+        [th ? 'ชื่อบัญชี' : 'Account name', footer.bankAccountName],
+        [th ? 'ธนาคาร' : 'Bank', footer.bankName],
+        [th ? 'เลขที่บัญชี' : 'Account number', footer.bankAccountNumber],
+        ['SWIFT', footer.bankSwift],
+      ].filter(([, value]) => value).map(([label, value]) => <div key={label} className="border-b border-white/20 pb-3"><dt className="t-label text-white/70">{label}</dt><dd className="mt-2 font-mono text-lg font-bold text-white">{value}</dd></div>)}</dl>
+      <p className="mt-7 text-sm text-white/70">{th ? `ยืนยันโดย ${footer.bankVerifiedBy} เมื่อ ${new Date(footer.bankVerifiedAt!).toLocaleDateString('th-TH')}` : `Verified by ${footer.bankVerifiedBy} on ${new Date(footer.bankVerifiedAt!).toLocaleDateString('en')}`}</p>
+    </Container></Section>}
+  </>
 }

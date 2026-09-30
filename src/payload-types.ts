@@ -69,6 +69,9 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    reports: Report;
+    'impact-metrics': ImpactMetric;
+    stories: Story;
     categories: Category;
     authors: Author;
     teamMembers: TeamMember;
@@ -83,6 +86,9 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    reports: ReportsSelect<false> | ReportsSelect<true>;
+    'impact-metrics': ImpactMetricsSelect<false> | ImpactMetricsSelect<true>;
+    stories: StoriesSelect<false> | StoriesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     teamMembers: TeamMembersSelect<false> | TeamMembersSelect<true>;
@@ -419,6 +425,117 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reports".
+ */
+export interface Report {
+  id: number;
+  title: string;
+  /**
+   * URL path segment. Auto-generated from the title if left blank.
+   */
+  slug: string;
+  kind: 'annual' | 'research' | 'programme';
+  topic?: ('cross-cutting' | 'rights' | 'health' | 'education' | 'safety' | 'policy') | null;
+  year: number;
+  publishedAt?: string | null;
+  summary: string;
+  /**
+   * Scope, sample, definitions and important limits.
+   */
+  method?: string | null;
+  /**
+   * Canonical source or announcement URL.
+   */
+  sourceURL: string;
+  /**
+   * Direct PDF/download URL when available.
+   */
+  downloadURL?: string | null;
+  documentLanguage: 'th' | 'en' | 'multilingual';
+  coverImage?: (number | null) | Media;
+  reviewedAt?: string | null;
+  reviewedBy?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "impact-metrics".
+ */
+export interface ImpactMetric {
+  id: number;
+  label: string;
+  /**
+   * Display value, e.g. 135. Do not add unlike measures.
+   */
+  value: string;
+  unit: string;
+  periodLabel: string;
+  periodStart?: string | null;
+  periodEnd?: string | null;
+  definition: string;
+  method?: string | null;
+  sourceReport?: (number | null) | Report;
+  /**
+   * Use when no Report record exists.
+   */
+  sourceURL?: string | null;
+  featured?: boolean | null;
+  order?: number | null;
+  reviewedAt?: string | null;
+  reviewedBy?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stories".
+ */
+export interface Story {
+  id: number;
+  title: string;
+  /**
+   * URL path segment. Auto-generated from the title if left blank.
+   */
+  slug: string;
+  summary: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  storyDate?: string | null;
+  coverImage?: (number | null) | Media;
+  anonymity: 'anonymous' | 'pseudonym' | 'identified';
+  consentStatus: 'pending' | 'approved' | 'withdrawn';
+  /**
+   * Where text use was approved. Keep private case details outside this CMS.
+   */
+  consentScope?: string | null;
+  /**
+   * Required if a cover image identifies or depicts people.
+   */
+  imageUseApproved?: boolean | null;
+  safetyReviewedAt?: string | null;
+  approvedBy?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "teamMembers".
  */
 export interface TeamMember {
@@ -504,6 +621,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'reports';
+        value: number | Report;
+      } | null)
+    | ({
+        relationTo: 'impact-metrics';
+        value: number | ImpactMetric;
+      } | null)
+    | ({
+        relationTo: 'stories';
+        value: number | Story;
       } | null)
     | ({
         relationTo: 'categories';
@@ -691,6 +820,73 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reports_select".
+ */
+export interface ReportsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  kind?: T;
+  topic?: T;
+  year?: T;
+  publishedAt?: T;
+  summary?: T;
+  method?: T;
+  sourceURL?: T;
+  downloadURL?: T;
+  documentLanguage?: T;
+  coverImage?: T;
+  reviewedAt?: T;
+  reviewedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "impact-metrics_select".
+ */
+export interface ImpactMetricsSelect<T extends boolean = true> {
+  label?: T;
+  value?: T;
+  unit?: T;
+  periodLabel?: T;
+  periodStart?: T;
+  periodEnd?: T;
+  definition?: T;
+  method?: T;
+  sourceReport?: T;
+  sourceURL?: T;
+  featured?: T;
+  order?: T;
+  reviewedAt?: T;
+  reviewedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stories_select".
+ */
+export interface StoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  summary?: T;
+  content?: T;
+  storyDate?: T;
+  coverImage?: T;
+  anonymity?: T;
+  consentStatus?: T;
+  consentScope?: T;
+  imageUseApproved?: T;
+  safetyReviewedAt?: T;
+  approvedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
@@ -857,6 +1053,18 @@ export interface Footer {
          */
         language: string;
         phone: string;
+        /**
+         * Date LPN confirmed the number and language coverage.
+         */
+        verifiedAt?: string | null;
+        /**
+         * LPN staff member responsible for the verification.
+         */
+        verifiedBy?: string | null;
+        /**
+         * Only publish hours or response expectations after staff confirmation.
+         */
+        availability?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -885,6 +1093,18 @@ export interface Footer {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Confirm current account details before public promotion.
+   */
+  bankVerifiedAt?: string | null;
+  bankVerifiedBy?: string | null;
+  /**
+   * Published only when all bank fields and verification fields are complete.
+   */
+  bankAccountName?: string | null;
+  bankName?: string | null;
+  bankAccountNumber?: string | null;
+  bankSwift?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -918,6 +1138,9 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         language?: T;
         phone?: T;
+        verifiedAt?: T;
+        verifiedBy?: T;
+        availability?: T;
         id?: T;
       };
   socials?:
@@ -928,6 +1151,12 @@ export interface FooterSelect<T extends boolean = true> {
         id?: T;
       };
   bankDetails?: T;
+  bankVerifiedAt?: T;
+  bankVerifiedBy?: T;
+  bankAccountName?: T;
+  bankName?: T;
+  bankAccountNumber?: T;
+  bankSwift?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

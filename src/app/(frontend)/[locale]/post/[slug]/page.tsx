@@ -60,7 +60,7 @@ export default async function PostPage(props: {
         <nav aria-label={isThai ? 'เส้นทางนำทาง' : 'Breadcrumb'} className="mb-8">
           <Link
             href="/blog"
-            className="t-label inline-flex min-h-11 items-center gap-2 text-black/55 transition-colors hover:text-black"
+            className="t-label inline-flex min-h-11 items-center gap-2 text-black/70 transition-colors hover:text-black"
           >
             ← {isThai ? 'กลับไปที่บทความ' : 'Back to Voices & Stories'}
           </Link>
@@ -129,7 +129,7 @@ export default async function PostPage(props: {
 
             {/* Share row */}
             <div className="mt-12 flex items-center justify-between border-t border-black/10 pt-6">
-              <span className="t-label text-black/40">
+              <span className="t-label text-black/70">
                 {isThai ? 'แชร์บทความนี้' : 'Share this Story'}
               </span>
               <div className="flex gap-2">
@@ -183,8 +183,8 @@ export default async function PostPage(props: {
               <h2 className="t-label text-black">{isThai ? 'ต้องการความช่วยเหลือ?' : 'Need Assistance?'}</h2>
               <p className="mt-3 text-xs leading-relaxed text-black/60">
                 {isThai
-                  ? 'สายด่วนมูลนิธิ LPN พร้อมให้คำปรึกษาและเข้าช่วยเหลือแรงงานหลากหลายภาษาตลอด 24 ชั่วโมง'
-                  : 'LPN operates multi-lingual 24/7 hotlines to support workers and report labor abuses.'}
+                  ? 'ติดต่อ LPN ผ่านหมายเลขตามภาษาที่ต้องการ หากโทรไม่ติด สามารถดูช่องทางอื่นได้ในหน้าขอความช่วยเหลือ'
+                  : 'Contact LPN using the number for your language. If a call does not connect, find other channels on Get Help.'}
               </p>
               <div className="mt-5 flex flex-col gap-2.5">
                 {sidebarHotlines.map((h) => (
@@ -212,7 +212,7 @@ export default async function PostPage(props: {
             <div className="px-1">
               <a
                 href={`mailto:${OFFICE.email}`}
-                className="t-label inline-flex min-h-11 items-center text-black/55 transition-colors hover:text-black"
+                className="t-label inline-flex min-h-11 items-center text-black/70 transition-colors hover:text-black"
               >
                 {OFFICE.email} →
               </a>

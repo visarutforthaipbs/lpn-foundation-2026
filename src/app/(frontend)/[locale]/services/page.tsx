@@ -71,27 +71,15 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
   const isThai = locale === 'th'
   const copy: ServicesCopy = isThai ? servicesTh : servicesEn
 
-  const stats = isThai
-    ? [
-        { value: '15+', label: 'ปีของการทำงานภาคสนาม' },
-        { value: '4', label: 'เสาหลักของบริการ' },
-        { value: '24/7', label: 'สายด่วนหลายภาษา' },
-      ]
-    : [
-        { value: '15+', label: 'years on the frontline' },
-        { value: '4', label: 'service pillars' },
-        { value: '24/7', label: 'multilingual hotline' },
-      ]
-
   const journey = isThai
     ? [
-        { step: 'A', label: 'แจ้งเหตุ', body: 'สายด่วนหลายภาษา เปิดรับตลอด 24 ชั่วโมง' },
+        { step: 'A', label: 'แจ้งเหตุ', body: 'ติดต่อ LPN ผ่านหมายเลขตามภาษาที่ต้องการ' },
         { step: 'B', label: 'ประเมินและช่วยเหลือ', body: 'ภาคสนามเข้าถึงพื้นที่ ประสานหน่วยงานรัฐ' },
         { step: 'C', label: 'คุ้มครองและเยียวยา', body: 'บ้านพักปลอดภัย กฎหมาย และจิตสังคม' },
         { step: 'D', label: 'คืนสู่ชีวิตที่มีศักดิ์ศรี', body: 'การงาน การศึกษา และการรวมกลุ่มของผู้รอด' },
       ]
     : [
-        { step: 'A', label: 'A case is reported', body: 'Multilingual hotline open around the clock.' },
+        { step: 'A', label: 'A case is reported', body: 'Contact LPN using the number for your language.' },
         { step: 'B', label: 'Assessment & rescue', body: 'Field team mobilises and coordinates with authorities.' },
         { step: 'C', label: 'Protect & heal', body: 'Safe shelter, legal aid, and psychosocial recovery.' },
         { step: 'D', label: 'Return to dignity', body: 'Livelihoods, education, and survivor-led networks.' },
@@ -105,7 +93,6 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
         eyebrow={copy.hero.eyebrow}
         title={copy.hero.title}
         lede={copy.hero.lede}
-        stats={stats}
       />
 
       {/* LEDE 2 */}
@@ -150,7 +137,7 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
               <li key={j.step} className="glass-dark relative rounded p-6">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-black text-brand-yellow">{j.step}</span>
-                  <span className="t-label text-white/45">
+                  <span className="t-label text-white/70">
                     {isThai ? 'ขั้นที่' : 'Step'} {i + 1}
                   </span>
                 </div>
@@ -167,8 +154,8 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
         heading={isThai ? 'พบเหตุที่ต้องการความช่วยเหลือ?' : 'Need to report a case?'}
         body={
           isThai
-            ? 'สายด่วนของเราเปิดรับการแจ้งเหตุและการขอความช่วยเหลือเป็นความลับ ในหลายภาษา ตลอด 24 ชั่วโมง'
-            : 'Our multilingual hotline takes reports and assistance requests in confidence, around the clock.'
+            ? 'ติดต่อ LPN ผ่านหมายเลขตามภาษาที่ต้องการ หากยังไม่แน่ใจว่าจะใช้ช่องทางใด ดูหน้าขอความช่วยเหลือ'
+            : 'Contact LPN using the number for your language. If you are unsure which channel to use, see Get Help.'
         }
         actions={
           <>

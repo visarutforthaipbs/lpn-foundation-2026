@@ -7,25 +7,26 @@ import dynamic from 'next/dynamic'
 import { MobileMenu } from './MobileMenu'
 
 const LocaleSwitcher = dynamic(() => import('./LocaleSwitcher').then((mod) => mod.LocaleSwitcher), {
-  loading: () => <span className="t-label text-white/55">...</span>,
+  loading: () => <span className="t-label text-white/75">...</span>,
 })
 
 export async function SiteHeader({ locale }: { locale: Locale }) {
   const [header, footer] = await Promise.all([getHeader(locale), getFooter(locale)])
   const isThai = locale === 'th'
 
-  // Only show these four items, in this order.
+  // Two equal journeys: a direct help path and a visible support action.
   const ALLOWED: { href: string; en: string; th: string }[] = [
+    { href: '/get-help', en: 'Get Help', th: 'ขอความช่วยเหลือ' },
+    { href: '/our-work', en: 'Our Work', th: 'งานของเรา' },
+    { href: '/impact', en: 'Impact & Reports', th: 'ผลการทำงานและรายงาน' },
     { href: '/about', en: 'About', th: 'เกี่ยวกับเรา' },
-    { href: '/team', en: 'Team', th: 'ทีมงาน' },
-    { href: '/services', en: 'Services', th: 'บริการ' },
-    { href: '/blog', en: 'Blog', th: 'บล็อก' },
+    { href: '/blog', en: 'News', th: 'ข่าวสาร' },
   ]
   const cmsItems = header?.navItems ?? []
-  const navItems = ALLOWED.map((allowed) => {
-    const cms = cmsItems.find((n) => n.href === allowed.href)
-    return { href: allowed.href, label: cms?.label ?? (isThai ? allowed.th : allowed.en) }
-  })
+  const cmsReady = ALLOWED.every((item) => cmsItems.some((cms) => cms.href === item.href))
+  const navItems = cmsReady
+    ? cmsItems.filter((item) => ALLOWED.some((allowed) => allowed.href === item.href)).map((item) => ({ href: item.href, label: item.label }))
+    : ALLOWED.map((item) => ({ href: item.href, label: isThai ? item.th : item.en }))
 
   const donate = {
     href: header?.donateHref || '/donate',
@@ -56,7 +57,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               </span>
             </a>
           ) : (
-            <span className="t-label text-white/55">LPN Foundation</span>
+            <span className="t-label text-white/75">LPN Foundation</span>
           )}
           <LocaleSwitcher />
         </div>
@@ -73,7 +74,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
             />
           </Link>
 
-          <nav aria-label={isThai ? 'เมนูหลัก' : 'Main menu'} className="hidden items-center gap-7 md:flex">
+          <nav aria-label={isThai ? 'เมนูหลัก' : 'Main menu'} className="hidden items-center gap-5 xl:gap-7 lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}

@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Link } from '@/i18n/navigation'
 
@@ -54,12 +53,15 @@ export function Section({
 
 export function Eyebrow({
   children,
+  tone = 'light',
   className = '',
 }: {
   children: React.ReactNode
+  tone?: 'light' | 'dark'
   className?: string
 }) {
-  return <span className={`eyebrow text-brand-yellow ${className}`}>{children}</span>
+  const textColor = tone === 'dark' ? 'text-black' : 'text-brand-yellow'
+  return <span className={`eyebrow ${textColor} ${className}`}>{children}</span>
 }
 
 /** Eyebrow + title + optional lede. One per section — this IS the section header. */
@@ -83,7 +85,7 @@ export function SectionHeading({
       className={`max-w-3xl ${align === 'center' ? 'mx-auto text-center' : ''} ${className}`}
     >
       {eyebrow && (
-        <Eyebrow className={align === 'center' ? 'justify-center' : ''}>{eyebrow}</Eyebrow>
+        <Eyebrow tone={tone} className={align === 'center' ? 'justify-center' : ''}>{eyebrow}</Eyebrow>
       )}
       <h2
         className={`t-h2 mt-5 ${tone === 'dark' ? 'text-black' : 'text-white'}`}
@@ -92,7 +94,7 @@ export function SectionHeading({
       </h2>
       {lede && (
         <p
-          className={`t-lede mt-5 ${tone === 'dark' ? 'text-black/70' : 'text-white/75'}`}
+          className={`t-lede mt-5 ${tone === 'dark' ? 'text-black/75' : 'text-white/80'}`}
         >
           {lede}
         </p>
@@ -205,9 +207,9 @@ export function StatBand({
     light: 'border-black/15 text-black',
   }[tone]
   const label = {
-    yellow: 'text-black/65',
-    dark: 'text-white/55',
-    light: 'text-black/55',
+    yellow: 'text-black/85',
+    dark: 'text-white/70',
+    light: 'text-black/70',
   }[tone]
   return (
     <dl className={`grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 ${className}`}>
@@ -224,8 +226,8 @@ export function StatBand({
 /* --------------------------------------------------------------------- hero */
 
 /**
- * Page hero — dark, photography-led (brand rule: human-centered imagery with a
- * strong-contrast treatment). `compact` for interior pages, `full` for home.
+ * Page hero — a neutral typographic treatment for topics that extend beyond
+ * the foundation's historical fishing rescues. `compact` for interior pages.
  */
 export function PageHero({
   eyebrow,
@@ -246,16 +248,7 @@ export function PageHero({
 }) {
   return (
     <section className="relative isolate overflow-hidden bg-black text-white">
-      <Image
-        src="/images/trawler-hero.jpg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center opacity-30"
-      />
-      <div className="absolute inset-0 bg-linear-to-t from-black via-black/75 to-black/35" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0.85)_85%)]" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-[42%] border-l border-white/10 bg-[linear-gradient(135deg,transparent_0%,rgba(255,199,0,0.12)_100%)]" aria-hidden="true" />
 
       <div className={`container-page relative z-10 ${compact ? 'py-20 md:py-24' : 'py-24 md:py-32'}`}>
         <div className="max-w-4xl">
@@ -325,7 +318,7 @@ export function EditorialRow({
       className={`grid gap-x-10 gap-y-4 border-t border-black/15 py-10 md:grid-cols-[auto_1fr_auto] ${className}`}
     >
       {index !== undefined && (
-        <div className="text-xs font-black uppercase tracking-[0.3em] text-black/35 md:pt-1.5">
+        <div className="text-xs font-black uppercase tracking-[0.3em] text-black/65 md:pt-1.5">
           {index}
         </div>
       )}
