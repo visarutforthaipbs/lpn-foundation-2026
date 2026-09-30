@@ -57,3 +57,20 @@ The blog snapshot contains unpublished drafts and is kept in the ignored
 `.migration` directory on the migration machine. A future direct Wix API run
 can use `WIX_API_KEY` and `WIX_SITE_ID` instead of `--snapshot` when those
 credentials are valid.
+
+## Local development copy
+
+The development machine's ignored `.env` points to a **separate local Postgres
+database** named `lpn_payload_dev_20260930`. It contains a snapshot of the
+production Payload database (89 posts including drafts, 9 pages, 262 media
+records). The previous local `lpn` database remains untouched. Backup dumps
+are in the ignored `.migration` directory.
+
+All 262 production media files were downloaded into the ignored local `media/`
+directory, so blog images work without production Blob credentials. Leave
+`BLOB_READ_WRITE_TOKEN` unset locally so development uploads cannot write to
+production Blob storage. If a developer copies the database without downloading
+the files, `DEV_MEDIA_ORIGIN=https://lpn-foundation-2026.vercel.app` can
+temporarily proxy public media reads instead. This content copy is a snapshot;
+future production edits do not automatically appear in localhost until it is
+refreshed.
