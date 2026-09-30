@@ -10,7 +10,7 @@ The existing Next.js/Payload site now has the PRD's two primary journeys. The ho
 - Stories has a consent, date, safety, and editorial sign-off gate, plus separate cover-image approval; the public route renders only published records with approved consent. No new individual story was published.
 - Support describes individual and institutional paths without invented gift-to-outcome costs. Bank details render only if account fields, named reviewer, and verification date are complete in Payload. They are withheld at present.
 - Payload has an additive migration for the three collections and review fields. The separate local database and Vercel preview database have the schema. A 2024 annual report and four metrics were seeded as **drafts** in both, pending LPN review. Primary navigation is editable in Payload in both locales.
-- TypeScript, lint, local and production-mode builds passed. All 14 core route/locale combinations returned 200 locally. All 83 migrated published article URLs returned 200 locally. The Thai mobile menu was opened and checked at a 390px viewport.
+- TypeScript, lint, local and production-mode builds passed. All 14 core route/locale combinations returned 200 locally. All 83 migrated published article URLs returned 200 locally and in the Vercel preview. In the preview, all 83 old Wix article paths returned the expected 200 or 308. The Thai mobile menu was opened and checked at a 390px viewport.
 
 ## Before public-domain cutover
 
@@ -18,7 +18,7 @@ The existing Next.js/Payload site now has the PRD's two primary journeys. The ho
 - LPN must verify current bank/provider details and sign off on donor and partnership terms. Until then, donor contact works but direct transfer details are withheld.
 - LPN must review consent, attribution, and safe reuse of public Wix photographs, plus any new stories or identifiable images. The editorial gate blocks new story publication without recorded approval.
 - Approve and publish the drafted metrics/report; supply current 2025–26 evidence. Do not combine case counts, people reached, and research sample sizes into a single total.
-- Complete representative worker and donor usability tests, migrant-language review, keyboard/screen-reader checks, mobile and performance QA, and a full old-URL crawl on the Vercel deployment.
+- Complete representative worker and donor usability tests, migrant-language review, keyboard/screen-reader checks, and broader mobile and performance QA. The article URL crawl passed; verify legacy Wix page routes and other external backlinks before DNS cutover.
 - Confirm privacy consent and retention before enabling cross-site intent analytics. DNS cutover and any standalone Right Guide domain changes remain separate release steps.
 
 The preview is for review. See [PRD-2026.md](./PRD-2026.md) for acceptance criteria and [MIGRATION-STATUS.md](./MIGRATION-STATUS.md) for the source inventory.
