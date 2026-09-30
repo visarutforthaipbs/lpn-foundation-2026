@@ -1,11 +1,18 @@
+import { WixIntegratedCopy } from '@/components/WixIntegratedCopy'
 import { setRequestLocale } from 'next-intl/server'
-import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage, getTeam } from '@/lib/api'
 import { MediaImage } from '@/components/MediaImage'
 import { buildMetadata } from '@/lib/seo'
-import Image from 'next/image'
+import {
+  Container,
+  Section,
+  SectionHeading,
+  PageHero,
+  CtaBand,
+  ButtonLink,
+} from '@/components/ui'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -87,171 +94,119 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
 
   return (
     <>
-      {/* HERO */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-black text-white">
-        <Image
-          src="/images/trawler-hero.jpg"
-          alt="Fishing trawler hero background"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-25"
-          {...({ fetchPriority: 'high' } as any)}
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-black/30" />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-32">
-          <div className="max-w-3xl">
-            <span className="inline-flex rounded glass-tag px-3 py-1 text-[10px] font-black uppercase tracking-[0.25em] text-brand-yellow">
-              {isThai ? 'ทีม LPN' : 'The LPN team'}
-            </span>
-            <h1 className="mt-6 text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-6xl">
-              {isThai
-                ? 'นักกิจกรรม นักสังคมสงเคราะห์ และอดีตแรงงานที่ปฏิเสธจะยอมแพ้'
-                : 'Activists, social workers, and former workers who refuse to look away.'}
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 md:text-lg">
-              {isThai
-                ? 'เครือข่ายของเราเป็นทั้งหน่วยกู้ภัย หน่วยกฎหมาย ครู และผู้นำชุมชน รวมพลังกันเพื่อหยุดวงจรการแสวงหาประโยชน์จากแรงงาน'
-                : 'Our network is at once rescue team, legal aid, teachers, and community leaders — joined in the work of breaking labour exploitation.'}
-            </p>
-          </div>
+      {/* ---------------------------------------------------------------- HERO */}
+      <PageHero
+        compact
+        eyebrow={isThai ? 'ทีม LPN' : 'The LPN team'}
+        title={
+          isThai
+            ? 'นักกิจกรรม นักสังคมสงเคราะห์ และอดีตแรงงานที่ปฏิเสธจะยอมแพ้'
+            : 'Activists, social workers, and former workers who refuse to look away.'
+        }
+        lede={
+          isThai
+            ? 'เครือข่ายของเราเป็นทั้งหน่วยกู้ภัย หน่วยกฎหมาย ครู และผู้นำชุมชน รวมพลังกันเพื่อหยุดวงจรการแสวงหาประโยชน์จากแรงงาน'
+            : 'Our network is at once rescue team, legal aid, teachers, and community leaders — joined in the work of breaking labour exploitation.'
+        }
+        stats={stats}
+      />
 
-          <dl className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-l-4 border-brand-yellow pl-6">
-            {stats.map((s) => (
-              <div key={s.label}>
-                <dt className="text-[10px] font-bold uppercase tracking-widest text-white/55">
-                  {s.label}
-                </dt>
-                <dd className="mt-1 text-2xl font-black md:text-3xl">{s.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
-      {/* LEADERSHIP */}
-      <section className="border-b border-black bg-white py-20 text-black md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl font-black uppercase tracking-tight md:text-5xl">
-                {isThai ? 'ผู้นำองค์กร' : 'Leadership'}
-              </h2>
-              <p className="mt-4 text-base leading-relaxed text-black/70">
-                {isThai
+      {/* ------------------------------------------------------------ LEADERSHIP */}
+      <Section tone="light" className="on-light">
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-8">
+            <SectionHeading
+              title={isThai ? 'ผู้นำองค์กร' : 'Leadership'}
+              lede={
+                isThai
                   ? 'ผู้ร่วมก่อตั้งและหัวหน้าฝ่ายภาคสนามที่กำหนดทิศทางของ LPN มากว่าสองทศวรรษ'
-                  : 'Co-founders and frontline leads who have shaped LPN’s direction for two decades.'}
-              </p>
-            </div>
-            <Link
-              href="/about"
-              className="rounded border border-black px-5 py-2.5 text-[11px] font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-brand-yellow"
-            >
+                  : 'Co-founders and frontline leads who have shaped LPN’s direction for two decades.'
+              }
+            />
+            <ButtonLink href="/about" variant="ghostDark">
               {isThai ? 'อ่านเรื่องราวของเรา →' : 'Our story →'}
-            </Link>
+            </ButtonLink>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          {/* Editorial 2-col: quote carries the person, bio carries the record. */}
+          <div className="mt-12">
             {leaders.map((l) => (
               <article
                 key={l.name}
-                className="group relative overflow-hidden rounded border border-black bg-white p-8 transition-all duration-300 hover:-translate-y-1"
+                className="grid gap-x-10 gap-y-5 border-t border-black/15 py-10 md:grid-cols-2"
               >
-                <div className="absolute top-0 left-0 h-full w-1.5 bg-brand-yellow" />
-                <div className="pl-3">
-                  <p className="text-base font-bold italic leading-snug text-black/85">{l.quote}</p>
-                  <h3 className="mt-6 text-xl font-black uppercase tracking-tight">{l.name}</h3>
-                  <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-black/55">
-                    {l.role}
-                  </div>
-                  <p className="mt-4 text-sm leading-relaxed text-black/75">{l.body}</p>
+                <div>
+                  <p className="t-lede font-medium text-black/85 italic">{l.quote}</p>
+                  <h3 className="t-h3 mt-6">{l.name}</h3>
+                  <div className="t-label mt-2 text-black/55">{l.role}</div>
                 </div>
+                <p className="max-w-2xl text-base leading-relaxed text-black/70 md:pt-1.5">
+                  {l.body}
+                </p>
               </article>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* FULL TEAM GRID */}
-      <section className="border-b border-white/10 bg-black py-20 text-white md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-12 max-w-2xl">
-            <span className="inline-flex rounded glass-tag px-3 py-1 text-[10px] font-black uppercase tracking-[0.25em] text-brand-yellow">
-              {isThai ? 'สมาชิกทีม' : 'Team members'}
-            </span>
-            <h2 className="mt-6 text-3xl font-black uppercase tracking-tight md:text-4xl">
-              {isThai ? 'หลายเสียง ภารกิจเดียวกัน' : 'Many voices. One mission.'}
-            </h2>
-          </div>
+      {/* ------------------------------------------------------- FULL TEAM GRID */}
+      <Section tone="dark" className="border-y border-white/10">
+        <Container>
+          <SectionHeading
+            eyebrow={isThai ? 'สมาชิกทีม' : 'Team members'}
+            tone="light"
+            title={isThai ? 'หลายเสียง ภารกิจเดียวกัน' : 'Many voices. One mission.'}
+          />
 
           {team.length === 0 ? (
-            <p className="text-white/55">
+            <p className="mt-10 text-white/55">
               {isThai
                 ? 'ยังไม่มีข้อมูลทีมงานในระบบ — โปรดเพิ่มข้อมูลในแผงควบคุม'
                 : 'No team members yet — add them from the admin panel.'}
             </p>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {team.map((m) => (
-                <article
-                  key={m.id}
-                  className="group relative overflow-hidden glass-dark rounded p-6"
-                >
-                  <span className="absolute top-0 left-0 h-1.5 w-10 bg-brand-yellow" />
+                <article key={m.id} className="card p-6">
                   {m.photo && typeof m.photo !== 'number' ? (
                     <MediaImage
                       media={m.photo}
-                      className="h-24 w-24 rounded-full border border-white/20 object-cover"
+                      className="h-24 w-24 rounded-full border border-black/10 object-cover"
                     />
                   ) : (
-                    <div className="flex h-24 w-24 items-center justify-center rounded-full border border-white/20 bg-brand-yellow/10 text-xs font-black text-brand-yellow">
+                    <div className="flex h-24 w-24 items-center justify-center rounded-full border border-black bg-brand-yellow text-xs font-black text-black">
                       LPN
                     </div>
                   )}
-                  <h3 className="mt-5 text-base font-black uppercase tracking-tight text-white">
-                    {m.name}
-                  </h3>
-                  {m.role && (
-                    <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/55">
-                      {m.role}
-                    </div>
-                  )}
+                  <h3 className="mt-5 text-base font-black tracking-tight text-black">{m.name}</h3>
+                  {m.role && <div className="t-label mt-1 text-black/55">{m.role}</div>}
                 </article>
               ))}
             </div>
           )}
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* CTA */}
-      <section className="bg-brand-yellow py-16 text-black">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 md:flex-row md:items-center md:justify-between">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl font-black uppercase tracking-tight md:text-4xl">
-              {isThai ? 'ทำงานกับเรา' : 'Work with us.'}
-            </h2>
-            <p className="mt-3 text-sm text-black/80 md:text-base">
-              {isThai
-                ? 'ทั้งบทบาทอาสาสมัคร นักศึกษาฝึกงาน หรือพันธมิตรองค์กร เราต้อนรับคนที่พร้อมยืนข้างแรงงาน'
-                : 'Volunteer, intern, or partner — we welcome anyone ready to stand with workers.'}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/contact"
-              className="rounded bg-black px-6 py-3 text-xs font-black uppercase tracking-widest text-brand-yellow transition-all hover:bg-white hover:text-black border border-black"
-            >
+      {/* ------------------------------------------------------------- CTA BAND */}
+      <CtaBand
+        heading={isThai ? 'ทำงานกับเรา' : 'Work with us.'}
+        body={
+          isThai
+            ? 'ทั้งบทบาทอาสาสมัคร นักศึกษาฝึกงาน หรือพันธมิตรองค์กร เราต้อนรับคนที่พร้อมยืนข้างแรงงาน'
+            : 'Volunteer, intern, or partner — we welcome anyone ready to stand with workers.'
+        }
+        actions={
+          <>
+            <ButtonLink href="/contact" variant="solidDark">
               {isThai ? 'ติดต่อทีม' : 'Contact the team'}
-            </Link>
-            <Link
-              href="/donate"
-              className="rounded border border-black bg-transparent px-6 py-3 text-xs font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-brand-yellow"
-            >
+            </ButtonLink>
+            <ButtonLink href="/donate" variant="ghostDark">
               {isThai ? 'สนับสนุนภารกิจ' : 'Fund the mission'}
-            </Link>
-          </div>
-        </div>
-      </section>
+            </ButtonLink>
+          </>
+        }
+      />
+      <WixIntegratedCopy slug="team" locale={locale} />
     </>
   )
 }

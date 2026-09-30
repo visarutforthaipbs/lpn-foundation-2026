@@ -1,10 +1,19 @@
+import { WixIntegratedCopy } from '@/components/WixIntegratedCopy'
 import { setRequestLocale } from 'next-intl/server'
-import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
-import Image from 'next/image'
+import {
+  Container,
+  Section,
+  SectionHeading,
+  PageHero,
+  CtaBand,
+  ButtonLink,
+  EditorialRow,
+  MarkLink,
+} from '@/components/ui'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -170,170 +179,111 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
 
   return (
     <>
-      {/* HERO */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-black text-white">
-        <Image
-          src="/images/trawler-hero.jpg"
-          alt="Fishing trawler hero background"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-25"
-          {...({ fetchPriority: 'high' } as any)}
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-black/30" />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-32">
-          <div className="max-w-3xl">
-            <span className="inline-flex rounded glass-tag px-3 py-1 text-[10px] font-black uppercase tracking-[0.25em] text-brand-yellow">
-              {isThai ? 'บริการของ LPN' : 'What LPN does'}
-            </span>
-            <h1 className="mt-6 text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-6xl">
-              {isThai
-                ? 'สี่เสาหลักที่หยุดวงจรการแสวงหาประโยชน์จากแรงงาน'
-                : 'Four pillars that break the cycle of labour exploitation.'}
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 md:text-lg">
-              {isThai
-                ? 'จากการช่วยชีวิตในทะเลถึงห้องเรียนของลูกแรงงานข้ามชาติ บริการของเราถูกหล่อหลอมจากประสบการณ์ภาคสนามกว่า 15 ปีกับชุมชนแรงงาน'
-                : 'From open-sea rescues to classrooms for migrant children, our services are built from 15+ years of frontline work with migrant communities.'}
-            </p>
-          </div>
+      {/* ---------------------------------------------------------------- HERO */}
+      <PageHero
+        compact
+        eyebrow={isThai ? 'บริการของ LPN' : 'What LPN does'}
+        title={
+          isThai
+            ? 'สี่เสาหลักที่หยุดวงจรการแสวงหาประโยชน์จากแรงงาน'
+            : 'Four pillars that break the cycle of labour exploitation.'
+        }
+        lede={
+          isThai
+            ? 'จากการช่วยชีวิตในทะเลถึงห้องเรียนของลูกแรงงานข้ามชาติ บริการของเราถูกหล่อหลอมจากประสบการณ์ภาคสนามกว่า 15 ปีกับชุมชนแรงงาน'
+            : 'From open-sea rescues to classrooms for migrant children, our services are built from 15+ years of frontline work with migrant communities.'
+        }
+        stats={stats}
+      />
 
-          <dl className="mt-12 grid grid-cols-3 gap-4 max-w-2xl border-l-4 border-brand-yellow pl-6">
-            {stats.map((s) => (
-              <div key={s.label}>
-                <dt className="text-[10px] font-bold uppercase tracking-widest text-white/55">
-                  {s.label}
-                </dt>
-                <dd className="mt-1 text-2xl font-black md:text-3xl">{s.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
-      {/* SERVICES GRID */}
-      <section className="border-b border-black bg-white py-20 text-black md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-            <div className="max-w-xl">
-              <h2 className="text-3xl font-black uppercase tracking-tight md:text-5xl">
-                {isThai ? 'บริการ' : 'Our services'}
-              </h2>
-              <p className="mt-4 text-base leading-relaxed text-black/70">
-                {isThai
+      {/* ------------------------------------------------------- SERVICE PILLARS */}
+      <Section tone="light" className="on-light">
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-8">
+            <SectionHeading
+              title={isThai ? 'บริการ' : 'Our services'}
+              lede={
+                isThai
                   ? 'งานของเราเชื่อมโยงกัน — การช่วยเหลือนำไปสู่กระบวนการยุติธรรม การศึกษา และการรวมพลังของผู้รอด'
-                  : 'Every pillar feeds the next — rescue leads to justice, justice into education, education into worker-led power.'}
-              </p>
-            </div>
-            <Link
-              href="/donate"
-              className="rounded bg-brand-yellow px-6 py-3 text-xs font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-brand-yellow border border-transparent hover:border-brand-yellow"
-            >
+                  : 'Every pillar feeds the next — rescue leads to justice, justice into education, education into worker-led power.'
+              }
+            />
+            <ButtonLink href="/donate" variant="primary">
               {isThai ? 'สนับสนุนภารกิจ' : 'Fund the mission'}
-            </Link>
+            </ButtonLink>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="mt-12">
             {services.map((s) => (
-              <article
+              <EditorialRow
                 key={s.number}
-                className="group relative overflow-hidden rounded border border-black bg-white p-8 transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="absolute top-0 left-0 h-full w-1.5 bg-brand-yellow" />
-                <div className="flex items-start justify-between gap-4 pl-3">
-                  <span className="text-xs font-black uppercase tracking-[0.25em] text-black/40">
-                    {isThai ? 'เสาหลัก' : 'Pillar'} {s.number}
-                  </span>
-                </div>
-                <h3 className="mt-3 pl-3 text-2xl font-black uppercase tracking-tight md:text-3xl">
-                  {s.title}
-                </h3>
-                <p className="mt-4 pl-3 text-sm leading-relaxed text-black/75">{s.body}</p>
-
-                <ul className="mt-6 pl-3 grid gap-2 text-sm text-black/85">
-                  {s.outcomes.map((o) => (
-                    <li key={o} className="flex gap-3">
-                      <span className="mt-2 inline-block h-1 w-3 shrink-0 bg-brand-yellow" />
-                      <span>{o}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="mt-8 pl-3">
-                  <Link
-                    href={s.cta.href}
-                    className="inline-flex items-center text-xs font-black uppercase tracking-widest text-black border-b-2 border-brand-yellow pb-0.5 transition-all group-hover:border-black"
-                  >
-                    {s.cta.label} →
-                  </Link>
-                </div>
-              </article>
+                index={`${isThai ? 'เสาหลัก' : 'Pillar'} ${s.number}`}
+                title={s.title}
+                body={s.body}
+                meta={
+                  <ul className="flex flex-wrap gap-x-6 gap-y-2">
+                    {s.outcomes.map((o) => (
+                      <li key={o} className="flex items-center gap-2.5 text-sm text-black/80">
+                        <span className="inline-block h-1 w-3 shrink-0 bg-brand-yellow" aria-hidden="true" />
+                        {o}
+                      </li>
+                    ))}
+                  </ul>
+                }
+                actions={<MarkLink href={s.cta.href} className="text-black">{s.cta.label} →</MarkLink>}
+              />
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* JOURNEY / PROCESS */}
-      <section className="border-b border-white/10 bg-black py-20 text-white md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="max-w-2xl">
-            <span className="inline-flex rounded glass-tag px-3 py-1 text-[10px] font-black uppercase tracking-[0.25em] text-brand-yellow">
-              {isThai ? 'เส้นทางการช่วยเหลือ' : 'How a case moves'}
-            </span>
-            <h2 className="mt-6 text-3xl font-black uppercase tracking-tight md:text-4xl">
-              {isThai
-                ? 'จากสายโทรศัพท์สู่ชีวิตที่มีศักดิ์ศรี'
-                : 'From a phone call to a life restored.'}
-            </h2>
-          </div>
-
+      {/* -------------------------------------------------------------- JOURNEY */}
+      <Section tone="dark" className="border-y border-white/10">
+        <Container>
+          <SectionHeading
+            tone="light"
+            eyebrow={isThai ? 'เส้นทางการช่วยเหลือ' : 'How a case moves'}
+            title={
+              isThai ? 'จากสายโทรศัพท์สู่ชีวิตที่มีศักดิ์ศรี' : 'From a phone call to a life restored.'
+            }
+          />
           <ol className="mt-12 grid gap-4 md:grid-cols-4">
             {journey.map((j, i) => (
-              <li key={j.step} className="relative glass-dark rounded p-6">
+              <li key={j.step} className="glass-dark relative rounded p-6">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-black text-brand-yellow">{j.step}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/45">
+                  <span className="t-label text-white/45">
                     {isThai ? 'ขั้นที่' : 'Step'} {i + 1}
                   </span>
                 </div>
-                <div className="mt-4 text-base font-bold uppercase tracking-tight">{j.label}</div>
+                <div className="mt-4 text-base font-bold tracking-tight">{j.label}</div>
                 <p className="mt-2 text-sm leading-relaxed text-white/70">{j.body}</p>
               </li>
             ))}
           </ol>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* CTA */}
-      <section className="bg-brand-yellow py-16 text-black">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 md:flex-row md:items-center md:justify-between">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl font-black uppercase tracking-tight md:text-4xl">
-              {isThai ? 'พบเหตุที่ต้องการความช่วยเหลือ?' : 'Need to report a case?'}
-            </h2>
-            <p className="mt-3 text-sm text-black/80 md:text-base">
-              {isThai
-                ? 'สายด่วนของเราเปิดรับการแจ้งเหตุและการขอความช่วยเหลือเป็นความลับ ในหลายภาษา ตลอด 24 ชั่วโมง'
-                : 'Our multilingual hotline takes reports and assistance requests in confidence, around the clock.'}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/contact"
-              className="rounded bg-black px-6 py-3 text-xs font-black uppercase tracking-widest text-brand-yellow transition-all hover:bg-white hover:text-black border border-black"
-            >
+      {/* ---------------------------------------------------------------- CTA */}
+      <CtaBand
+        heading={isThai ? 'พบเหตุที่ต้องการความช่วยเหลือ?' : 'Need to report a case?'}
+        body={
+          isThai
+            ? 'สายด่วนของเราเปิดรับการแจ้งเหตุและการขอความช่วยเหลือเป็นความลับ ในหลายภาษา ตลอด 24 ชั่วโมง'
+            : 'Our multilingual hotline takes reports and assistance requests in confidence, around the clock.'
+        }
+        actions={
+          <>
+            <ButtonLink href="/contact" variant="solidDark">
               {isThai ? 'ติดต่อทันที' : 'Contact now'}
-            </Link>
-            <Link
-              href="/donate"
-              className="rounded border border-black bg-transparent px-6 py-3 text-xs font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-brand-yellow"
-            >
+            </ButtonLink>
+            <ButtonLink href="/donate" variant="ghostDark">
               {isThai ? 'บริจาค' : 'Donate'}
-            </Link>
-          </div>
-        </div>
-      </section>
+            </ButtonLink>
+          </>
+        }
+      />
+      <WixIntegratedCopy slug="services" locale={locale} />
     </>
   )
 }

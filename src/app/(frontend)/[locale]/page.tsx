@@ -1,9 +1,11 @@
+import { WixIntegratedCopy } from '@/components/WixIntegratedCopy'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { Link } from '@/i18n/navigation'
+import Image from 'next/image'
 import type { Locale } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
-import Image from 'next/image'
+import { HOTLINES, telHref } from '@/lib/content'
+import { Container, Section, SectionHeading, StatBand, ButtonLink, CtaBand, EditorialRow, Eyebrow, MarkLink } from '@/components/ui'
 
 export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
@@ -93,56 +95,40 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
 
   return (
     <>
-      {/* Stark Full-Bleed Documentary Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-black text-white py-20">
+      {/* ---------------------------------------------------------------- HERO */}
+      <section className="relative isolate overflow-hidden bg-black text-white">
         <Image
           src="/images/trawler-hero.jpg"
-          alt="Fishing trawler hero background"
+          alt=""
           fill
           priority
           sizes="100vw"
           className="object-cover object-center"
-          {...({ fetchPriority: 'high' } as any)}
         />
-        {/* Cinematic gradient overlays to enforce stark drama and contrast */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.9)_80%)]" />
-        <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/45 to-transparent" />
 
-        <div className="relative mx-auto max-w-7xl px-4 w-full z-10">
+        <div className="container-page relative z-10 py-24 md:py-36">
           <div className="max-w-4xl">
-            <span className="inline-flex rounded glass-tag px-3 py-1 text-[10px] font-black uppercase tracking-[0.25em] text-brand-yellow">
-              Labour Rights Promotion Network Foundation
-            </span>
-            <h1 className="mt-6 text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-7xl">
-              {t('title')}
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
-              {t('subtitle')}
-            </p>
+            <Eyebrow>Labour Rights Promotion Network Foundation</Eyebrow>
+            <h1 className="t-display mt-6">{t('title')}</h1>
+            <p className="t-lede mt-7 max-w-2xl text-white/90">{t('subtitle')}</p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link
-                href="/donate"
-                className="rounded bg-brand-yellow px-8 py-3.5 text-sm font-bold uppercase tracking-wider text-black transition-all hover:bg-white hover:text-black border border-transparent hover:border-black"
-              >
+            <div className="mt-9 flex flex-wrap gap-3">
+              <ButtonLink href="/donate" variant="primary">
                 {t('ctaDonate')}
-              </Link>
-              <Link
-                href="/about"
-                className="rounded border border-white/45 bg-black/40 px-8 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition-all hover:bg-white hover:text-black"
-              >
+              </ButtonLink>
+              <ButtonLink href="/about" variant="ghostLight">
                 {t('ctaLearn')}
-              </Link>
+              </ButtonLink>
             </div>
 
-            {/* Custom LPN Bracket Statistic Card */}
-            <div className="mt-14 max-w-2xl relative p-6 md:p-8 border-l-4 border-r-4 border-brand-yellow/80 bg-black/55 backdrop-blur-xs overflow-hidden rounded">
-              <span className="absolute top-0 left-0 w-6 h-1.5 bg-brand-yellow"></span>
-              <span className="absolute bottom-0 right-0 w-6 h-1.5 bg-brand-yellow"></span>
-              <p className="text-xl font-extrabold leading-tight text-white md:text-2xl">
-                {statLabel}
-              </p>
-              <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-brand-yellow/90">
+            {/* Bracket stat card — the one high-Surprisal fact of the page */}
+            <div className="relative mt-14 max-w-2xl overflow-hidden rounded border-x-4 border-brand-yellow/80 bg-black/55 p-6 backdrop-blur-sm md:p-8">
+              <span className="absolute top-0 left-0 h-1.5 w-6 bg-brand-yellow" aria-hidden="true" />
+              <span className="absolute right-0 bottom-0 h-1.5 w-6 bg-brand-yellow" aria-hidden="true" />
+              <p className="text-xl font-extrabold leading-tight text-white md:text-2xl">{statLabel}</p>
+              <p className="mt-3 text-xs font-semibold tracking-widest text-brand-yellow/90 uppercase">
                 {statSource}
               </p>
             </div>
@@ -150,148 +136,115 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         </div>
       </section>
 
-      {/* Impact stats band */}
-      <section className="border-y border-black bg-brand-yellow text-black">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-4 py-10 md:grid-cols-4">
-          {impactStats.map((s) => (
-            <div key={s.label} className="border-l-4 border-black pl-4">
-              <div className="text-3xl font-black tracking-tight md:text-4xl">{s.value}</div>
-              <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-black/70">
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* ---------------------------------------------------------- STAT BAND */}
+      <Section tone="yellow" tight className="border-y border-black">
+        <Container>
+          <StatBand stats={impactStats} tone="yellow" />
+        </Container>
+      </Section>
 
-      {/* Focus Pillars Section */}
-      <section className="bg-white py-20 text-black border-t border-black contain-pillars">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl font-black leading-tight tracking-tight uppercase md:text-5xl">
-                {sectionTitle}
-              </h2>
-              <p className="mt-4 text-base text-black/75 leading-relaxed">{sectionSubtitle}</p>
-            </div>
-            <Link
-              href="/services"
-              className="rounded border border-black px-5 py-2.5 text-[11px] font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-brand-yellow"
-            >
-              {isThai ? 'ดูบริการทั้งหมด →' : 'See all services →'}
-            </Link>
+      {/* ------------------------------------------------------- FOCUS PILLARS */}
+      <Section tone="light" className="contain-pillars on-light">
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-8">
+            <SectionHeading title={sectionTitle} lede={sectionSubtitle} />
+            <ButtonLink href="/services" variant="ghostDark">
+              {isThai ? 'ดูบริการทั้งหมด' : 'See all services'} →
+            </ButtonLink>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="mt-12">
             {focusAreas.map((item, idx) => (
-              <article
+              <EditorialRow
                 key={item.title}
-                className="group relative p-8 border border-black rounded bg-white transition-all duration-300 hover:-translate-y-1 overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
-                <div className="absolute top-4 right-4 text-xs font-bold text-black/25">
-                  0{idx + 1}
-                </div>
-                <h3 className="text-xl font-bold uppercase tracking-tight pr-6">{item.title}</h3>
-                <p className="mt-4 text-sm leading-relaxed text-black/80">{item.body}</p>
-                <div className="mt-8">
-                  <Link
-                    href={item.href}
-                    className="inline-flex items-center text-xs font-black uppercase tracking-widest text-black border-b-2 border-brand-yellow pb-0.5 transition-all group-hover:border-black"
-                  >
-                    {isThai ? 'อ่านเพิ่มเติม' : 'Read more'}
-                  </Link>
-                </div>
-              </article>
+                index={`0${idx + 1}`}
+                title={item.title}
+                body={item.body}
+                actions={
+                  <MarkLink href={item.href} className="text-black">
+                    {isThai ? 'อ่านเพิ่มเติม' : 'Read more'} →
+                  </MarkLink>
+                }
+              />
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* Rescued Worker Testimony (Layer 3 - Conscious Deep-Dive / The Breath Rule) */}
-      <section className="bg-black py-24 text-white border-y border-white/10 contain-testimony">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <div className="relative inline-block py-12 px-8 border-t border-b border-brand-yellow/40">
-            <span className="absolute left-0 top-0 w-4 h-full border-l-2 border-brand-yellow"></span>
-            <span className="absolute right-0 top-0 w-4 h-full border-r-2 border-brand-yellow"></span>
-            <p className="text-xl md:text-2xl font-medium italic leading-relaxed text-white/90">
+      {/* ------------------------------------------------------ TESTIMONY (breath) */}
+      <Section tone="dark" className="border-y border-white/10 contain-testimony">
+        <Container>
+          <figure className="relative mx-auto max-w-3xl border-x-2 border-brand-yellow/40 px-8 py-12 text-center">
+            <blockquote className="t-lede font-medium text-white/90 italic">
               {isThai
                 ? '"ผมถูกขังในกรงเหล็กบนเรือประมงนานสามเดือนกลางมหาสมุทร LPN ประสานงานตำรวจเข้าช่วยเหลือ ตัดโซ่ตรวนที่ล่ามผมไว้ และพาผมกลับสู่อ้อมกอดของครอบครัวอย่างปลอดภัย"'
                 : '"I was locked in a cage on a fishing trawler for three months in the open sea. LPN tracked my location, coordinated the rescue, cut the chains, and brought me back to my family."'}
-            </p>
-            <p className="mt-6 text-xs font-bold uppercase tracking-[0.25em] text-brand-yellow">
+            </blockquote>
+            <figcaption className="mt-8 text-xs font-bold tracking-[0.25em] text-brand-yellow uppercase">
               {isThai
                 ? '— แรงงานประมงสัญชาติเมียนมา ที่ได้รับความช่วยเหลือในน่านน้ำสากล'
                 : '— Rescued Migrant Fisher, Assisted in International Waters'}
-            </p>
-          </div>
-        </div>
-      </section>
+            </figcaption>
+          </figure>
+        </Container>
+      </Section>
 
-      {/* Emergency Hotline Center (Action Focus) */}
-      <section className="bg-white py-20 text-black border-b border-black contain-hotline">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="inline-block rounded bg-brand-yellow px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-black">
-              Emergency Action
-            </span>
-            <h2 className="mt-3 text-3xl font-black uppercase tracking-tight md:text-5xl">
-              {isThai ? 'ศูนย์ช่วยเหลือฉุกเฉิน' : 'Emergency Rescue Hub'}
-            </h2>
-            <p className="mt-4 text-sm text-black/75">
-              {isThai
+      {/* ------------------------------------------------------------- CTA BAND */}
+      <CtaBand
+        heading={isThai ? 'ร่วมยุติระบบทาสสมัยใหม่ไปด้วยกัน' : 'Help us end modern slavery'}
+        body={
+          isThai
+            ? 'การสนับสนุนของคุณช่วยให้เราทำงานช่วยชีวิตแรงงาน สร้างเครือข่ายคุ้มครอง และขยายงานป้องกันการค้ามนุษย์'
+            : 'Your support funds rescue operations, worker protection networks, and anti-trafficking prevention programmes.'
+        }
+        actions={
+          <ButtonLink href="/donate" variant="solidDark">
+            {isThai ? 'ร่วมบริจาค' : 'Donate now'}
+          </ButtonLink>
+        }
+      />
+
+      {/* ------------------------------------------------------ HOTLINE CENTER */}
+      <Section tone="paper" className="contain-hotline on-light">
+        <Container>
+          <SectionHeading
+            eyebrow={isThai ? 'ช่วยเหลือฉุกเฉิน' : 'Emergency action'}
+            align="center"
+            title={isThai ? 'ศูนย์ช่วยเหลือฉุกเฉิน' : 'Emergency Rescue Hub'}
+            lede={
+              isThai
                 ? 'หากคุณตกอยู่ในอันตราย ถูกจำกัดเสรีภาพ หรือพบเห็นการค้ามนุษย์ โปรดโทรหาเราทันที (บริการช่วยเหลือฟรีและเก็บเป็นความลับ)'
-                : 'If you are in danger, forced to work, or witness human trafficking, call our hotlines immediately. Confidential and supportive.'}
-            </p>
-          </div>
+                : 'If you are in danger, forced to work, or witness human trafficking, call our hotlines immediately. Confidential and supportive.'
+            }
+          />
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-5xl mx-auto">
-            {[
-              {
-                lang: 'ภาษาไทย (Thai)',
-                code: 'TH',
-                phone: '084-434-6663',
-                label: 'Call Thai Line',
-              },
-              {
-                lang: 'မြန်မာဘာသာ (Burmese)',
-                code: 'MM',
-                phone: '084-434-6664',
-                label: 'Call Burmese Line',
-              },
-              {
-                lang: 'ភាសាខ្មែរ (Khmer)',
-                code: 'KH',
-                phone: '084-434-6665',
-                label: 'Call Khmer Line',
-              },
-              { lang: 'ພາສາລາວ (Lao)', code: 'LA', phone: '084-434-6666', label: 'Call Lao Line' },
-            ].map((hotline) => (
-              <div
-                key={hotline.code}
-                className="border border-black rounded p-6 flex flex-col items-center text-center bg-white shadow-xs"
-              >
-                <span className="w-10 h-10 rounded-full border border-black flex items-center justify-between justify-content-center text-center text-xs font-black bg-brand-yellow text-black select-none">
-                  <span className="w-full text-center">{hotline.code}</span>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {HOTLINES.map((hotline) => (
+              <div key={hotline.code} className="card card-marked flex flex-col items-center p-6 text-center">
+                <span
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-black bg-brand-yellow text-xs font-black text-black"
+                  aria-hidden="true"
+                >
+                  {hotline.code}
                 </span>
-                <span className="mt-4 text-xs font-bold text-black">{hotline.lang}</span>
+                <div className="mt-4 text-sm font-bold text-black">
+                  {isThai ? hotline.langTh : hotline.langEn}
+                </div>
                 <a
-                  href={`tel:${hotline.phone}`}
-                  className="mt-3 text-lg font-black text-black tracking-wide border-b-2 border-brand-yellow hover:border-black transition-all"
+                  href={telHref(hotline.phone)}
+                  className="mt-2 border-b-2 border-brand-yellow pb-1 text-lg font-black tracking-wide text-black transition-colors hover:border-black"
                 >
                   {hotline.phone}
                 </a>
-                <a
-                  href={`tel:${hotline.phone}`}
-                  className="mt-6 w-full text-center rounded border border-black bg-black py-2 text-[10px] font-black uppercase tracking-wider text-brand-yellow transition-all hover:bg-brand-yellow hover:text-black hover:font-black"
-                >
-                  {isThai ? 'โทรด่วน' : 'Call Now'}
+                <a href={telHref(hotline.phone)} className="btn btn-solid-dark mt-6 w-full">
+                  {isThai ? 'โทรด่วน' : 'Call now'}
                 </a>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
+      <WixIntegratedCopy slug="home" locale={locale} />
     </>
   )
 }

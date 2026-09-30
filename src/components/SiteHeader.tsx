@@ -1,14 +1,17 @@
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getHeader, getFooter } from '@/lib/api'
+import { HOTLINES, telHref } from '@/lib/content'
 import dynamic from 'next/dynamic'
+import { MobileMenu } from './MobileMenu'
 
 const LocaleSwitcher = dynamic(() => import('./LocaleSwitcher').then((mod) => mod.LocaleSwitcher), {
-  loading: () => <span className="text-white/55 font-semibold text-[10px]">...</span>,
+  loading: () => <span className="t-label text-white/55">...</span>,
 })
 
 export async function SiteHeader({ locale }: { locale: Locale }) {
   const [header, footer] = await Promise.all([getHeader(locale), getFooter(locale)])
+  const isThai = locale === 'th'
 
   // Only show these four items, in this order.
   const ALLOWED: { href: string; en: string; th: string }[] = [
@@ -20,42 +23,48 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   const cmsItems = header?.navItems ?? []
   const navItems = ALLOWED.map((allowed) => {
     const cms = cmsItems.find((n) => n.href === allowed.href)
-    return { href: allowed.href, label: cms?.label ?? (locale === 'th' ? allowed.th : allowed.en) }
+    return { href: allowed.href, label: cms?.label ?? (isThai ? allowed.th : allowed.en) }
   })
-  const isThai = locale === 'th'
 
-  // Pick the locale-appropriate hotline from CMS, falling back to the Thai line.
-  const primaryHotline =
-    footer?.hotlines?.find((h) => (isThai ? /thai|ไทย/i.test(h.language ?? '') : true)) ??
-    footer?.hotlines?.[0]
+  const donate = {
+    href: header?.donateHref || '/donate',
+    label: header?.donateLabel || (isThai ? 'บริจาค' : 'Donate'),
+  }
+
+  // Locale-appropriate hotline: CMS footer first, canonical list as fallback.
+  const cmsHotline =
+    (isThai
+      ? footer?.hotlines?.find((h) => /thai|ไทย/i.test(h.language ?? ''))
+      : undefined) ?? footer?.hotlines?.[0]
+  const primaryHotline = cmsHotline ? { phone: cmsHotline.phone } : { phone: HOTLINES[0].phone }
 
   return (
     <header className="sticky top-0 z-50 bg-black text-white">
-      {/* Top utility strip — emergency hotline + locale */}
+      {/* Utility strip — emergency hotline + locale */}
       <div className="border-b border-white/10">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em]">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2">
           {primaryHotline ? (
             <a
-              href={`tel:${primaryHotline.phone}`}
+              href={telHref(primaryHotline.phone)}
               className="group flex items-center gap-2 text-white/70 transition-colors hover:text-brand-yellow"
             >
-              <span className="inline-block h-1.5 w-1.5 animate-pulse bg-brand-yellow" />
-              <span className="text-brand-yellow">{isThai ? 'สายด่วน' : 'Hotline'}</span>
-              <span className="font-mono normal-case tracking-normal text-white/85 group-hover:text-brand-yellow">
+              <span className="inline-block h-1.5 w-1.5 animate-pulse bg-brand-yellow" aria-hidden="true" />
+              <span className="t-label text-brand-yellow">{isThai ? 'สายด่วน' : 'Hotline'}</span>
+              <span className="font-mono text-xs text-white/85 group-hover:text-brand-yellow">
                 {primaryHotline.phone}
               </span>
             </a>
           ) : (
-            <span className="text-white/55">{isThai ? 'มูลนิธิ LPN' : 'LPN Foundation'}</span>
+            <span className="t-label text-white/55">LPN Foundation</span>
           )}
           <LocaleSwitcher />
         </div>
       </div>
 
       {/* Main bar */}
-      <div className="border-b border-white/10">
+      <div className="relative border-b border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4">
-          <Link href="/" className="group flex items-center gap-3">
+          <Link href="/" className="group flex items-center gap-3" aria-label="LPN Foundation">
             <img
               src="/logos/lpn-logo-white.svg"
               alt="LPN Foundation"
@@ -63,15 +72,15 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
             />
           </Link>
 
-          <nav className="hidden items-center gap-7 md:flex">
+          <nav aria-label={isThai ? 'เมนูหลัก' : 'Main menu'} className="hidden items-center gap-7 md:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative text-[11px] font-black uppercase tracking-[0.2em] text-white/80 transition-colors hover:text-white"
+                className="group relative py-1 text-[11px] font-black uppercase tracking-[0.2em] text-white/80 transition-colors hover:text-white"
               >
                 <span>{item.label}</span>
-                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-brand-yellow transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-0.5 left-0 h-0.5 w-0 bg-brand-yellow transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
@@ -80,9 +89,8 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
             <Link
               href="/contact"
               aria-label={isThai ? 'ติดต่อเรา' : 'Contact'}
-              className="flex h-9 w-9 items-center justify-center rounded border border-white/20 text-white/70 transition-all hover:border-white/60 hover:text-white"
+              className="flex h-11 w-11 items-center justify-center rounded border border-white/20 text-white/70 transition-all hover:border-white/60 hover:text-white"
             >
-              {/* Phone icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -98,12 +106,11 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               </svg>
             </Link>
 
-            <Link
-              href={header?.donateHref || '/donate'}
-              className="rounded bg-brand-yellow px-5 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] text-black transition-all hover:bg-white border border-transparent hover:border-black"
-            >
-              {header?.donateLabel || (isThai ? 'บริจาค' : 'Donate')}
+            <Link href={donate.href} className="btn btn-primary !min-h-11 px-5 py-2.5">
+              {donate.label}
             </Link>
+
+            <MobileMenu items={navItems} donate={donate} isThai={isThai} />
           </div>
         </div>
       </div>

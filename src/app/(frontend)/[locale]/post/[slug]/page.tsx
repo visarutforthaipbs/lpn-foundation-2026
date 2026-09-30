@@ -1,10 +1,14 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { setRequestLocale } from 'next-intl/server'
-import { routing, type Locale } from '@/i18n/routing'
+import { Link } from '@/i18n/navigation'
+import type { Locale } from '@/i18n/routing'
 import { getPost, getAllPostSlugs } from '@/lib/api'
+import { HOTLINES, OFFICE, telHref, buildShareUrls } from '@/lib/content'
 import { MediaImage } from '@/components/MediaImage'
 import { RichText } from '@/components/RichText'
-import { buildMetadata, SITE_URL } from '@/lib/seo'
+import { buildMetadata } from '@/lib/seo'
+import { legacyPostDestination } from '@/lib/legacy-posts'
+import { ButtonLink, MarkLink } from '@/components/ui'
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale; slug: string }>
@@ -37,51 +41,59 @@ export default async function PostPage(props: {
   setRequestLocale(locale)
 
   const post = await getPost(slug, locale)
-  if (!post) notFound()
+  if (!post) {
+    const destination = legacyPostDestination(slug, locale)
+    if (destination) permanentRedirect(destination)
+    notFound()
+  }
 
+  const isThai = locale === 'th'
   const author = post.author && typeof post.author !== 'number' ? post.author : null
+  const share = buildShareUrls(locale, slug)
+  // Sidebar offers the Thai + Khmer lines first (highest call volume).
+  const sidebarHotlines = HOTLINES.filter((h) => h.code === 'TH' || h.code === 'KH')
 
   return (
-    <div className="bg-[#fafafa] min-h-screen py-10">
-      <article className="mx-auto max-w-6xl px-4">
-        {/* Breadcrumb / Back to Blog */}
-        <div className="mb-6">
-          <a
-            href={`/${locale}/blog`}
-            className="text-black/60 hover:text-black font-semibold text-sm inline-flex items-center gap-2 transition"
+    <div className="bg-paper py-10 on-light">
+      <article className="container-page">
+        {/* Breadcrumb */}
+        <nav aria-label={isThai ? 'เส้นทางนำทาง' : 'Breadcrumb'} className="mb-8">
+          <Link
+            href="/blog"
+            className="t-label inline-flex min-h-11 items-center gap-2 text-black/55 transition-colors hover:text-black"
           >
-            ← {locale === 'th' ? 'กลับไปที่บทความ' : 'Back to Voices & Stories'}
-          </a>
-        </div>
+            ← {isThai ? 'กลับไปที่บทความ' : 'Back to Voices & Stories'}
+          </Link>
+        </nav>
 
-        {/* Post Hero Section */}
-        <div className="relative overflow-hidden rounded-2xl bg-black text-white p-8 md:p-12 mb-8 shadow-xl">
-          {/* Subtle brand yellow light glow in background */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 flex flex-col justify-end min-h-[180px]">
+        {/* Post header */}
+        <header className="relative isolate overflow-hidden rounded bg-black p-8 text-white md:p-12">
+          <div
+            className="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-brand-yellow/10 blur-3xl"
+            aria-hidden="true"
+          />
+          <div className="relative z-10 flex min-h-[180px] flex-col justify-end">
             {post.category && typeof post.category !== 'number' && (
-              <span className="mb-4 inline-block w-fit rounded-full bg-brand-yellow px-4 py-1 text-xs font-black uppercase tracking-wider text-black">
+              <span className="mb-5 inline-flex w-fit rounded-full bg-brand-yellow px-4 py-1.5 text-xs font-black tracking-wider text-black uppercase">
                 {post.category.title}
               </span>
             )}
-
-            <h1 className="text-2xl md:text-4xl font-extrabold leading-tight tracking-tight text-white mb-6">
-              {post.title}
-            </h1>
-
-            <div className="flex flex-wrap items-center gap-4 text-xs text-white/70 border-t border-white/10 pt-6">
+            <h1 className="t-display-sm text-white">{post.title}</h1>
+            <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-white/10 pt-6">
               {author && (
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-brand-yellow text-black font-black flex items-center justify-center text-[10px]">
+                <div className="flex items-center gap-2.5">
+                  <div
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-yellow text-[10px] font-black text-black"
+                    aria-hidden="true"
+                  >
                     {author.name.slice(0, 2).toUpperCase()}
                   </div>
-                  <span className="font-bold text-white">{author.name}</span>
+                  <span className="text-sm font-bold text-white">{author.name}</span>
                 </div>
               )}
               {author && post.publishedAt && <span className="text-white/30">·</span>}
               {post.publishedAt && (
-                <time dateTime={post.publishedAt} className="font-semibold">
+                <time dateTime={post.publishedAt} className="text-sm font-semibold text-white/80">
                   {new Date(post.publishedAt).toLocaleDateString(locale, {
                     year: 'numeric',
                     month: 'long',
@@ -91,46 +103,51 @@ export default async function PostPage(props: {
               )}
             </div>
           </div>
-        </div>
+        </header>
 
-        {/* Featured Image */}
+        {/* Featured image */}
         {post.coverImage && typeof post.coverImage !== 'number' ? (
-          <div className="relative group overflow-hidden rounded-2xl shadow-md mb-10">
-            <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300 z-10" />
+          <div className="group relative my-10 overflow-hidden rounded shadow-md">
+            <div
+              className="absolute inset-0 z-10 bg-black/5 transition duration-300 group-hover:bg-transparent"
+              aria-hidden="true"
+            />
             <MediaImage
               media={post.coverImage}
-              className="w-full max-h-[480px] object-cover transition-transform duration-700 group-hover:scale-[1.01]"
+              className="max-h-[480px] w-full object-cover transition-transform duration-700 group-hover:scale-[1.01]"
               sizes="(max-width:768px) 100vw, 1200px"
               priority
             />
           </div>
         ) : null}
 
-        {/* Article Body + Sidebar Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main content column */}
-          <div className="lg:col-span-8 bg-white p-6 md:p-8 rounded-2xl border border-black/5 shadow-xs">
-            <RichText data={post.content} className="prose-lpn text-lg text-black/85" />
+        {/* Body + action sidebar */}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+          {/* Article body */}
+          <div className="rounded border border-black/8 bg-white p-6 shadow-xs lg:col-span-8 md:p-10">
+            <RichText data={post.content} className="prose-lpn text-black/85" />
 
-            {/* Action Divider */}
-            <div className="border-t border-black/10 mt-10 pt-6 flex items-center justify-between">
-              <span className="text-xs font-black text-black/40 uppercase tracking-widest">
-                {locale === 'th' ? 'แชร์บทความนี้' : 'Share this Story'}
+            {/* Share row */}
+            <div className="mt-12 flex items-center justify-between border-t border-black/10 pt-6">
+              <span className="t-label text-black/40">
+                {isThai ? 'แชร์บทความนี้' : 'Share this Story'}
               </span>
               <div className="flex gap-2">
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${SITE_URL}/post/${slug}`}
+                  href={share.facebook}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-8 h-8 rounded-lg bg-black/5 hover:bg-brand-yellow hover:text-black flex items-center justify-center text-xs font-bold text-black transition"
+                  aria-label="Share on Facebook"
+                  className="t-label flex h-11 w-11 items-center justify-center rounded bg-black/5 text-black transition hover:bg-brand-yellow"
                 >
                   FB
                 </a>
                 <a
-                  href={`https://twitter.com/intent/tweet?url=${SITE_URL}/post/${slug}`}
+                  href={share.x}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-8 h-8 rounded-lg bg-black/5 hover:bg-brand-yellow hover:text-black flex items-center justify-center text-xs font-bold text-black transition"
+                  aria-label="Share on X"
+                  className="t-label flex h-11 w-11 items-center justify-center rounded bg-black/5 text-black transition hover:bg-brand-yellow"
                 >
                   X
                 </a>
@@ -138,64 +155,64 @@ export default async function PostPage(props: {
             </div>
           </div>
 
-          {/* Sidebar - LPN Action Cards */}
-          <div className="lg:col-span-4 flex flex-col gap-6">
-            <div className="bg-black text-white p-6 rounded-2xl shadow-lg relative overflow-hidden border border-white/10">
-              {/* Subtle accent glow */}
-              <div className="absolute -top-12 -right-12 w-32 h-32 bg-brand-yellow/20 rounded-full blur-2xl pointer-events-none" />
-
-              <span className="text-[9px] font-black uppercase tracking-widest text-brand-yellow bg-brand-yellow/10 px-2.5 py-1 rounded-full border border-brand-yellow/20 mb-4 inline-block">
-                {locale === 'th' ? 'ยืนหยัดร่วมกับ LPN' : 'Stand With Us'}
+          {/* LPN action sidebar */}
+          <aside className="flex flex-col gap-6 lg:col-span-4">
+            {/* Donation CTA */}
+            <div className="glass-dark relative overflow-hidden rounded p-7">
+              <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
+              <span className="t-label text-brand-yellow">
+                {isThai ? 'ยืนหยัดร่วมกับ LPN' : 'Stand With Us'}
               </span>
-
-              <h3 className="text-lg font-bold mb-3 leading-snug">
-                {locale === 'th'
+              <h2 className="t-h3 mt-4">
+                {isThai
                   ? 'ร่วมยุติการค้ามนุษย์และคุ้มครองสิทธิ์แรงงาน'
                   : 'End Human Trafficking & Protect Workers'}
-              </h3>
-
-              <p className="text-xs text-white/70 leading-relaxed mb-6">
-                {locale === 'th'
+              </h2>
+              <p className="mt-4 text-xs leading-relaxed text-white/70">
+                {isThai
                   ? 'มูลนิธิ LPN ดำเนินงานเพื่อช่วยเหลือแรงงานที่ถูกบังคับ ยุติการค้าทาสสมัยใหม่ และสร้างความมั่นใจในสิทธิความเป็นมนุษย์ที่เท่าเทียม'
                   : 'LPN Foundation works tirelessly to rescue abused workers, combat modern slavery, and secure justice for migrant communities.'}
               </p>
-
-              <a
-                href={`/${locale}/donate`}
-                className="block w-full text-center bg-brand-yellow text-black font-black py-3 px-4 rounded-xl hover:bg-white transition duration-300 text-xs uppercase tracking-wider"
-              >
-                {locale === 'th' ? 'ร่วมบริจาคสนับสนุน' : 'Support Our Mission'}
-              </a>
+              <ButtonLink href="/donate" variant="primary" className="mt-6 w-full">
+                {isThai ? 'ร่วมบริจาคสนับสนุน' : 'Support Our Mission'}
+              </ButtonLink>
             </div>
 
-            {/* LPN Contact Info Sidebar Card */}
-            <div className="bg-white p-6 rounded-2xl border border-black/5 shadow-xs">
-              <h4 className="text-xs font-black uppercase tracking-widest text-black mb-3">
-                {locale === 'th' ? 'ต้องการความช่วยเหลือ?' : 'Need Assistance?'}
-              </h4>
-              <p className="text-xs text-black/60 leading-relaxed mb-4">
-                {locale === 'th'
+            {/* Hotline card */}
+            <div className="card p-7">
+              <h2 className="t-label text-black">{isThai ? 'ต้องการความช่วยเหลือ?' : 'Need Assistance?'}</h2>
+              <p className="mt-3 text-xs leading-relaxed text-black/60">
+                {isThai
                   ? 'สายด่วนมูลนิธิ LPN พร้อมให้คำปรึกษาและเข้าช่วยเหลือแรงงานหลากหลายภาษาตลอด 24 ชั่วโมง'
                   : 'LPN operates multi-lingual 24/7 hotlines to support workers and report labor abuses.'}
               </p>
-              <div className="flex flex-col gap-2">
-                <a
-                  href="tel:+66841211609"
-                  className="text-xs font-bold text-black hover:text-brand-yellow flex justify-between items-center bg-[#fafafa] p-2.5 rounded-lg border border-black/5 hover:border-brand-yellow/30 transition"
-                >
-                  <span>🇹🇭 Thai</span>
-                  <span className="text-black/60">+66 84 121 1609</span>
-                </a>
-                <a
-                  href="tel:+66855341595"
-                  className="text-xs font-bold text-black hover:text-brand-yellow flex justify-between items-center bg-[#fafafa] p-2.5 rounded-lg border border-black/5 hover:border-brand-yellow/30 transition"
-                >
-                  <span>🇰🇭 Khmer</span>
-                  <span className="text-black/60">+66 85 534 1595</span>
-                </a>
+              <div className="mt-5 flex flex-col gap-2">
+                {sidebarHotlines.map((h) => (
+                  <a
+                    key={h.code}
+                    href={telHref(h.phone)}
+                    className="flex min-h-11 items-center justify-between rounded border border-black/8 bg-paper p-2.5 text-xs font-bold text-black transition hover:border-brand-yellow"
+                  >
+                    <span>{isThai ? h.langTh : h.langEn}</span>
+                    <span className="font-mono text-black/60">{h.phone}</span>
+                  </a>
+                ))}
               </div>
+              <MarkLink href="/contact" className="mt-5 text-black">
+                {isThai ? 'ดูช่องทางช่วยเหลือทั้งหมด' : 'All support channels'} →
+              </MarkLink>
             </div>
-          </div>
+
+            {/* Email */}
+            <div className="px-1">
+              <a
+                href={`mailto:${OFFICE.email}`}
+                className="t-label inline-flex min-h-11 items-center text-black/55 transition-colors hover:text-black"
+              >
+                {OFFICE.email} →
+              </a>
+            </div>
+          </aside>
         </div>
       </article>
     </div>
