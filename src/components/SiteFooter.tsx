@@ -1,7 +1,7 @@
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getFooter } from '@/lib/api'
-import { OFFICE, telHref } from '@/lib/content'
+import { HOTLINES, OFFICE, SOCIALS, FACEBOOK_URL, telHref } from '@/lib/content'
 
 export async function SiteFooter({ locale }: { locale: Locale }) {
   const footer = await getFooter(locale)
@@ -28,30 +28,50 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
   return (
     <footer className="mt-20 bg-black text-white contain-footer">
       {/* Emergency hotline strip — the site's most safety-critical content */}
-      {footer?.hotlines?.length ? (
-        <div className="border-y border-black/10 bg-brand-yellow text-black">
-          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 md:flex-row md:items-center md:justify-between">
+      <div className="border-y border-black/10 bg-brand-yellow text-black">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 md:flex-row md:items-start md:justify-between">
+          <div className="max-w-md">
             <div className="flex items-center gap-3">
               <span className="inline-block h-1.5 w-1.5 animate-pulse bg-black" aria-hidden="true" />
-              <span className="t-label">{isThai ? 'สายด่วนช่วยเหลือ' : 'Emergency hotlines'}</span>
+              <span className="t-label">{isThai ? 'หากท่านต้องการความช่วยเหลือ' : 'Get help now'}</span>
             </div>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-              {footer.hotlines.map((h) => (
-                <a
-                  key={h.id ?? h.phone}
-                  href={telHref(h.phone)}
-                  className="group flex min-h-11 items-center gap-2 transition-opacity hover:opacity-70"
-                >
-                  <span className="t-label text-black/65">{h.language}</span>
-                  <span className="border-b border-black/30 font-mono text-sm font-bold text-black group-hover:border-black">
-                    {h.phone}
-                  </span>
-                </a>
-              ))}
-            </div>
+            <p className="mt-2 text-sm leading-relaxed text-black/75">
+              {isThai
+                ? 'แจ้งความคดี ขอความช่วยเหลือ ขอข้อมูลแรงงาน กฎหมายหรือขั้นตอนการลงทะเบียนของทางราชการ โปรดติดต่อโดยตรง เสามารติดต่อเราโดยตรงได้ทั้ง ไทย เขมร ลาว และ พม่า'
+                : 'To report a case, request assistance, get information on labor laws or government registration process, get in touch directly. We speak Thai, Khmer, Lao & Burmese.'}
+            </p>
+            <a
+              href={FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-mark mt-3 text-black"
+            >
+              {isThai ? 'ติดต่อเราได้ที่ Facebook' : 'Message us on Facebook'}
+            </a>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+            {(footer?.hotlines?.length
+              ? footer.hotlines.map((h) => ({
+                  key: h.id ?? h.phone,
+                  label: h.language ?? '',
+                  phone: h.phone,
+                }))
+              : HOTLINES.map((h) => ({ key: h.code, label: h.langNative, phone: h.phone }))
+            ).map((h) => (
+              <a
+                key={h.key}
+                href={telHref(h.phone)}
+                className="group flex min-h-11 items-center gap-2 transition-opacity hover:opacity-70"
+              >
+                <span className="t-label text-black/65">{h.label}</span>
+                <span className="border-b border-black/30 font-mono text-sm font-bold text-black group-hover:border-black">
+                  {h.phone}
+                </span>
+              </a>
+            ))}
           </div>
         </div>
-      ) : null}
+      </div>
 
       {/* Main footer */}
       <div className="border-b border-white/10">
@@ -85,7 +105,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="inline-flex min-h-8 items-center text-white/70 transition-colors hover:text-brand-yellow"
+                    className="inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow"
                   >
                     {l.label}
                   </Link>
@@ -96,23 +116,36 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
           {/* Connect */}
           <div>
-            <h3 className="t-label text-brand-yellow">{isThai ? 'ติดต่อ' : 'Connect'}</h3>
-            <ul className="mt-5 grid gap-2.5 text-sm">
-              <li>
-                <a
-                  href={`mailto:${OFFICE.email}`}
-                  className="inline-flex min-h-8 items-center font-mono text-white/70 transition-colors hover:text-brand-yellow"
-                >
-                  {OFFICE.email}
-                </a>
-              </li>
-              {footer?.socials?.map((s) => (
-                <li key={s.id ?? s.url}>
+            <h3 className="t-label text-brand-yellow">
+              {isThai ? 'สำนักงานใหญ่ประเทศไทย' : 'Thailand Headquarters'}
+            </h3>
+            <address className="mt-5 text-sm leading-relaxed text-white/70 not-italic">
+              {isThai ? OFFICE.addressTh : OFFICE.addressEn}
+            </address>
+            <p className="mt-3 font-mono text-sm text-white/85">
+              {isThai ? OFFICE.phoneTh : OFFICE.phoneEn}
+            </p>
+            <ul className="mt-3 grid gap-2.5 text-sm">
+              {OFFICE.emails.map((e) => (
+                <li key={e}>
+                  <a
+                    href={`mailto:${e}`}
+                    className="inline-flex min-h-11 items-center font-mono text-white/70 transition-colors hover:text-brand-yellow"
+                  >
+                    {e}
+                  </a>
+                </li>
+              ))}
+              {(footer?.socials?.length
+                ? footer.socials.map((s) => ({ key: s.id ?? s.url, platform: s.platform, url: s.url }))
+                : SOCIALS.map((s) => ({ key: s.url, platform: s.platform, url: s.url }))
+              ).map((s) => (
+                <li key={s.key}>
                   <a
                     href={s.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-8 items-center text-white/70 transition-colors hover:text-brand-yellow"
+                    className="inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow"
                   >
                     {s.platform} →
                   </a>
@@ -125,12 +158,12 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
       {/* Bottom bar */}
       <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 md:flex-row md:items-center md:justify-between">
-        <span className="t-label font-bold text-white/45">
+        <span className="t-label text-white/45">
           © {new Date().getFullYear()}{' '}
           {isThai ? OFFICE.nameTh : OFFICE.nameEn}
         </span>
-        <span className="t-label font-bold text-white/45">
-          {isThai ? 'สมุทรสาคร · ประเทศไทย' : 'Samut Sakhon · Thailand'}
+        <span className="t-label text-white/45">
+          {isThai ? 'ปทุมธานี · ประเทศไทย' : 'Pathum Thani · Thailand'}
         </span>
       </div>
     </footer>

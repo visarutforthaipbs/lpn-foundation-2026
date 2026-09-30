@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { cva, type VariantProps } from 'class-variance-authority'
 import { Link } from '@/i18n/navigation'
 
 /**
@@ -102,33 +103,57 @@ export function SectionHeading({
 
 /* -------------------------------------------------------------------- links */
 
-const buttonClass = {
-  primary: 'btn btn-primary',
-  ghostLight: 'btn btn-ghost-light',
-  ghostDark: 'btn btn-ghost-dark',
-  solidDark: 'btn btn-solid-dark',
-}
+/**
+ * Typed button variants (class-variance-authority per thai-agency-frontend-standards).
+ * Visual implementation lives in styles.css `.btn*` classes — their metrics
+ * encode the Thai-safety rules: min-height 44px + py (never fixed heights),
+ * leading-normal, disabled states, 200ms cubic-bezier(0.16,1,0.3,1) motion.
+ */
+export const buttonVariants = cva('btn', {
+  variants: {
+    variant: {
+      primary: 'btn-primary',
+      ghostLight: 'btn-ghost-light',
+      ghostDark: 'btn-ghost-dark',
+      solidDark: 'btn-solid-dark',
+    },
+  },
+  defaultVariants: { variant: 'primary' },
+})
 
 /** Locale-aware internal button, or plain <a> for external / tel: / mailto:. */
 export function ButtonLink({
   href,
-  variant = 'primary',
+  variant,
   children,
   className = '',
+  disabled = false,
+  onClick,
+  ariaLabel,
 }: {
   href: string
-  variant?: keyof typeof buttonClass
+  variant?: VariantProps<typeof buttonVariants>['variant']
   children: React.ReactNode
   className?: string
+  disabled?: boolean
+  onClick?: () => void
+  ariaLabel?: string
 }) {
-  const cls = `${buttonClass[variant]} ${className}`
+  const cls = buttonVariants({ variant, className })
   const internal = href.startsWith('/') && !href.startsWith('//')
+  if (disabled) {
+    return (
+      <span className={cls} aria-disabled="true" role="link">
+        {children}
+      </span>
+    )
+  }
   return internal ? (
-    <Link href={href} className={cls}>
+    <Link href={href} className={cls} onClick={onClick} aria-label={ariaLabel}>
       {children}
     </Link>
   ) : (
-    <a href={href} className={cls}>
+    <a href={href} className={cls} onClick={onClick} aria-label={ariaLabel}>
       {children}
     </a>
   )

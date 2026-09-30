@@ -163,9 +163,11 @@ export default async function DonatePage(props: { params: Promise<{ locale: Loca
           />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {tiers.map((t) => (
-              <article key={t.tag} className="card p-7">
-                <div className="text-3xl font-black tracking-tight">{t.tag}</div>
-                <h3 className="t-h3 mt-4">{t.title}</h3>
+              <article key={t.tag} className="card card-marked p-7">
+                <span className="tactile-badge px-4 py-1.5 text-sm font-black text-black">
+                  {t.tag}
+                </span>
+                <h3 className="t-h3 mt-5">{t.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-black/70">{t.body}</p>
               </article>
             ))}
@@ -188,7 +190,7 @@ export default async function DonatePage(props: { params: Promise<{ locale: Loca
                   : 'Use the details on the right for domestic or international transfers. Email us for a receipt.'}
               </p>
             </div>
-            <div className="glass-dark relative rounded p-8">
+            <div className="glass-dark relative rounded-lg p-8">
               <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
               <dl className="grid gap-5">
                 {[
@@ -199,10 +201,12 @@ export default async function DonatePage(props: { params: Promise<{ locale: Loca
                 ].map((row) => (
                   <div
                     key={row.k}
-                    className="grid gap-1 border-b border-white/10 pb-4 last:border-b-0 last:pb-0"
+                    className="grid gap-1.5 border-b border-white/10 pb-4 last:border-b-0 last:pb-0"
                   >
                     <dt className="t-label text-white/55">{row.k}</dt>
-                    <dd className="font-mono text-base text-white md:text-lg">{row.v}</dd>
+                    <dd className="tactile-well-dark px-3 py-2 font-mono text-base font-bold text-white md:text-lg">
+                      {row.v}
+                    </dd>
                   </div>
                 ))}
               </dl>

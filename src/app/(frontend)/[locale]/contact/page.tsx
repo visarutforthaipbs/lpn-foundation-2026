@@ -1,11 +1,18 @@
-import { WixIntegratedCopy } from '@/components/WixIntegratedCopy'
 import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
-import { HOTLINES, OFFICE, telHref } from '@/lib/content'
-import { Container, Section, SectionHeading, PageHero, CtaBand, ButtonLink } from '@/components/ui'
+import { HOTLINES, ALT_LINES, OFFICE, FACEBOOK_URL, telHref } from '@/lib/content'
+import {
+  Container,
+  Section,
+  SectionHeading,
+  PageHero,
+  CtaBand,
+  ButtonLink,
+  MarkLink,
+} from '@/components/ui'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -50,31 +57,17 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
         { value: '100%', label: 'confidential' },
       ]
 
-  const office = isThai
-    ? {
-        name: OFFICE.nameTh,
-        address: OFFICE.addressTh,
-        email: OFFICE.email,
-        hours: OFFICE.hoursTh,
-      }
-    : {
-        name: OFFICE.nameEn,
-        address: OFFICE.addressEn,
-        email: OFFICE.email,
-        hours: OFFICE.hoursEn,
-      }
-
   return (
     <>
       {/* ---------------------------------------------------------------- HERO */}
       <PageHero
         compact
-        eyebrow={isThai ? 'ติดต่อ LPN' : 'Contact LPN'}
+        eyebrow={isThai ? 'ช่องทางติดต่อเรา' : 'Get in touch'}
         title={isThai ? 'หากคุณตกอยู่ในอันตราย — โทรหาเรา ตอนนี้' : 'If you are in danger — call us. Right now.'}
         lede={
           isThai
-            ? 'สายด่วนของเราเปิดรับการแจ้งเหตุและคำขอความช่วยเหลือเป็นความลับ ในหลายภาษา ตลอด 24 ชั่วโมง'
-            : 'Our hotlines take reports and assistance requests confidentially, in four languages, around the clock.'
+            ? 'สำหรับความช่วยเหลือเร่งด่วน โปรดติดต่อเราโดยตรงผ่านทางโทรศัพท์หรือส่งข้อความถึงเราบน Facebook สำหรับการสอบถามที่ไม่เร่งด่วน กรุณาใช้อีเมล การทำงานส่วนใหญ่ของเรา มักจะอยู่ในพื้นที่ซึ่งอาจจะทำให้ล้าช้าในการตอบกลับอยู่บ้าง'
+            : 'For urgent assistance please call us directly or message us on facebook. For less urgent inquires, please use email. We are often in the field unexpectedly and may take a few days to respond. Thank you for your understanding.'
         }
         stats={stats}
       />
@@ -84,70 +77,98 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
         <Container>
           <SectionHeading
             eyebrow={isThai ? 'การช่วยเหลือฉุกเฉิน' : 'Emergency action'}
-            title={isThai ? 'สายด่วนหลายภาษา' : 'Multilingual hotlines'}
+            title={isThai ? 'หากต้องการขอความช่วยเหลือด่วน' : 'Get help now'}
             lede={
               isThai
-                ? 'พูดในภาษาของคุณ ปลอดภัย เป็นความลับ และเชื่อมต่อกับทีมภาคสนามทันที'
-                : 'Speak in your language. Safe, confidential, and connected to our field team in real time.'
+                ? 'แจ้งความคดี ขอความช่วยเหลือ ขอข้อมูลกฎหมายแรงงาน หรือขั้นตอนการลงทะเบียนของทางราชการ ติดต่อโดยตรง เราพูดภาษาไทย เขมร ลาว และพม่า'
+                : 'To report a case, request assistance, get information on labor laws or government registration process, get in touch directly. We speak Thai, Khmer, Lao & Burmese.'
             }
           />
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {HOTLINES.map((h) => (
-              <a
-                key={h.code}
-                href={telHref(h.phone)}
-                className="card group flex flex-col p-6"
-              >
+              <a key={h.code} href={telHref(h.phone)} className="card card-marked group flex flex-col p-6">
                 <div className="flex items-center justify-between">
                   <span
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-black bg-brand-yellow text-xs font-black text-black"
+                    className="tactile-badge h-11 w-11 text-xs font-black text-black"
                     aria-hidden="true"
                   >
                     {h.code}
                   </span>
-                  <span className="t-label text-black/45">{isThai ? 'โทรเลย' : 'Tap to call'}</span>
+                  <span className="t-label text-black/55">{isThai ? 'โทรเลย' : 'Tap to call'}</span>
                 </div>
-                <div className="mt-6 text-xs font-bold text-black/65">{LANG_LABELS[h.code]}</div>
-                <div className="mt-2 border-b-2 border-brand-yellow pb-1 text-xl font-black tracking-tight text-black transition-colors group-hover:border-black">
-                  {h.phone}
+                <div className="mt-5 text-xs font-bold text-black/70">{LANG_LABELS[h.code]}</div>
+                <div className="tactile-well mt-3 w-full px-3 py-2 text-center">
+                  <span className="font-mono text-base font-black tracking-tight text-black transition-colors group-hover:text-brand-yellow">
+                    {h.phone}
+                  </span>
                 </div>
               </a>
             ))}
           </div>
+          {/* General lines printed on the live contact page */}
+          <p className="mt-8 text-sm text-black/65">
+            {isThai ? 'โทรศัพท์สำนักงาน: ' : 'Office lines: '}
+            <a href={telHref(ALT_LINES.office1)} className="font-mono font-bold text-black underline decoration-brand-yellow underline-offset-4">
+              {ALT_LINES.office1}
+            </a>
+            {' · '}
+            <a
+              href={telHref(isThai ? ALT_LINES.office3 : ALT_LINES.office2)}
+              className="font-mono font-bold text-black underline decoration-brand-yellow underline-offset-4"
+            >
+              {isThai ? ALT_LINES.office3 : ALT_LINES.office2}
+            </a>
+          </p>
         </Container>
       </Section>
 
-      {/* ------------------------------------------------------ OFFICE & EMAIL */}
+      {/* ------------------------------------------------------------- FACEBOOK */}
       <Section tone="dark" className="border-y border-white/10">
         <Container>
           <div className="grid gap-10 md:grid-cols-2">
             <article className="glass-dark relative rounded p-8">
               <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
-              <div className="t-label text-brand-yellow">{isThai ? 'สำนักงาน' : 'Office'}</div>
-              <h2 className="t-h3 mt-3 text-white">{office.name}</h2>
-              <p className="mt-4 text-sm leading-relaxed text-white/75">{office.address}</p>
-              <dl className="mt-6 grid gap-3 text-sm text-white/85">
-                <div>
-                  <dt className="t-label text-white/55">{isThai ? 'เวลาทำการ' : 'Office hours'}</dt>
-                  <dd className="mt-1">{office.hours}</dd>
-                </div>
-              </dl>
+              <div className="t-label text-brand-yellow">
+                {isThai ? 'เชื่อมต่อบน Facebook' : 'Connect on Facebook'}
+              </div>
+              <h2 className="t-h3 mt-3 text-white">{isThai ? 'ส่งข้อความหาเรา' : 'Message us on Facebook'}</h2>
+              <p className="mt-4 text-sm leading-relaxed text-white/75">
+                {isThai
+                  ? 'หากต้องการเรียนรู้เพิ่มเติมเกี่ยวกับ LPN ถามคำถามเกี่ยวกับงานของเรา หรือขอเข้าร่วมการประชุมหรืออภิปราย โปรดติดต่อเราทางอีเมลที่ลิงก์ด้านล่าง'
+                  : 'To learn more about LPN, ask questions about our work, or request attendance in conferences or panel discussions, please contact us by email at the link below.'}
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <ButtonLink href={FACEBOOK_URL} variant="primary">
+                  {isThai ? 'ติดต่อเราได้ที่ Facebook' : 'Message us on Facebook'}
+                </ButtonLink>
+                <ButtonLink href={`mailto:${OFFICE.email}`} variant="ghostLight">
+                  {isThai ? 'ส่งอีเมลตอนนี้' : 'Email now'}
+                </ButtonLink>
+              </div>
             </article>
             <article className="glass-dark relative rounded p-8">
               <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
-              <div className="t-label text-brand-yellow">{isThai ? 'อีเมล' : 'Email'}</div>
-              <h2 className="t-h3 mt-3 text-white">{isThai ? 'เขียนหาเรา' : 'Write to us'}</h2>
-              <p className="mt-4 text-sm leading-relaxed text-white/75">
-                {isThai
-                  ? 'สำหรับการร่วมงาน สื่อมวลชน หรือคำถามเชิงโครงการ ทีมงานจะตอบกลับภายใน 2 วันทำการ'
-                  : 'For partnerships, press, or programme questions. We respond within two business days.'}
+              <div className="t-label text-brand-yellow">
+                {isThai ? 'สำนักงานใหญ่ประเทศไทย' : 'Thailand Headquarters'}
+              </div>
+              <h2 className="t-h3 mt-3 text-white">
+                {isThai ? OFFICE.nameTh : OFFICE.nameEn}
+              </h2>
+              <address className="mt-4 text-sm leading-relaxed text-white/75 not-italic">
+                {isThai ? OFFICE.addressTh : OFFICE.addressEn}
+              </address>
+              <p className="mt-4 font-mono text-sm text-white/85">
+                {isThai ? OFFICE.phoneTh : OFFICE.phoneEn}
               </p>
-              <a
-                href={`mailto:${office.email}`}
-                className="link-mark mt-6 text-white hover:text-brand-yellow"
-              >
-                {office.email} →
-              </a>
+              <ul className="mt-3">
+                {OFFICE.emails.map((e) => (
+                  <li key={e}>
+                    <MarkLink href={`mailto:${e}`} className="text-white hover:text-brand-yellow">
+                      {e}
+                    </MarkLink>
+                  </li>
+                ))}
+              </ul>
             </article>
           </div>
         </Container>
@@ -172,7 +193,6 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
           </>
         }
       />
-      <WixIntegratedCopy slug="contact" locale={locale} />
     </>
   )
 }

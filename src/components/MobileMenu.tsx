@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
+import { ButtonLink } from './ui'
 
 type NavItem = { href: string; label: string }
 
@@ -37,7 +38,7 @@ export function MobileMenu({
         aria-controls="mobile-nav"
         aria-label={isThai ? 'เปิดเมนู' : 'Open menu'}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-11 w-11 items-center justify-center border border-white/25 text-white transition-colors hover:border-white/60"
+        className="tactile-icon-btn h-11 w-11 text-white hover:text-brand-yellow"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -77,13 +78,14 @@ export function MobileMenu({
             ))}
           </ul>
           <div className="mx-auto max-w-7xl px-4 pb-5 pt-2">
-            <Link
+            <ButtonLink
               href={donate.href}
+              variant="primary"
+              className="w-full"
               onClick={() => setOpen(false)}
-              className="btn btn-primary w-full"
             >
               {donate.label}
-            </Link>
+            </ButtonLink>
           </div>
         </nav>
       )}

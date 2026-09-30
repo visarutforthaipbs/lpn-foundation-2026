@@ -138,7 +138,7 @@ export default async function PostPage(props: {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Share on Facebook"
-                  className="t-label flex h-11 w-11 items-center justify-center rounded bg-black/5 text-black transition hover:bg-brand-yellow"
+                  className="tactile-icon-btn-light h-11 w-11 text-xs font-black"
                 >
                   FB
                 </a>
@@ -147,7 +147,7 @@ export default async function PostPage(props: {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Share on X"
-                  className="t-label flex h-11 w-11 items-center justify-center rounded bg-black/5 text-black transition hover:bg-brand-yellow"
+                  className="tactile-icon-btn-light h-11 w-11 text-xs font-black"
                 >
                   X
                 </a>
@@ -186,15 +186,20 @@ export default async function PostPage(props: {
                   ? 'สายด่วนมูลนิธิ LPN พร้อมให้คำปรึกษาและเข้าช่วยเหลือแรงงานหลากหลายภาษาตลอด 24 ชั่วโมง'
                   : 'LPN operates multi-lingual 24/7 hotlines to support workers and report labor abuses.'}
               </p>
-              <div className="mt-5 flex flex-col gap-2">
+              <div className="mt-5 flex flex-col gap-2.5">
                 {sidebarHotlines.map((h) => (
                   <a
                     key={h.code}
                     href={telHref(h.phone)}
-                    className="flex min-h-11 items-center justify-between rounded border border-black/8 bg-paper p-2.5 text-xs font-bold text-black transition hover:border-brand-yellow"
+                    className="tactile-well flex min-h-11 items-center justify-between p-3 text-xs font-bold text-black transition-transform hover:-translate-y-0.5"
                   >
-                    <span>{isThai ? h.langTh : h.langEn}</span>
-                    <span className="font-mono text-black/60">{h.phone}</span>
+                    <span className="flex items-center gap-2">
+                      <span className="tactile-badge h-6 w-6 text-[10px] font-black text-black">
+                        {h.code}
+                      </span>
+                      <span>{isThai ? h.langTh : h.langEn}</span>
+                    </span>
+                    <span className="font-mono text-xs font-bold text-black">{h.phone}</span>
                   </a>
                 ))}
               </div>

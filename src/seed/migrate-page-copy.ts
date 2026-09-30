@@ -26,6 +26,15 @@ const choices: Record<string, { title: string; indices: number[] }> = {
   donate: { title: 'Ways to support LPN', indices: [0, 1, 4, 5] },
 }
 
+// Thai copy is kept in distinct blocks because Payload's page layout is shared
+// across locales. Sections already present in the redesigned pages stay there.
+const thaiChoices: Record<string, { title: string; indices: number[] }> = {
+  about: { title: 'การละเมิดสิทธิและแนวทางการทำงานของ LPN', indices: [7, 14, 15, 16, 17, 20, 24, 26, 28, 31] },
+  team: { title: 'เรื่องราวของทีมงาน LPN', indices: [4, 7, 11, 13] },
+  'ghost-fleet': { title: 'เกี่ยวกับภาพยนตร์ Ghost Fleet', indices: [0, 1, 2] },
+  news: { title: 'ข่าวและสิ่งพิมพ์ที่ผ่านมา', indices: [1, ...Array.from({ length: 20 }, (_, i) => i + 3)] },
+}
+
 const clean = (value: string) =>
   value
     .replace(/\u0000|\u200b/g, '')
@@ -69,24 +78,30 @@ function visibleNodes(section: SourceSection) {
 
 async function main() {
   const dryRun = process.argv.includes('--dry-run')
+  const localeArg = process.argv.find((arg) => arg.startsWith('--locale='))
+  const locale = localeArg?.slice('--locale='.length) ?? 'en'
+  if (locale !== 'en' && locale !== 'th') throw new Error(`Unsupported locale: ${locale}`)
   const onlyArg = process.argv.find((arg) => arg.startsWith('--only='))
   const onlySlug = onlyArg?.slice('--only='.length)
-  const pages = JSON.parse(await readFile('src/seed/wix-pages.snapshot.json', 'utf8')) as SourcePage[]
+  const snapshot = locale === 'th' ? 'src/seed/wix-pages.th.snapshot.json' : 'src/seed/wix-pages.snapshot.json'
+  const pages = JSON.parse(await readFile(snapshot, 'utf8')) as SourcePage[]
   const payload = await getPayload({ config: await config })
   let updated = 0
   for (const source of pages) {
     if (onlySlug && source.slug !== onlySlug) continue
-    const choice = choices[source.slug]
-    if (!choice) continue // Wix's events page contains no editorial copy.
-    const found = await payload.find({ collection: 'pages', locale: 'en', depth: 0, limit: 1, where: { slug: { equals: source.slug } } })
+    const choice = (locale === 'th' ? thaiChoices : choices)[source.slug]
+    if (!source.sections.length) continue // Wix's events page contains no editorial copy.
+    const found = await payload.find({ collection: 'pages', locale, depth: 0, limit: 1, where: { slug: { equals: source.slug } } })
     const page = found.docs[0]
     if (!page) throw new Error(`Missing Payload page: ${source.slug}`)
-    const existing = (page.layout || []).filter((block) => !['Wix source archive', 'Wix integrated copy'].includes(block.blockName || ''))
+    const archiveName = locale === 'th' ? 'Wix source archive (th)' : 'Wix source archive'
+    const integratedName = locale === 'th' ? 'Wix integrated copy (th)' : 'Wix integrated copy'
+    const existing = (page.layout || []).filter((block) => ![archiveName, integratedName].includes(block.blockName || ''))
     const archive = {
       blockType: 'richText' as const,
-      blockName: 'Wix source archive',
+      blockName: archiveName,
       content: lexical([
-        heading(`Original Wix page copy: ${source.slug}`),
+        heading(`Original Wix page copy (${locale}): ${source.slug}`),
         para(`Source: ${source.sourceUrl}. Historical contact and payment details require review.`),
         ...source.sections.flatMap((section) => [
           para(clean(section.text).replace(/\n/g, ' ')),
@@ -94,21 +109,21 @@ async function main() {
         ]),
       ]),
     }
-    const integrated = {
+    const integrated = choice && {
       blockType: 'richText' as const,
-      blockName: 'Wix integrated copy',
+      blockName: integratedName,
       content: lexical([
         heading(choice.title),
         ...choice.indices.flatMap((index) => source.sections[index] ? visibleNodes(source.sections[index]) : []),
       ]),
     }
     if (dryRun) {
-      payload.logger.info(`Would update ${source.slug}: archive ${source.sections.length} sections, integrate ${choice.indices.length}`)
+      payload.logger.info(`Would update ${source.slug} (${locale}): archive ${source.sections.length} sections, integrate ${choice?.indices.length ?? 0}`)
       continue
     }
-    await payload.update({ collection: 'pages', id: page.id, locale: 'en', data: { layout: [...existing, archive, integrated] } })
+    await payload.update({ collection: 'pages', id: page.id, locale, data: { layout: [...existing, archive, ...(integrated ? [integrated] : [])] } })
     updated++
-    payload.logger.info(`Updated ${source.slug}: ${source.sections.length} archived, ${choice.indices.length} integrated sections`)
+    payload.logger.info(`Updated ${source.slug} (${locale}): ${source.sections.length} archived, ${choice?.indices.length ?? 0} integrated sections`)
   }
   payload.logger.info(`Done: ${updated} pages updated${dryRun ? ' (dry run)' : ''}`)
   process.exit(0)

@@ -38,6 +38,15 @@ export function buildMetadata({
 }): Metadata {
   const languages = Object.fromEntries(routing.locales.map((l) => [l, `/${l}${path}`]))
 
+  // OG wants POSIX-style locales (th_TH), not route codes (th).
+  const ogLocale = locale === 'th' ? 'th_TH' : 'en_US'
+  const ogAlternate = routing.locales
+    .filter((l) => l !== locale)
+    .map((l) => (l === 'th' ? 'th_TH' : 'en_US'))
+  // Full-bleed documentary hero as the default share card (LINE/FB dominate TH
+  // traffic — always ship a large image). TODO: dedicated 1200x630 brand banner.
+  const shareImage = image ?? `${SITE_URL}/images/trawler-hero.jpg`
+
   return {
     title,
     description,
@@ -50,9 +59,16 @@ export function buildMetadata({
       description,
       url: `${SITE_URL}/${locale}${path}`,
       siteName: 'LPN Foundation',
-      locale,
+      locale: ogLocale,
+      alternateLocale: ogAlternate,
       type: 'website',
-      images: image ? [{ url: image }] : undefined,
+      images: [{ url: shareImage, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [shareImage],
     },
   }
 }

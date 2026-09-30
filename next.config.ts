@@ -58,7 +58,9 @@ const nextConfig: NextConfig = {
     // locale prefix added by the i18n middleware first, so cover both shapes.
     const renamed: [string, string][] = [
       ['services-1', 'services'],
-      ['events-page', 'events'],
+      // The old Wix events page is an empty placeholder — send visitors home
+      // instead of a dead /events path.
+      ['events-page', ''],
     ]
     return renamed.flatMap(([from, to]) => [
       { source: `/${from}`, destination: `/${to}`, permanent: true },

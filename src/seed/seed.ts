@@ -244,12 +244,15 @@ async function main() {
         para('Samut Sakhon, Thailand'),
       ]),
       hotlines: [
-        { language: 'Thai', phone: '+66 84 121 1609' },
-        { language: 'Khmer', phone: '+66 85 534 1595' },
-        { language: 'Lao', phone: '+66 92 321 1516' },
-        { language: 'Burmese', phone: '0963812069' },
+        { language: 'ภาษาไทย (Thai)', phone: '+66 84 121 1609' },
+        { language: 'និយាយជាមួយនរណាម្នាក់ជាភាសាខ្មែរ (Khmer)', phone: '+66 85 534 1595' },
+        { language: 'ເວົ້າກັບຄົນອື່ນໃນລາວ (Lao)', phone: '+66 92 321 1516' },
+        { language: 'မြန်မာလိုပြောသည်။ (Burmese)', phone: '0963812069' },
       ],
-      socials: [{ platform: 'Facebook', url: 'https://www.facebook.com/LPNFoundation' }],
+      socials: [
+        { platform: 'Facebook', url: 'https://www.facebook.com/LPN-Foundation-1406397336075427' },
+        { platform: 'Facebook', url: 'https://www.facebook.com/Labour-Rights-Promotion-Network-371018579290' },
+      ],
       bankDetails: lexical([
         para('Account Name: Labour Rights Promotion Network'),
         para('Bank: Krungthai Bank PCL, Chamchuri Square branch'),

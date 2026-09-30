@@ -64,10 +64,8 @@ export default async function BlogIndex(props: {
           <span className="t-label mr-3">{isThai ? 'กรองตาม' : 'Filter'}</span>
           <Link
             href="/blog"
-            className={`inline-flex min-h-11 items-center rounded border px-4 text-[11px] font-black tracking-widest uppercase transition-all ${
-              !category
-                ? 'border-black bg-black text-brand-yellow'
-                : 'border-black/40 text-black hover:border-black hover:bg-black hover:text-brand-yellow'
+            className={`tactile-pill min-h-11 px-4 text-[11px] font-black tracking-widest uppercase ${
+              !category ? 'active' : 'text-black'
             }`}
           >
             {isThai ? 'ทั้งหมด' : 'All'}
@@ -76,10 +74,8 @@ export default async function BlogIndex(props: {
             <Link
               key={c.id}
               href={{ pathname: '/blog', query: { category: c.slug } }}
-              className={`inline-flex min-h-11 items-center rounded border px-4 text-[11px] font-black tracking-widest uppercase transition-all ${
-                category === c.slug
-                  ? 'border-black bg-black text-brand-yellow'
-                  : 'border-black/40 text-black hover:border-black hover:bg-black hover:text-brand-yellow'
+              className={`tactile-pill min-h-11 px-4 text-[11px] font-black tracking-widest uppercase ${
+                category === c.slug ? 'active' : 'text-black'
               }`}
             >
               {c.title}

@@ -19,11 +19,11 @@ export function LocaleSwitcher() {
           <Link
             href={pathname}
             locale={loc}
-            className={
+            className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${
               loc === active
                 ? 'text-brand-yellow'
                 : 'text-white/55 transition-colors hover:text-white'
-            }
+            }`}
           >
             {labels[loc] ?? loc.toUpperCase()}
           </Link>

@@ -2,6 +2,7 @@ import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getHeader, getFooter } from '@/lib/api'
 import { HOTLINES, telHref } from '@/lib/content'
+import { ButtonLink } from './ui'
 import dynamic from 'next/dynamic'
 import { MobileMenu } from './MobileMenu'
 
@@ -89,7 +90,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
             <Link
               href="/contact"
               aria-label={isThai ? 'ติดต่อเรา' : 'Contact'}
-              className="flex h-11 w-11 items-center justify-center rounded border border-white/20 text-white/70 transition-all hover:border-white/60 hover:text-white"
+              className="tactile-icon-btn h-11 w-11 text-white/80 hover:text-white"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -106,9 +107,9 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               </svg>
             </Link>
 
-            <Link href={donate.href} className="btn btn-primary !min-h-11 px-5 py-2.5">
+            <ButtonLink href={donate.href} variant="primary" className="px-5">
               {donate.label}
-            </Link>
+            </ButtonLink>
 
             <MobileMenu items={navItems} donate={donate} isThai={isThai} />
           </div>

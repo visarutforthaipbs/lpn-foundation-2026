@@ -1,9 +1,9 @@
-import { WixIntegratedCopy } from '@/components/WixIntegratedCopy'
 import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
+import { aboutEn, aboutTh, type AboutCopy } from '@/content/about'
 import {
   Container,
   Section,
@@ -35,42 +35,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
   const { locale } = await props.params
   setRequestLocale(locale)
   const isThai = locale === 'th'
-
-  const pillars = isThai
-    ? [
-        {
-          number: '01',
-          title: 'ภารกิจ',
-          body: 'ยุติการแสวงหาประโยชน์ การเลือกปฏิบัติ และความเหลื่อมล้ำเชิงโครงสร้างที่กระทำต่อแรงงานข้ามชาติในประเทศไทย',
-        },
-        {
-          number: '02',
-          title: 'แนวทาง',
-          body: 'รวมการช่วยเหลือเร่งด่วนเข้ากับการศึกษาเรื่องสิทธิระยะยาว และการป้องกันโดยฐานชุมชน เพื่อหยุดการตกเป็นเหยื่อซ้ำซาก',
-        },
-        {
-          number: '03',
-          title: 'ทฤษฎีการเปลี่ยนแปลง',
-          body: 'เชื่อมการช่วยเหลือผู้รอดชีวิต กระบวนการกฎหมาย หลักฐานเชิงนโยบาย และการขับเคลื่อนสาธารณะ ให้นำไปสู่การปฏิรูปเชิงระบบที่ยั่งยืน',
-        },
-      ]
-    : [
-        {
-          number: '01',
-          title: 'Mission',
-          body: 'End exploitation, discrimination, and structural inequality against migrant workers in Thailand.',
-        },
-        {
-          number: '02',
-          title: 'Approach',
-          body: 'Combine urgent rescue with long-term rights education and community-based prevention to break the cycle of abuse.',
-        },
-        {
-          number: '03',
-          title: 'Theory of change',
-          body: 'Link survivor assistance, legal support, evidence gathering, and policy advocacy so immediate protection drives durable systemic reform.',
-        },
-      ]
+  const copy: AboutCopy = isThai ? aboutTh : aboutEn
 
   const stats = isThai
     ? [
@@ -135,81 +100,127 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
   return (
     <>
       {/* ---------------------------------------------------------------- HERO */}
-      <PageHero
-        compact
-        eyebrow={isThai ? 'เกี่ยวกับ LPN' : 'About LPN'}
-        title={
-          isThai
-            ? 'ยืนอยู่กับแรงงานข้ามชาติมากว่า 15 ปี — ตั้งแต่ในทะเลจนถึงห้องประชุมเชิงนโยบาย'
-            : 'For 15+ years, standing with migrant workers — from the open sea to the policy table.'
-        }
-        lede={
-          isThai
-            ? 'LPN ก่อตั้งขึ้นเพื่อปรับปรุงคุณภาพชีวิตของแรงงานข้ามชาติในประเทศไทย โดยเผชิญหน้ากับการแสวงหาประโยชน์ การเลือกปฏิบัติ และความเหลื่อมล้ำเชิงโครงสร้าง'
-            : 'LPN was founded to improve the lives of migrant workers in Thailand by confronting exploitation, discrimination, and structural inequality.'
-        }
-        stats={stats}
-      />
+      <PageHero compact eyebrow={isThai ? 'เกี่ยวกับ LPN' : 'About LPN'} title={copy.hero.title} stats={stats}>
+        <p className="t-label mt-8 text-white/45">{copy.hero.credit}</p>
+      </PageHero>
 
-      {/* ------------------------------------------------------ WHY THIS WORK */}
+      {/* INTRO + RENAME NOTE */}
       <Section tone="light" className="on-light">
         <Container>
-          <SectionHeading
-            title={isThai ? 'ทำไมงานนี้จึงสำคัญ' : 'Why this work matters'}
-            lede={
-              isThai
-                ? 'แรงงานข้ามชาติเป็นกลุ่มที่เปราะบางที่สุดต่อการละเมิด การค้ามนุษย์ และการบังคับใช้แรงงาน เราจึงทำงานทั้งช่วยเหลือเร่งด่วนและเปลี่ยนระบบไปพร้อมกัน'
-                : 'Migrant workers are among the most vulnerable to abuse, trafficking, and forced labour. We pair urgent rescue with long-term systemic change.'
-            }
-          />
-          <div className="mt-12">
-            {pillars.map((p) => (
-              <EditorialRow key={p.number} index={p.number} title={p.title} body={p.body} />
+          <div className="max-w-3xl">
+            <p className="t-lede text-black/85">{copy.hero.intro}</p>
+            <p className="t-lede mt-6 font-semibold text-black">{copy.hero.courage}</p>
+            <p className="mt-8 border-l-2 border-brand-yellow pl-4 text-sm text-black/60 italic">
+              {copy.hero.footnote}
+            </p>
+          </div>
+        </Container>
+      </Section>
+
+      {/* WHY MIGRANTS */}
+      <Section tone="paper" className="on-light">
+        <Container>
+          <SectionHeading eyebrow={copy.why.eyebrow} title={copy.why.title} />
+          <div className="mt-8 max-w-3xl">
+            {copy.why.paras.map((p) => (
+              <p key={p.slice(0, 24)} className="t-lede mt-5 text-black/75">
+                {p}
+              </p>
+            ))}
+            <p className="mt-8 text-base font-bold text-black">{copy.why.prey}</p>
+            <p className="t-label mt-4 text-black/45">{copy.why.credit}</p>
+          </div>
+        </Container>
+      </Section>
+
+      {/* HUMAN BEINGS ARE NOT FOR SALE */}
+      <Section tone="dark" className="border-y border-white/10">
+        <Container>
+          <SectionHeading tone="light" title={copy.sale.title} />
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {copy.sale.cards.map((c, i) => (
+              <article key={c.title} className="glass-dark relative rounded p-6">
+                <div className="text-3xl font-black text-brand-yellow">0{i + 1}</div>
+                <h3 className="t-h3 mt-4 text-white">{c.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/70">{c.body}</p>
+              </article>
             ))}
           </div>
         </Container>
       </Section>
 
-      {/* --------------------------------------------------------- LEADERSHIP */}
+      {/* THEORY OF CHANGE */}
+      <Section tone="light" className="on-light">
+        <Container>
+          <SectionHeading eyebrow={copy.theory.eyebrow} title={copy.theory.title} />
+          <div className="mt-8 max-w-3xl">
+            {copy.theory.paras.map((p) => (
+              <p key={p.slice(0, 24)} className="t-lede mt-5 text-black/75">
+                {p}
+              </p>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* THREE SERVICE AREAS */}
+      <Section tone="paper" className="on-light">
+        <Container>
+          <SectionHeading eyebrow={copy.services.eyebrow} title={copy.services.title} />
+          <div className="mt-10">
+            {copy.services.items.map((s, i) => (
+              <EditorialRow key={s.title} index={`0${i + 1}`} title={s.title} body={s.body} />
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* 15 YEARS — CRITICAL FOR SUCCESS */}
       <Section tone="dark" className="border-y border-white/10">
         <Container>
+          <SectionHeading tone="light" title={copy.critical.title} />
+          <ul className="mt-10 grid gap-4 md:grid-cols-2">
+            {copy.critical.items.map((item) => (
+              <li key={item.slice(0, 24)} className="glass-dark relative rounded p-6">
+                <span className="absolute top-0 left-0 h-1.5 w-10 bg-brand-yellow" aria-hidden="true" />
+                <p className="text-sm leading-relaxed text-white/85">{item}</p>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      {/* LEADERSHIP (LPN addition) */}
+      <Section tone="light" className="on-light">
+        <Container>
           <SectionHeading
-            tone="light"
             eyebrow={isThai ? 'ผู้นำองค์กร' : 'Leadership'}
             title={isThai ? 'นักสิทธิที่ทำงานข้างเดียวกับแรงงาน' : 'Activists who walk beside workers.'}
           />
           <div className="mt-12 grid gap-6 md:grid-cols-2">
             {leaders.map((l) => (
-              <article key={l.name} className="glass-dark relative rounded p-8">
-                <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
-                <p className="text-lg font-bold text-brand-yellow italic leading-snug md:text-xl">
-                  {l.quote}
-                </p>
-                <h3 className="t-h3 mt-6 text-white">{l.name}</h3>
-                <div className="t-label mt-1.5 text-white/55">{l.role}</div>
-                <p className="mt-5 text-sm leading-relaxed text-white/75">{l.body}</p>
+              <article key={l.name} className="card card-marked p-8">
+                <p className="text-lg font-bold text-black italic leading-snug">{l.quote}</p>
+                <h3 className="t-h3 mt-6">{l.name}</h3>
+                <div className="t-label mt-1.5 text-black/55">{l.role}</div>
+                <p className="mt-5 text-sm leading-relaxed text-black/70">{l.body}</p>
               </article>
             ))}
           </div>
           <div className="mt-10">
-            <ButtonLink href="/team" variant="ghostLight">
+            <ButtonLink href="/team" variant="ghostDark">
               {isThai ? 'พบทีมงานทั้งหมด' : 'Meet the full team'} →
             </ButtonLink>
           </div>
         </Container>
       </Section>
 
-      {/* ------------------------------------------------------------- AWARDS */}
-      <Section tone="light" className="on-light">
+      {/* AWARDS (LPN addition) */}
+      <Section tone="paper" className="on-light">
         <Container>
           <div className="grid gap-12 md:grid-cols-[1fr_2fr] md:items-start">
             <div>
-              <span className="t-label inline-block bg-brand-yellow px-2 py-1 text-black">
-                {isThai ? 'การยอมรับ' : 'Recognition'}
-              </span>
-              <h2 className="t-h2 mt-5">
-                {isThai ? 'รางวัลและการยอมรับ' : 'Awards & recognition'}
-              </h2>
+              <h2 className="t-h2">{isThai ? 'รางวัลและการยอมรับ' : 'Awards & recognition'}</h2>
               <p className="mt-4 text-sm leading-relaxed text-black/70">
                 {isThai
                   ? 'รางวัลเหล่านี้สะท้อนถึงผู้รอดชีวิต พันธมิตร และชุมชนแรงงานที่ทำงานเคียงข้างกับเรา'
@@ -228,18 +239,14 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
         </Container>
       </Section>
 
-      {/* ---------------------------------------------------------------- CTA */}
+      {/* DONATE (live copy) */}
       <CtaBand
-        heading={isThai ? 'ร่วมขับเคลื่อนกับเรา' : 'Stand with the movement.'}
-        body={
-          isThai
-            ? 'การสนับสนุนของคุณคือเชื้อเพลิงของการช่วยเหลือ การคุ้มครองทางกฎหมาย และเครือข่ายแรงงานที่นำไปสู่การเปลี่ยนแปลงระยะยาว'
-            : 'Your support fuels rescue operations, legal protection, and worker-led networks that drive lasting change.'
-        }
+        heading={copy.donate.heading}
+        body={copy.donate.body}
         actions={
           <>
             <ButtonLink href="/donate" variant="solidDark">
-              {isThai ? 'บริจาค' : 'Donate'}
+              {copy.donate.cta}
             </ButtonLink>
             <ButtonLink href="/services" variant="ghostDark">
               {isThai ? 'ดูบริการของเรา' : 'See our services'}
@@ -247,7 +254,6 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
           </>
         }
       />
-      <WixIntegratedCopy slug="about" locale={locale} />
     </>
   )
 }

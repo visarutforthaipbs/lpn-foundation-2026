@@ -7,6 +7,7 @@ Only public, editorial pages are included. Wix blog posts use migrate-blog.ts.
 from __future__ import annotations
 
 import json
+import argparse
 import re
 import urllib.request
 from html.parser import HTMLParser
@@ -26,7 +27,6 @@ PAGES = {
     "donate": "/donate",
     "events": "/events-page",
 }
-OUTPUT = Path("src/seed/wix-pages.snapshot.json")
 
 
 class WixTextParser(HTMLParser):
@@ -91,12 +91,19 @@ def export_page(slug: str, path: str) -> dict:
 
 
 def main() -> None:
-    OUTPUT.parent.mkdir(exist_ok=True)
-    pages = [export_page(slug, path) for slug, path in PAGES.items()]
-    OUTPUT.write_text(json.dumps(pages, ensure_ascii=False, indent=2) + "\n")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--locale", choices=["en", "th"], default="en")
+    args = parser.parse_args()
+    output = Path(f"src/seed/wix-pages.{args.locale}.snapshot.json")
+    if args.locale == "en":
+        output = Path("src/seed/wix-pages.snapshot.json")
+    output.parent.mkdir(exist_ok=True)
+    prefix = "/th" if args.locale == "th" else ""
+    pages = [export_page(slug, prefix + (path if path != "/" else "")) for slug, path in PAGES.items()]
+    output.write_text(json.dumps(pages, ensure_ascii=False, indent=2) + "\n")
     for page in pages:
         print(page["slug"], len(page["sections"]), "text sections", len(page["mediaUrls"]), "media URLs")
-    print("Saved", OUTPUT)
+    print("Saved", output)
 
 
 if __name__ == "__main__":

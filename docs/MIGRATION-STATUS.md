@@ -9,9 +9,9 @@ The new site is deployed at https://lpn-foundation-2026.vercel.app. The public
 | --- | ---: | ---: | --- |
 | Published blog posts | 83 | 83 | All present; one newly imported in this pass |
 | Unpublished blog drafts | 6 | 6 | Imported with `_status: draft`; not public |
-| Editorial pages | 9 | 9 | Complete Wix text archived in each CMS page; selected details integrated into redesigned English pages |
+| Editorial pages | 9 in each language | 9 | Complete English and Thai Wix text archived in each CMS page; substantive details integrated into redesigned pages |
 | Empty events page | 1 | 0 | No editorial copy to migrate; existing redirect remains |
-| Referenced page images | 70 distinct | 70 matched | 63 newly imported; 7 were already present |
+| Referenced page images | 73 distinct across both languages | 73 matched | All present in Payload; 3 Thai-home assets were already present from other imports |
 | Media library entries | — | 262 | Every public image URL returned an image in a GET check |
 
 All 83 published Wix blog slugs are recorded in `src/seed/wix-blog-urls.json`.
@@ -19,17 +19,40 @@ The post route permanently redirects old slugs to the corresponding migrated
 article, preserving shared Wix article links after DNS cutover.
 
 The Wix page text and media references are preserved in
-`src/seed/wix-pages.snapshot.json`. Re-export with
-`python3 src/seed/export-wix-pages.py` while the Wix site remains live. The
-`Wix source archive` block on each Payload page holds the complete text and is
-hidden from visitors. `Wix integrated copy` blocks add relevant detail to the
-redesigned English pages. Old screening dates, outdated contact details and
-bank-transfer instructions remain in the archive for editorial review; they
-are not presented as current public guidance.
+`src/seed/wix-pages.snapshot.json` and `src/seed/wix-pages.th.snapshot.json`.
+Re-export with `python3 src/seed/export-wix-pages.py --locale=en` and
+`python3 src/seed/export-wix-pages.py --locale=th` while Wix remains live.
+The `Wix source archive` and `Wix source archive (th)` blocks hold the complete
+source text and are hidden from visitors. Locale-specific `Wix integrated copy`
+blocks add selected historical detail to the redesigned pages. The Thai archive
+was added to both local development and production Payload databases on
+30 September 2026.
+
+## Page-by-page coverage
+
+| Wix page | New location | Treatment |
+| --- | --- | --- |
+| Home | `/th`, `/en` | Hero, impact, three pillars, trafficking cycle, causes, action cards, emergency contacts, and the latest three Payload articles |
+| About | `/about` | Mission, exploitation mechanisms, theory of change, work streams, and approach combined in one bilingual page |
+| Team | `/team` | Leaders, awards, staff, and migrant youth network, with longer source biographies |
+| Services | `/services` | Rescue, advocacy, education, and programme deep dives combined in one bilingual page |
+| Projects | `/projects` | Six issue areas, seven dated funder collaborations in a year filter, and the two extended worker networks |
+| Ghost Fleet | `/ghost-fleet` | Film summary and attributed review in each language; old screening dates retained only in the source archive |
+| News | `/news` plus `/blog` | Historical press and publications on News; 83 migrated articles in the blog |
+| Contact | `/contact` and site footer | Urgent help, four language hotlines, office location, and email |
+| Donate | `/donate` | Donation purpose, bank transfer details, and partnership contact |
+| Events | — | Wix page has no editorial copy; historical events remain in articles or source archive where applicable |
+
+Repeated donation and hotline calls to action were merged into the relevant
+pages and persistent footer. Original Wix bank details are visible on the new
+donation page; LPN should confirm the account is still active before public
+domain cutover. Historical partner dates are labelled as past work so they do
+not imply active grants.
 
 The Burmese hotline is `0963812069` in the new site code, footer and contact
-page CMS content. The Wix Home and Contact edits were published on 30 September
-2026; both public pages now display the new number.
+page CMS content. The captured Thai Wix source still contains the earlier
+number, which is retained only in hidden archival copy and is replaced in
+integrated content.
 
 Wix native CMS collections `Items` (three placeholder entries),
 `contentsubmission` (three legacy submissions), `contact13` (empty), and
@@ -46,10 +69,12 @@ The migration scripts require Payload's `DATABASE_URL`, `PAYLOAD_SECRET` and
 pnpm migrate:blog --snapshot=.migration/wix-blog-missing.json --dry-run
 pnpm migrate:blog --snapshot=.migration/wix-blog-missing.json
 python3 src/seed/export-wix-pages.py
+python3 src/seed/export-wix-pages.py --locale=th
 pnpm exec tsx src/seed/migrate-page-media.ts --dry-run
 pnpm exec tsx src/seed/migrate-page-media.ts
 pnpm exec tsx src/seed/migrate-page-copy.ts --dry-run
 pnpm exec tsx src/seed/migrate-page-copy.ts
+pnpm exec tsx src/seed/migrate-page-copy.ts --locale=th
 pnpm exec tsx src/seed/update-burmese-phone.ts
 ```
 

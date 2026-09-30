@@ -26,7 +26,10 @@ async function main() {
   const limitArg = process.argv.find((arg) => arg.startsWith('--limit='))
   const limit = limitArg ? Number(limitArg.slice('--limit='.length)) : Infinity
   if (!(limit > 0)) throw new Error('--limit must be positive')
-  const pages = JSON.parse(await readFile('src/seed/wix-pages.snapshot.json', 'utf8')) as WixPage[]
+  const pages = [
+    ...(JSON.parse(await readFile('src/seed/wix-pages.snapshot.json', 'utf8')) as WixPage[]),
+    ...(JSON.parse(await readFile('src/seed/wix-pages.th.snapshot.json', 'utf8')) as WixPage[]),
+  ]
   const sources = new Map<string, string>()
   for (const page of pages) {
     for (const url of page.mediaUrls) {

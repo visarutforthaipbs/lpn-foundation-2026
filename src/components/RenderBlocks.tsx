@@ -71,7 +71,9 @@ export async function RenderBlocks({
   return (
     <>
       {blocks.map((block, i) => {
-        if (block.blockName === 'Wix source archive') return null
+        if (block.blockName?.startsWith('Wix source archive')) return null
+        if (locale === 'th' && block.blockName === 'Wix integrated copy') return null
+        if (locale === 'en' && block.blockName === 'Wix integrated copy (th)') return null
         switch (block.blockType) {
           case 'hero':
             return (
