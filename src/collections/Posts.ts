@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 import { metaField } from '../fields/meta'
 import { revalidatePost, revalidatePostDelete } from '../hooks/revalidate'
+import { stripEmoji, stripEmojiFromRichText } from '../lib/post-emoji'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -54,6 +55,12 @@ export const Posts: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data }) => {
+        // Keep future posts consistent with the site's emoji-free editorial style.
+        if (typeof data?.title === 'string') data.title = stripEmoji(data.title)
+        if (typeof data?.excerpt === 'string') data.excerpt = stripEmoji(data.excerpt)
+        if (typeof data?.meta?.title === 'string') data.meta.title = stripEmoji(data.meta.title)
+        if (typeof data?.meta?.description === 'string') data.meta.description = stripEmoji(data.meta.description)
+        if (data?.content) data.content = stripEmojiFromRichText(data.content)
         // Default publishedAt to now when first published.
         if (data?._status === 'published' && !data.publishedAt) {
           data.publishedAt = new Date().toISOString()

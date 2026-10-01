@@ -14,6 +14,7 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx src/seed/seed.ts",
     "migrate:blog": "cross-env NODE_OPTIONS=--no-deprecation tsx src/seed/migrate-blog.ts",
+    "audit:posts": "cross-env NODE_OPTIONS=--no-deprecation tsx src/seed/clean-blog-posts.ts --check",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
