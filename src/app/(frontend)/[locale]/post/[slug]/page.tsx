@@ -3,7 +3,8 @@ import { setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getPost, getAllPostSlugs } from '@/lib/api'
-import { HOTLINES, OFFICE, telHref, buildShareUrls } from '@/lib/content'
+import { OFFICE, telHref, buildShareUrls } from '@/lib/content'
+import { getHelpChannels } from '@/lib/help-channels'
 import { MediaImage } from '@/components/MediaImage'
 import { RichText } from '@/components/RichText'
 import { buildMetadata } from '@/lib/seo'
@@ -51,7 +52,7 @@ export default async function PostPage(props: {
   const author = post.author && typeof post.author !== 'number' ? post.author : null
   const share = buildShareUrls(locale, slug)
   // Sidebar offers the Thai + Khmer lines first (highest call volume).
-  const sidebarHotlines = HOTLINES.filter((h) => h.code === 'TH' || h.code === 'KH')
+  const sidebarHotlines = (await getHelpChannels(locale)).filter((h) => h.code === 'TH' || h.code === 'KH')
 
   return (
     <div className="bg-paper py-10 on-light">

@@ -1105,6 +1105,18 @@ export interface Footer {
   bankName?: string | null;
   bankAccountNumber?: string | null;
   bankSwift?: string | null;
+  /**
+   * Only add LPN’s live GlobalGiving project URL after approval. Payment integration must be connected separately; the current donation flow is a design preview.
+   */
+  globalGivingProjectUrl?: string | null;
+  /**
+   * Date LPN confirmed this project page receives gifts for LPN.
+   */
+  globalGivingVerifiedAt?: string | null;
+  /**
+   * LPN staff member who verified the project page.
+   */
+  globalGivingVerifiedBy?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1157,6 +1169,9 @@ export interface FooterSelect<T extends boolean = true> {
   bankName?: T;
   bankAccountNumber?: T;
   bankSwift?: T;
+  globalGivingProjectUrl?: T;
+  globalGivingVerifiedAt?: T;
+  globalGivingVerifiedBy?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

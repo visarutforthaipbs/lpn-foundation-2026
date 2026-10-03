@@ -59,14 +59,6 @@ export const ALT_LINES = {
   office3: '086 16 31 390', // listed on the Thai contact page
 }
 
-export const BANK = {
-  accountName: 'Labour Rights Promotion Network',
-  bankEn: 'Krungthai Bank PCL, Chamchuri Square branch',
-  bankTh: 'ธนาคารกรุงไทย สาขาจามจุรีสแควร์',
-  accountNumber: '162-0-09432-0',
-  swift: 'KRTHTHBK',
-}
-
 export const OFFICE = {
   nameEn: 'Labour Rights Promotion Network Foundation',
   nameTh: 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน',

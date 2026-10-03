@@ -1,4 +1,5 @@
 import { setRequestLocale } from 'next-intl/server'
+import { ChevronDown, PhoneCall } from 'lucide-react'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
@@ -11,38 +12,42 @@ import {
   PageHero,
   CtaBand,
   ButtonLink,
-  EditorialRow,
 } from '@/components/ui'
 
 /** Deep-dive section: intro paragraphs + titled program blocks. */
 function DeepDive({
   section,
   tone,
+  isThai,
 }: {
   section: { eyebrow: string; title: string; paras: string[]; items: Item[]; closing?: string[] }
   tone: 'light' | 'paper'
+  isThai: boolean
 }) {
   return (
     <Section tone={tone} className="on-light">
       <Container>
         <SectionHeading eyebrow={section.eyebrow} title={section.title} />
-        <div className="mt-8 max-w-3xl">
-          {section.paras.map((p) => (
-            <p key={p.slice(0, 24)} className="t-lede mt-5 text-black/75">{p}</p>
-          ))}
-        </div>
-        <div className="mt-12">
+        {section.paras[0] && <p className="t-lede mt-8 max-w-3xl text-black/75">{section.paras[0]}</p>}
+        <div className="mt-8 grid gap-3 md:grid-cols-2">
           {section.items.map((item, i) => (
-            <EditorialRow key={item.title} index={`0${i + 1}`} title={item.title} body={<span className="whitespace-pre-line">{item.body}</span>} />
+            <details key={item.title} className="group border border-black/20 bg-white open:border-black">
+              <summary className="flex min-h-24 cursor-pointer list-none items-center gap-4 p-5 marker:hidden [&::-webkit-details-marker]:hidden">
+                <span className="text-2xl font-black text-black/40">0{i + 1}</span>
+                <span className="flex-1 text-lg font-bold leading-snug">{item.title}</span>
+                <ChevronDown size={22} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+              </summary>
+              <p className="border-t border-black/15 px-5 pb-6 pt-4 text-base leading-relaxed whitespace-pre-line text-black/80">{item.body}</p>
+            </details>
           ))}
         </div>
-        {section.closing && section.closing.length > 0 && (
-          <div className="mt-12 max-w-3xl border-t border-black/15 pt-8">
-            {section.closing.map((p) => (
-              <p key={p.slice(0, 24)} className="mt-5 text-base leading-relaxed text-black/75">{p}</p>
-            ))}
-          </div>
-        )}
+        {(section.paras.length > 1 || (section.closing?.length ?? 0) > 0) && <details className="group mt-6 max-w-3xl border-t border-black/20 pt-4">
+          <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 font-bold underline decoration-brand-yellow decoration-2 underline-offset-4 marker:hidden [&::-webkit-details-marker]:hidden">
+            {isThai ? 'อ่านรายละเอียดเพิ่มเติม' : 'Read more about this work'}
+            <ChevronDown size={20} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+          </summary>
+          {[...section.paras.slice(1), ...(section.closing ?? [])].map((p) => <p key={p.slice(0, 24)} className="mt-5 text-base leading-relaxed text-black/75">{p}</p>)}
+        </details>}
       </Container>
     </Section>
   )
@@ -90,15 +95,33 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
       {/* ---------------------------------------------------------------- HERO */}
       <PageHero
         compact
+        backgroundImage="/images/fisher-protection.jpg"
+        backgroundAlt={isThai ? 'งานคุ้มครองและบริการช่วยเหลือแรงงาน LPN' : 'LPN worker protection services'}
         eyebrow={copy.hero.eyebrow}
-        title={copy.hero.title}
-        lede={copy.hero.lede}
+        title={isThai ? 'LPN ช่วยแรงงานอย่างไร' : 'How LPN helps workers'}
+        lede={isThai ? 'รับฟังปัญหา ช่วยเหลือ และทำงานกับชุมชน' : 'We listen, respond, and work alongside communities.'}
       />
 
-      {/* LEDE 2 */}
+      {/* Worker route stays visible before the detailed programme copy. */}
+      <Section tone="yellow" tight className="on-light">
+        <Container className="grid gap-5 sm:grid-cols-[auto_1fr_auto] sm:items-center">
+          <PhoneCall size={42} strokeWidth={1.7} aria-hidden="true" />
+          <p className="t-h3">{isThai ? 'มีปัญหาเรื่องงานหรือความปลอดภัย?' : 'Need help with work or safety?'}</p>
+          <ButtonLink href="/get-help" variant="solidDark">{isThai ? 'ติดต่อ LPN' : 'Contact LPN'}</ButtonLink>
+        </Container>
+      </Section>
+
       <Section tone="light" tight className="on-light">
         <Container>
-          <p className="t-lede max-w-3xl text-black/75">{copy.hero.lede2}</p>
+          <details className="group max-w-3xl border-b border-black/20 pb-4">
+            <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 font-bold underline decoration-brand-yellow decoration-2 underline-offset-4 marker:hidden [&::-webkit-details-marker]:hidden">
+              {isThai ? 'เกี่ยวกับงานบริการของ LPN' : 'About LPN’s services'}
+              <ChevronDown size={20} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <p className="mt-5 font-bold">{copy.hero.title}</p>
+            <p className="mt-3 text-base leading-relaxed text-black/75">{copy.hero.lede}</p>
+            <p className="mt-3 text-base leading-relaxed text-black/75">{copy.hero.lede2}</p>
+          </details>
         </Container>
       </Section>
 
@@ -106,23 +129,25 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
       <Section tone="paper" className="on-light">
         <Container>
           <SectionHeading title={copy.programsTitle} />
-          <div className="mt-12">
+          <div className="mt-8 grid gap-3 md:grid-cols-2">
             {copy.programs.map((p, i) => (
-              <EditorialRow
-                key={p.title}
-                index={`0${i + 1}`}
-                title={p.title}
-                body={p.body}
-              />
+              <details key={p.title} className="group border border-black/20 bg-white open:border-black">
+                <summary className="flex min-h-28 cursor-pointer list-none items-center gap-4 p-5 marker:hidden [&::-webkit-details-marker]:hidden">
+                  <span className="text-3xl font-black text-black/40">0{i + 1}</span>
+                  <span className="flex-1 text-lg font-bold leading-snug">{p.title}</span>
+                  <ChevronDown size={22} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+                </summary>
+                <p className="border-t border-black/15 px-5 pb-6 pt-4 text-base leading-relaxed text-black/80">{p.body}</p>
+              </details>
             ))}
           </div>
         </Container>
       </Section>
 
       {/* DEEP DIVES */}
-      <DeepDive section={copy.raid} tone="light" />
-      <DeepDive section={copy.advocacy} tone="paper" />
-      <DeepDive section={copy.education} tone="light" />
+      <DeepDive section={copy.raid} tone="light" isThai={isThai} />
+      <DeepDive section={copy.advocacy} tone="paper" isThai={isThai} />
+      <DeepDive section={copy.education} tone="light" isThai={isThai} />
 
       {/* JOURNEY */}
       <Section tone="dark" className="border-y border-white/10">

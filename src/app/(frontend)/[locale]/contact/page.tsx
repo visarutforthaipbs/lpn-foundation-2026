@@ -52,6 +52,8 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
       {/* ---------------------------------------------------------------- HERO */}
       <PageHero
         compact
+        backgroundImage="/images/field-action.jpg"
+        backgroundAlt={isThai ? 'การปฏิบัติการภาคสนามของ LPN' : 'LPN field operations'}
         eyebrow={isThai ? 'ช่องทางติดต่อเรา' : 'Get in touch'}
         title={isThai ? 'ติดต่อ LPN โดยตรง' : 'Contact LPN directly.'}
         lede={

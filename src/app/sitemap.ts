@@ -21,14 +21,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Posts live under their own language only.
   for (const { slug, language } of posts) {
-    entries.push({ url: `${SITE_URL}/${language}/post/${slug}`, changeFrequency: 'monthly' })
+    entries.push({ url: `${SITE_URL}/${language}/post/${encodeURIComponent(slug)}`, changeFrequency: 'monthly' })
   }
   const storyLocales = new Map<string, string[]>()
   for (const story of englishStories) storyLocales.set(story.slug, ['en'])
   for (const story of thaiStories) storyLocales.set(story.slug, [...(storyLocales.get(story.slug) ?? []), 'th'])
   for (const [slug, locales] of storyLocales) {
-    const languages = Object.fromEntries(locales.map((locale) => [locale, `${SITE_URL}/${locale}/stories/${slug}`]))
-    for (const locale of locales) entries.push({ url: `${SITE_URL}/${locale}/stories/${slug}`, changeFrequency: 'monthly', alternates: { languages } })
+    const languages = Object.fromEntries(locales.map((locale) => [locale, `${SITE_URL}/${locale}/stories/${encodeURIComponent(slug)}`]))
+    for (const locale of locales) entries.push({ url: `${SITE_URL}/${locale}/stories/${encodeURIComponent(slug)}`, changeFrequency: 'monthly', alternates: { languages } })
   }
   return entries
 }

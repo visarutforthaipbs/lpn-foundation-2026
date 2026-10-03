@@ -20,11 +20,11 @@ export function PartnerTimeline({ locale, projects }: { locale: Locale; projects
   return (
     <div className="mt-10">
       <div className="flex flex-wrap gap-2" aria-label={isThai ? 'กรองโครงการตามปี' : 'Filter projects by year'}>
-        <button type="button" aria-pressed={year === null} onClick={() => setYear(null)} className={`tactile-pill min-h-11 px-4 text-xs font-black ${year === null ? 'active' : ''}`}>
+        <button type="button" aria-pressed={year === null} onClick={() => setYear(null)} className={`tactile-pill min-h-11 px-4 text-sm font-semibold ${year === null ? 'active' : ''}`}>
           {isThai ? 'ทั้งหมด' : 'All years'}
         </button>
         {years.map((item) => (
-          <button key={item} type="button" aria-pressed={year === item} onClick={() => setYear(item)} className={`tactile-pill min-h-11 px-4 text-xs font-black ${year === item ? 'active' : ''}`}>
+          <button key={item} type="button" aria-pressed={year === item} onClick={() => setYear(item)} className={`tactile-pill min-h-11 px-4 text-sm font-semibold ${year === item ? 'active' : ''}`}>
             {isThai ? item + 543 : item}
           </button>
         ))}

@@ -1,4 +1,5 @@
 import { setRequestLocale } from 'next-intl/server'
+import Image from 'next/image'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
@@ -95,7 +96,9 @@ export default async function ProjectsPage(props: { params: Promise<{ locale: Lo
       {/* ---------------------------------------------------------------- HERO */}
       <PageHero
         compact
-        eyebrow={isThai ? 'พันธมิตรของเรา' : 'Our partners'}
+        backgroundImage="/images/learning-center.jpg"
+        backgroundAlt={isThai ? 'โครงการและความร่วมมือของ LPN' : 'LPN projects and partnerships'}
+        eyebrow={isThai ? 'ความร่วมมือและพันธมิตร' : 'Partnerships'}
         title={isThai ? 'การเปลี่ยนแปลงที่ยั่งยืนเกิดจากการทำงานร่วมกัน' : 'Lasting change is built in coalition.'}
         lede={
           isThai
@@ -156,6 +159,23 @@ export default async function ProjectsPage(props: { params: Promise<{ locale: Lo
       <Section tone="light" className="on-light">
         <Container>
           <SectionHeading title={copy.network.title} lede={copy.network.intro} />
+
+          {/* Labour Group sub-brand networks (LPN brand system) */}
+          <ul className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-6 border-y border-black/10 py-8">
+            {[
+              { src: '/logos/subbrands/flg-black.png', name: 'FLG' },
+              { src: '/logos/subbrands/mln-black.png', name: 'MLN' },
+              { src: '/logos/subbrands/mmlg-black.png', name: 'MMLG' },
+              { src: '/logos/subbrands/cmlg-black.png', name: 'CMLG' },
+              { src: '/logos/subbrands/lmlg-black.png', name: 'LMLG' },
+            ].map((b) => (
+              <li key={b.name} className="flex items-center gap-3 opacity-80 transition-opacity hover:opacity-100">
+                <Image src={b.src} alt="" width={44} height={44} className="h-11 w-11 object-contain" />
+                <span className="t-label text-black/60">{b.name}</span>
+              </li>
+            ))}
+          </ul>
+
           <div className="mt-12 grid gap-6 md:grid-cols-2">
             {copy.network.items.map((p) => (
               <PartnerEntry key={p.name} p={p} />

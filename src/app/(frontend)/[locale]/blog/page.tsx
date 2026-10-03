@@ -64,7 +64,7 @@ export default async function BlogIndex(props: {
           <span className="t-label mr-3">{isThai ? 'กรองตาม' : 'Filter'}</span>
           <Link
             href="/blog"
-            className={`tactile-pill min-h-11 px-4 text-[11px] font-black tracking-widest uppercase ${
+            className={`tactile-pill min-h-11 px-4 text-sm font-semibold ${
               !category ? 'active' : 'text-black'
             }`}
           >
@@ -74,7 +74,7 @@ export default async function BlogIndex(props: {
             <Link
               key={c.id}
               href={{ pathname: '/blog', query: { category: c.slug } }}
-              className={`tactile-pill min-h-11 px-4 text-[11px] font-black tracking-widest uppercase ${
+              className={`tactile-pill min-h-11 px-4 text-sm font-semibold ${
                 category === c.slug ? 'active' : 'text-black'
               }`}
             >

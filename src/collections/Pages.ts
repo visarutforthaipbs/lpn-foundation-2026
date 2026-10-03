@@ -31,5 +31,19 @@ export const Pages: CollectionConfig = {
   ],
   hooks: {
     afterChange: [revalidatePage],
+    afterRead: [({ doc, req }) => {
+      // The Wix source archive and seeded donation blocks keep historical bank
+      // and phone details for editors. The frontend never renders them, so keep
+      // them out of public REST/GraphQL responses too. Local API reads (server
+      // components, seed/migration scripts) are untouched: scripts read and
+      // write back the whole layout, and stripping here would delete the blocks.
+      if (req.user || req.payloadAPI === 'local' || !Array.isArray(doc?.layout)) return doc
+      return {
+        ...doc,
+        layout: doc.layout.filter((block: { blockType?: string; blockName?: string | null }) =>
+          block.blockType !== 'donationDetails' && !block.blockName?.startsWith('Wix source archive'),
+        ),
+      }
+    }],
   },
 }

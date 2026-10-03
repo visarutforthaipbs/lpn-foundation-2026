@@ -1,4 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
+import Image from 'next/image'
+import { Globe } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getImpactMetrics, getPosts, getReports } from '@/lib/api'
@@ -43,13 +45,34 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
   ]
 
   return <>
-    <Section tone="dark"><Container>
-      <p className="eyebrow text-brand-yellow">{th ? 'ผลการทำงานและรายงาน' : 'Impact & Reports'}</p>
-      <h1 className="t-display mt-6 max-w-5xl text-white">{th ? 'ดูหลักฐาน พร้อมช่วงเวลาและที่มา' : 'Evidence with dates and sources.'}</h1>
-      <p className="t-lede mt-7 max-w-3xl text-white/80">{th
-        ? 'ตัวเลขผลการทำงานบอกว่า LPN ทำอะไรและเข้าถึงใคร งานวิจัยช่วยอธิบายปัญหาในระบบ ทั้งสองอย่างสำคัญ แต่ไม่ใช่สิ่งเดียวกัน'
-        : 'Results show what LPN did and whom it reached. Research describes wider conditions. Both matter, but they measure different things.'}</p>
-    </Container></Section>
+    <section className="relative overflow-hidden bg-black text-white">
+      {/* Authentic field photography backdrop */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/learning-center.jpg"
+          alt={th ? 'การดำเนินงานและศูนย์การเรียนรู้ LPN' : 'LPN learning center and evidence operations'}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-30 brightness-90 contrast-105"
+        />
+        <div className="absolute inset-0 bg-linear-to-r from-black via-black/85 to-black/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40 pointer-events-none" />
+      </div>
+
+      <Container className="relative z-10 py-16 md:py-24">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow/15 border border-brand-yellow/30 text-brand-yellow">
+            <Globe className="h-4.5 w-4.5" aria-hidden="true" />
+          </div>
+          <p className="eyebrow text-brand-yellow">{th ? 'ผลการทำงานและรายงาน' : 'Impact & Reports'}</p>
+        </div>
+        <h1 className="t-display mt-6 max-w-5xl text-white">{th ? 'ดูหลักฐาน พร้อมช่วงเวลาและที่มา' : 'Evidence with dates and sources.'}</h1>
+        <p className="t-lede mt-7 max-w-3xl text-white/80">{th
+          ? 'ตัวเลขผลการทำงานบอกว่า LPN ทำอะไรและเข้าถึงใคร งานวิจัยช่วยอธิบายปัญหาในระบบ ทั้งสองอย่างสำคัญ แต่ไม่ใช่สิ่งเดียวกัน'
+          : 'Results show what LPN did and whom it reached. Research describes wider conditions. Both matter, but they measure different things.'}</p>
+      </Container>
+    </section>
 
     {reviewedMetrics.length > 0 && <Section tone="paper"><Container>
       <SectionHeading eyebrow={th ? 'ข้อมูลที่บรรณาธิการตรวจทาน' : 'Reviewed metrics'} title={th ? 'ตัวเลขพร้อมนิยามและแหล่งที่มา' : 'Figures with definitions and sources'} />

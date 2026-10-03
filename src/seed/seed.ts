@@ -13,7 +13,7 @@ import config from '../payload.config'
 import { lexical, para, heading, bulletList } from './lexical'
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@lpnfoundation.org'
-const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'changeme123!'
+const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD
 
 type SeedPage = {
   slug: string
@@ -170,11 +170,13 @@ async function main() {
   // 1. Admin user
   const users = await payload.find({ collection: 'users', limit: 1 })
   if (users.totalDocs === 0) {
+    // No default password: a guessable one would end up on the live /admin.
+    if (!ADMIN_PASSWORD) throw new Error('No users exist yet. Set SEED_ADMIN_PASSWORD to create the first admin.')
     await payload.create({
       collection: 'users',
       data: { email: ADMIN_EMAIL, password: ADMIN_PASSWORD },
     })
-    payload.logger.info(`Created admin user: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD} (change this!)`)
+    payload.logger.info(`Created admin user: ${ADMIN_EMAIL}`)
   }
 
   // 2. Categories

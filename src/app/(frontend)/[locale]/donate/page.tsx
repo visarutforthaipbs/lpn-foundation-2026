@@ -1,8 +1,11 @@
+import Image from 'next/image'
 import { setRequestLocale } from 'next-intl/server'
+import { ArrowDown, BookOpen, LifeBuoy, Scale } from 'lucide-react'
 import type { Locale } from '@/i18n/routing'
-import { getFooter, getPage } from '@/lib/api'
+import { DonationChannelPreview } from '@/components/DonationChannelPreview'
+import { ButtonLink, Container, Section } from '@/components/ui'
+import { getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
-import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
 
 export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
@@ -17,62 +20,42 @@ export async function generateMetadata(props: { params: Promise<{ locale: Locale
   })
 }
 
-export default async function DonatePage(props: { params: Promise<{ locale: Locale }> }) {
-  const { locale } = await props.params
+export default async function DonatePage({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params
   setRequestLocale(locale)
   const th = locale === 'th'
-  const footer = await getFooter(locale)
-  const bankVerified = Boolean(footer.bankVerifiedAt && footer.bankVerifiedBy && footer.bankAccountName && footer.bankName && footer.bankAccountNumber)
   const streams = th ? [
-    ['ช่วยเหลือและคุ้มครอง', 'ช่วยให้ LPN รับฟังและประสานความช่วยเหลือสำหรับแรงงานและครอบครัวที่เผชิญปัญหา'],
-    ['ความรู้และชุมชน', 'สนับสนุนการเรียนรู้เรื่องสิทธิ เยาวชน ครอบครัว และเครือข่ายแรงงาน'],
-    ['หลักฐานและการเปลี่ยนระบบ', 'สนับสนุนงานวิจัยและความร่วมมือที่ใช้ประสบการณ์ภาคสนามเพื่อแก้ปัญหาเชิงระบบ'],
-  ] : [
-    ['Respond and protect', 'Help LPN listen and connect workers and families facing problems with appropriate support.'],
-    ['Learn with communities', 'Support rights learning, young people, families, and worker networks.'],
-    ['Build evidence for change', 'Support research and partnerships that use field experience to address systemic barriers.'],
-  ]
+    [LifeBuoy, 'ช่วยเหลือและคุ้มครอง', '/images/fisher-protection.jpg'],
+    [BookOpen, 'เรียนรู้กับชุมชน', '/images/field-action.jpg'],
+    [Scale, 'เปลี่ยนแปลงระบบ', null],
+  ] as const : [
+    [LifeBuoy, 'Respond and protect', '/images/fisher-protection.jpg'],
+    [BookOpen, 'Learn with communities', '/images/field-action.jpg'],
+    [Scale, 'Build fairer systems', null],
+  ] as const
 
   return <>
-    <Section tone="dark"><Container>
-      <p className="eyebrow text-brand-yellow">{th ? 'ร่วมสนับสนุน' : 'Support LPN'}</p>
-      <h1 className="t-display mt-6 max-w-5xl text-white">{th ? 'ช่วยให้สิทธิและการคุ้มครองเข้าถึงทุกคน' : 'Help make rights and protection reachable.'}</h1>
-      <p className="t-lede mt-7 max-w-3xl text-white/80">{th
-        ? 'การสนับสนุนของคุณช่วยให้งานช่วยเหลือ การสร้างความรู้ และการเปลี่ยนแปลงระบบดำเนินต่อไป'
-        : 'Your support helps sustain direct assistance, community learning, and systems change.'}</p>
-      <div className="mt-9 flex flex-wrap gap-3">
-        <ButtonLink href={bankVerified ? '#bank-details' : '/contact'} variant="primary">{bankVerified ? (th ? 'ดูข้อมูลโอนเงิน' : 'See bank details') : (th ? 'สอบถามการสนับสนุน' : 'Ask about giving')}</ButtonLink>
-        <ButtonLink href="/impact" variant="ghostLight">{th ? 'ดูผลการทำงาน' : 'Explore impact'}</ButtonLink>
+    <div className="border-b border-black/15 bg-brand-yellow py-3 text-black"><Container><p className="text-sm font-semibold">{th ? 'แบบร่างสำหรับหารือกับปฏิมา · ยังไม่มีการชำระเงิน · ช่องทางและจำนวนเงินเป็นตัวอย่าง' : 'Design for discussion with Patima · Payments inactive · Methods and amounts are illustrative'}</p></Container></div>
+    <section className="bg-black text-white"><Container className="grid lg:grid-cols-[1.1fr_1fr]">
+      <div className="py-12 pr-0 sm:py-16 lg:pr-12">
+        <p className="eyebrow text-brand-yellow">{th ? 'สนับสนุน LPN' : 'Support LPN'}</p>
+        <h1 className="mt-5 max-w-2xl text-4xl leading-tight font-semibold sm:text-5xl xl:text-6xl">{th ? 'เคียงข้างแรงงานและครอบครัว' : 'Stand beside workers and families.'}</h1>
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">{th ? 'ช่วยให้การคุ้มครอง ความรู้ และโอกาสเข้าถึงคนที่ต้องการ เลือกช่องทางที่เหมาะกับคุณ' : 'Help make protection, knowledge, and opportunity reachable. Choose the giving channel that works for you.'}</p>
+        <div className="mt-7"><ButtonLink href="#giving-channels" variant="primary">{th ? 'เลือกช่องทางบริจาค' : 'Choose how to give'}<ArrowDown size={18} aria-hidden="true" /></ButtonLink></div>
       </div>
+      <div className="relative min-h-60 lg:my-8"><Image src="/images/community-outreach.jpg" alt={th ? 'การทำงานกับชุมชนของ LPN' : 'LPN working with communities'} fill priority sizes="(max-width: 1023px) 100vw, 45vw" className="object-cover" /></div>
+    </Container></section>
+
+    <Section tone="paper"><Container><DonationChannelPreview locale={locale} /></Container></Section>
+
+    <Section><Container>
+      <div className="flex flex-wrap items-end justify-between gap-5"><h2 className="t-h2 max-w-2xl">{th ? 'การสนับสนุนหนึ่งครั้ง เชื่อมงานสามด้าน' : 'One mission. Three connected strands.'}</h2><ButtonLink href="/impact" variant="ghostDark">{th ? 'ดูผลการทำงานและรายงาน' : 'Explore impact and reports'}</ButtonLink></div>
+      <div className="mt-8 grid gap-5 md:grid-cols-3">{streams.map(([Icon, title, image]) => <article key={title} className="bg-paper"><div className="relative aspect-3/2">{image ? <Image src={image} alt="" fill sizes="(max-width: 767px) 100vw, 33vw" className="object-cover" /> : <div className="flex h-full flex-col items-center justify-center gap-5 bg-black p-6 text-white"><Scale size={64} strokeWidth={1} className="text-brand-yellow" aria-hidden="true" /><p className="text-center text-sm font-semibold">{th ? 'หลักฐาน → เสียงของแรงงาน → การเปลี่ยนแปลง' : 'Evidence → Worker voice → Change'}</p></div>}</div><div className="flex items-center gap-3 border-t-4 border-brand-yellow p-5"><Icon size={23} aria-hidden="true" /><h3 className="text-xl font-semibold">{title}</h3></div></article>)}</div>
+      <p className="mt-5 max-w-2xl text-sm leading-relaxed text-black/65">{th ? 'รายละเอียดการใช้เงินและความต้องการปัจจุบันจะยืนยันกับ LPN ก่อนเผยแพร่แคมเปญ' : 'LPN will confirm current funding needs and how gifts are used before a campaign is published.'}</p>
     </Container></Section>
 
-    <Section tone="paper"><Container>
-      <SectionHeading eyebrow={th ? 'การสนับสนุนของคุณ' : 'Where support helps'} title={th ? 'สามด้านของงานที่เชื่อมกัน' : 'Three connected parts of the work'} lede={th ? 'ความต้องการปัจจุบันและข้อจำกัดของทุนควรตกลงกับทีม LPN ก่อนสนับสนุนโครงการเฉพาะ' : 'Discuss current needs and any funding restrictions with LPN before supporting a specific programme.'} />
-      <div className="mt-10 grid gap-5 md:grid-cols-3">{streams.map(([title, body], i) => <article key={title} className="border-t-4 border-brand-yellow bg-white p-7">
-        <span className="t-label text-black/70">0{i + 1}</span><h3 className="t-h3 mt-5">{title}</h3><p className="mt-4 text-sm leading-relaxed text-black/75">{body}</p>
-      </article>)}</div>
-    </Container></Section>
+    <Section tone="dark" tight><Container className="flex flex-wrap items-center justify-between gap-6"><div><p className="eyebrow text-brand-yellow">{th ? 'องค์กรและพันธมิตร' : 'Institutions and partners'}</p><h2 className="t-h3 mt-4 text-white">{th ? 'ร่วมสนับสนุนงานระยะยาว' : 'Build a longer-term partnership'}</h2></div><ButtonLink href="/contact" variant="ghostLight">{th ? 'คุยกับ LPN' : 'Talk with LPN'}</ButtonLink></Container></Section>
 
-    <Section tone="light"><Container className="grid gap-10 lg:grid-cols-2">
-      <div>
-        <SectionHeading eyebrow={th ? 'บริจาค' : 'Individual giving'} title={th ? 'ร่วมบริจาค' : 'Make a gift'} lede={th ? 'ติดต่อ LPN เพื่อยืนยันช่องทางและรายละเอียดการบริจาคล่าสุด รวมถึงใบเสร็จหรือเอกสารที่ต้องการ' : 'Contact LPN to confirm current payment details and ask about receipts or documentation.'} />
-        <div className="mt-7"><ButtonLink href="/contact" variant="solidDark">{th ? 'ติดต่อ LPN' : 'Contact LPN'}</ButtonLink></div>
-      </div>
-      <div>
-        <SectionHeading eyebrow={th ? 'องค์กรและพันธมิตร' : 'Institutions and partners'} title={th ? 'ร่วมงานอย่างรับผิดชอบ' : 'Partner responsibly'} lede={th ? 'พูดคุยเรื่องทุนวิจัย การศึกษา หรือการคุ้มครองแรงงาน โดยคำนึงถึงความลับ ความปลอดภัยของแรงงาน และความเป็นอิสระในการทำงานของ LPN' : 'Discuss research, education, or worker-protection support while respecting confidentiality, worker safety, and LPN’s independence.'} />
-        <div className="mt-7"><ButtonLink href="/contact" variant="solidDark">{th ? 'คุยเรื่องความร่วมมือ' : 'Discuss a partnership'}</ButtonLink></div>
-      </div>
-    </Container></Section>
-
-    {bankVerified && <Section tone="dark" id="bank-details" className="scroll-mt-24"><Container>
-      <SectionHeading eyebrow={th ? 'รายละเอียดที่ยืนยันแล้ว' : 'Verified details'} title={th ? 'โอนเงินผ่านธนาคาร' : 'Bank transfer'} tone="light" />
-      <dl className="mt-8 grid max-w-2xl gap-4">{[
-        [th ? 'ชื่อบัญชี' : 'Account name', footer.bankAccountName],
-        [th ? 'ธนาคาร' : 'Bank', footer.bankName],
-        [th ? 'เลขที่บัญชี' : 'Account number', footer.bankAccountNumber],
-        ['SWIFT', footer.bankSwift],
-      ].filter(([, value]) => value).map(([label, value]) => <div key={label} className="border-b border-white/20 pb-3"><dt className="t-label text-white/70">{label}</dt><dd className="mt-2 font-mono text-lg font-bold text-white">{value}</dd></div>)}</dl>
-      <p className="mt-7 text-sm text-white/70">{th ? `ยืนยันโดย ${footer.bankVerifiedBy} เมื่อ ${new Date(footer.bankVerifiedAt!).toLocaleDateString('th-TH')}` : `Verified by ${footer.bankVerifiedBy} on ${new Date(footer.bankVerifiedAt!).toLocaleDateString('en')}`}</p>
-    </Container></Section>}
+    <Section tone="paper" tight><Container><details className="border border-black/15 bg-white p-6"><summary className="cursor-pointer text-lg font-semibold">{th ? 'หัวข้อสำหรับหารือกับปฏิมา' : 'Decisions to review with Patima'}</summary><div className="mt-6 grid gap-7 md:grid-cols-2"><div><h3 className="font-semibold">{th ? 'ช่องทางในประเทศไทย' : 'Thailand channel'}</h3><ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-black/70"><li>{th ? 'บัญชีมูลนิธิและ QR รับเงินที่ต้องการใช้' : 'Foundation bank account and approved payment QR.'}</li><li>{th ? 'ผู้รับผิดชอบยืนยันยอดและออกใบเสร็จ' : 'Who reconciles gifts and issues receipts.'}</li><li>{th ? 'สถานะภาษีและข้อมูลที่ต้องใช้ขอใบเสร็จ' : 'Confirmed tax status and information needed for a receipt.'}</li></ul></div><div><h3 className="font-semibold">{th ? 'ช่องทางต่างประเทศ' : 'International channel'}</h3><ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-black/70"><li>{th ? 'พันธมิตรรับเงิน ค่าธรรมเนียม และรอบโอนเงิน' : 'Receiving partner, fees, and payout schedule.'}</li><li>{th ? 'สกุลเงิน ช่องทางชำระ และการบริจาครายเดือน' : 'Currencies, payment methods, and monthly giving.'}</li><li>{th ? 'ประเทศที่ออกใบเสร็จ และผู้ดูแลความสัมพันธ์กับผู้บริจาค' : 'Receipt jurisdictions and donor relationship ownership.'}</li></ul></div></div></details></Container></Section>
   </>
 }

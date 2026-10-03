@@ -154,19 +154,36 @@ export async function getMediaById(id: number): Promise<Media | null> {
   }
 }
 
-export async function getMediaByIds(ids: number[]): Promise<Record<number, Media>> {
-  if (!ids.length) return {}
+/**
+ * Editorial images used by the hand-built pages. Keyed by Payload filename, not
+ * row ID, so pages keep their images when the database is re-seeded or cloned.
+ */
+export const SITE_MEDIA = {
+  assistanceCentre: 'd6c8d1_6042b9358fde4e0894a61b005b95c57d_mv2-7.jpg',
+  trainingCentre: 'd90624_f19e0c74863d4b18b4b511304872bc17_mv2-V0AF88o2gf7pWVxWtQRljOdfqJVXyJ.jpg',
+  familyHome: '72011e_1e727aa47c4a4156afe2c44c36349674_mv2_d_4893_3262_s_4_2-wxLtzd2ii5k38FoO59Bi3GRvsYEFjm.jpg',
+  patima: 'd6c8d1_9595357407c44b0a812e5807508cc7ea_mv2-mCSnvguSXqnHD9Zuielutn8jbq5fAl.jpg',
+  sompong: 'd6c8d1_fc19f203584146e1905019bbff5a2f1a_mv2_d_2560_1420_s_2-hTdpRb08hhyEpyuTdz9eLy8bH6NAsv.png',
+  projectLaunch: 'd90624_0bba1bd8f67544eb888f06f923981aa0_mv2-5-phG8UoxZP3AUjY91WDY4RFqygVDvgy.jpg',
+} as const
+
+export type SiteMediaKey = keyof typeof SITE_MEDIA
+
+export async function getSiteMedia(): Promise<Partial<Record<SiteMediaKey, Media>>> {
   const payload = await getPayloadClient()
+  const filenames = Object.values(SITE_MEDIA)
   try {
     const { docs } = await payload.find({
       collection: 'media',
-      where: { id: { in: ids } },
+      where: { filename: { in: filenames } },
       depth: 0,
-      limit: ids.length,
+      limit: filenames.length,
     })
-    const map: Record<number, Media> = {}
-    for (const d of docs as Media[]) {
-      map[d.id] = d
+    const byFilename = new Map((docs as Media[]).map((d) => [d.filename, d]))
+    const map: Partial<Record<SiteMediaKey, Media>> = {}
+    for (const [key, filename] of Object.entries(SITE_MEDIA) as [SiteMediaKey, string][]) {
+      const doc = byFilename.get(filename)
+      if (doc) map[key] = doc
     }
     return map
   } catch {

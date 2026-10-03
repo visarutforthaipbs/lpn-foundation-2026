@@ -1,8 +1,9 @@
 import { setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
+import { BookOpen, LifeBuoy, PhoneCall, Scale } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
-import { getPosts, getMediaByIds, getImpactMetrics } from '@/lib/api'
+import { getPosts, getSiteMedia, getImpactMetrics } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
 import { telHref } from '@/lib/content'
 import { getHelpChannels } from '@/lib/help-channels'
@@ -32,7 +33,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
   const [{ docs: posts }, hotlines, mediaMap, publishedMetrics] = await Promise.all([
     getPosts(locale, { limit: 3 }),
     getHelpChannels(locale),
-    getMediaByIds([224, 237, 229, 253, 9]),
+    getSiteMedia(),
     getImpactMetrics(locale),
   ])
 
@@ -43,7 +44,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'ตอบสนองและคุ้มครอง',
       category: 'ช่วยเหลือตรง',
       body: 'ช่วยแรงงานและครอบครัวเมื่อเผชิญปัญหาค่าจ้าง เอกสาร สุขภาพ ความปลอดภัย หรือการแสวงหาประโยชน์ และประสานช่องทางช่วยเหลือที่เหมาะสม',
-      media: mediaMap[224],
+      icon: LifeBuoy,
+      media: mediaMap.assistanceCentre,
       alt: 'พิธีเปิดศูนย์ช่วยเหลือแรงงานประมงกับผู้แทนหลายหน่วยงาน',
     },
     {
@@ -52,7 +54,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'เสริมความรู้และชุมชน',
       category: 'การศึกษาและชุมชน',
       body: 'สร้างความรู้เรื่องสิทธิ สนับสนุนเยาวชนและครอบครัว และทำงานร่วมกับเครือข่ายแรงงาน เพื่อป้องกันปัญหาก่อนจะรุนแรงขึ้น',
-      media: mediaMap[237],
+      icon: BookOpen,
+      media: mediaMap.familyHome,
       alt: 'ผู้หญิงและเด็กนั่งอยู่ด้วยกันในบ้าน',
     },
     {
@@ -61,7 +64,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'เปลี่ยนระบบ',
       category: 'ขับเคลื่อนนโยบาย',
       body: 'นำประสบการณ์ภาคสนามและเสียงแรงงานมาสร้างหลักฐาน ทำงานกับพันธมิตร และผลักดันระบบที่คุ้มครองคนได้ดีขึ้น',
-      media: mediaMap[229],
+      icon: Scale,
+      media: mediaMap.trainingCentre,
       alt: 'พิธีเปิดศูนย์ฝึกอบรมและฟื้นฟูโดยผู้แทนหลายหน่วยงาน',
     },
   ] : [
@@ -71,7 +75,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'Respond and protect',
       category: 'Casework',
       body: 'Help workers and families facing problems with pay, documents, health, safety, or exploitation, and connect them with appropriate support.',
-      media: mediaMap[224],
+      icon: LifeBuoy,
+      media: mediaMap.assistanceCentre,
       alt: 'Opening ceremony of a fishermen’s assistance centre',
     },
     {
@@ -80,7 +85,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'Learn and strengthen communities',
       category: 'Education & Community',
       body: 'Build rights knowledge, support young people and families, and work with worker networks so problems can be prevented earlier.',
-      media: mediaMap[237],
+      icon: BookOpen,
+      media: mediaMap.familyHome,
       alt: 'A woman and child sitting together at home',
     },
     {
@@ -89,7 +95,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'Change systems',
       category: 'Systems Change',
       body: 'Turn field experience and worker voice into evidence, partnerships, and practical changes to the systems people rely on.',
-      media: mediaMap[229],
+      icon: Scale,
+      media: mediaMap.trainingCentre,
       alt: 'Opening ceremony of a training and rehabilitation centre',
     },
   ]
@@ -121,6 +128,39 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     ['Build evidence for change', 'Use verified findings with partners, policy makers, and international forums.'],
   ]
 
+  const networks = [
+    {
+      abbr: 'FLG',
+      name: th ? 'กลุ่มผู้นำแรงงานประมง' : 'Fishermen Leaders Group',
+      sub: th ? 'เฝ้าระวังและช่วยเหลือแรงงานประมง' : 'Maritime worker leadership',
+      logo: '/logos/subbrands/flg-white.png',
+    },
+    {
+      abbr: 'MLN',
+      name: th ? 'เครือข่ายผู้นำแรงงานข้ามชาติ' : 'Migrant Leaders Network',
+      sub: th ? 'เครือข่ายประสานงานระหว่างกลุ่ม' : 'Cross-sector worker leadership',
+      logo: '/logos/subbrands/mln-white.png',
+    },
+    {
+      abbr: 'MMLG',
+      name: th ? 'กลุ่มผู้นำแรงงานเมียนมา' : 'Myanmar Migrant Leaders Group',
+      sub: th ? 'สื่อสารและดูแลชุมชนเมียนมา' : 'Community solidarity & rights',
+      logo: '/logos/subbrands/mmlg-white.png',
+    },
+    {
+      abbr: 'CMLG',
+      name: th ? 'กลุ่มผู้นำแรงงานกัมพูชา' : 'Cambodian Migrant Leaders Group',
+      sub: th ? 'การประสานความช่วยเหลือในชุมชน' : 'Community outreach & assistance',
+      logo: '/logos/subbrands/cmlg-white.png',
+    },
+    {
+      abbr: 'LMLG',
+      name: th ? 'กลุ่มผู้นำแรงงานลาว' : 'Lao Migrant Leaders Group',
+      sub: th ? 'การคุ้มครองและสวัสดิการแรงงาน' : 'Workplace welfare & mutual aid',
+      logo: '/logos/subbrands/lmlg-white.png',
+    },
+  ]
+
   return <>
     {/* ------------------------------------------------------------- HERO */}
     <section className="relative overflow-hidden bg-black text-white">
@@ -132,10 +172,10 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-35 brightness-90 contrast-105"
+          className="object-cover object-center opacity-65 brightness-90 contrast-105"
         />
         {/* Protective gradient scrim ensuring 100% WCAG AAA readability */}
-        <div className="absolute inset-0 bg-linear-to-r from-black via-black/85 to-black/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-r from-black via-black/75 to-black/30 pointer-events-none" />
         <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40 pointer-events-none" />
       </div>
 
@@ -149,8 +189,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         </h1>
         <p className="t-lede mt-8 max-w-2xl text-white/90">
           {th
-            ? 'LPN เคียงข้างแรงงานข้ามชาติและครอบครัวในประเทศไทย เพื่อให้เข้าถึงความปลอดภัย การรักษาพยาบาล การศึกษา และสิทธิที่ควรได้รับ เราช่วยเหลือเมื่อเกิดปัญหา และนำสิ่งที่เรียนรู้จากชุมชนไปสร้างการเปลี่ยนแปลงระยะยาว'
-            : 'LPN works alongside migrant workers and families in Thailand to access safety, healthcare, education, and fair treatment. We respond when someone needs help and use what we learn to build lasting change.'}
+            ? 'เราช่วยแรงงานข้ามชาติและครอบครัวให้เข้าถึงความช่วยเหลือและสิทธิที่ควรได้รับ'
+            : 'We help migrant workers and families access support and their rights.'}
         </p>
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
           <ButtonLink href="/get-help" variant="primary" className="sm:min-w-48">{th ? 'ขอความช่วยเหลือ' : 'Get help'}</ButtonLink>
@@ -158,8 +198,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         </div>
         <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/75">
           <p>{th ? 'ต้องการติดต่อโดยตรง? ' : 'Need to speak with someone? '}
-            <a className="font-semibold text-white underline decoration-brand-yellow underline-offset-4" href={telHref(hotlines[0]?.phone || '034-434-046')}>
-              {th ? 'โทร LPN ' : 'Call LPN '}{hotlines[0]?.phone || '034-434-046'}
+            <a className="font-semibold text-white underline decoration-brand-yellow underline-offset-4" href={telHref(hotlines[0].phone)}>
+              {th ? 'โทร LPN ' : 'Call LPN '}{hotlines[0].phone}
             </a>
           </p>
         </div>
@@ -168,17 +208,20 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
 
     {/* ------------------------------------------------- FOR WORKERS & FAMILIES */}
     <Section tone="yellow" tight>
-      <Container className="grid gap-7 md:grid-cols-[1fr_auto] md:items-center">
-        <div>
-          <p className="t-label uppercase">{th ? 'สำหรับแรงงานและครอบครัว' : 'For workers and families'}</p>
-          <h2 className="t-h3 mt-2">{th ? 'มีปัญหาอยู่ หรืออยากรู้สิทธิของตัวเอง?' : 'Facing a problem, or want to know your rights?'}</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-black/80">{th
-            ? 'ติดต่อ LPN โดยตรง หรือค้นหาข้อมูลเรื่องค่าจ้าง เอกสาร ความปลอดภัย สุขภาพ และครอบครัวในคู่มือรู้สิทธิ'
-            : 'Contact LPN directly, or explore practical information about pay, documents, safety, health, and family in the Rights Guide.'}</p>
-        </div>
-        <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
-          <ButtonLink href="/get-help" variant="solidDark">{th ? 'ติดต่อขอความช่วยเหลือ' : 'Contact LPN'}</ButtonLink>
-          <ButtonLink href={RIGHT_GUIDE} variant="ghostDark">{th ? 'รู้สิทธิ ติดกระเป๋า' : 'Explore the Rights Guide'}</ButtonLink>
+      <Container>
+        <p className="t-label">{th ? 'สำหรับแรงงานและครอบครัว' : 'For workers and families'}</p>
+        <h2 className="t-h2 mt-3">{th ? 'เริ่มตรงนี้' : 'Start here'}</h2>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link href="/get-help" className="group flex min-h-40 flex-col justify-between border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
+            <PhoneCall size={38} strokeWidth={1.8} aria-hidden="true" />
+            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-black leading-tight sm:text-2xl">{th ? 'ต้องการความช่วยเหลือ' : 'I need help'} <span aria-hidden="true">→</span></span>
+            <span className="mt-1 text-sm font-semibold">{th ? 'โทรหา LPN ตามภาษาของคุณ' : 'Call LPN in your language'}</span>
+          </Link>
+          <a href={RIGHT_GUIDE} className="group flex min-h-40 flex-col justify-between border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
+            <BookOpen size={38} strokeWidth={1.8} aria-hidden="true" />
+            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-black leading-tight sm:text-2xl">{th ? 'อยากรู้สิทธิของฉัน' : 'I want to know my rights'} <span aria-hidden="true">↗</span></span>
+            <span className="mt-1 text-sm font-semibold">{th ? 'เปิดคู่มือรู้สิทธิ' : 'Open the Rights Guide'}</span>
+          </a>
         </div>
       </Container>
     </Section>
@@ -204,7 +247,12 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
               </div>
             )}
             <div className="flex flex-1 flex-col p-6 sm:p-7">
-              <h3 className="t-h3">{s.title}</h3>
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-black text-brand-yellow">
+                  <s.icon className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <h3 className="t-h3">{s.title}</h3>
+              </div>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-black/80">{s.body}</p>
               <Link href={`/our-work#${s.id}`} className="link-mark mt-7 self-start text-black">
                 {th ? 'ดูงานด้านนี้' : 'Explore this work'} →
@@ -243,10 +291,10 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
 
         {/* Leadership documentary portrait & statement */}
         <div className="border border-white/15 bg-white/5 p-6 sm:p-8 backdrop-blur-xs">
-          {mediaMap[253] && (
+          {mediaMap.patima && (
             <div className="relative aspect-16/10 w-full overflow-hidden border border-white/10 bg-black/40">
               <MediaImage
-                media={mediaMap[253]}
+                media={mediaMap.patima}
                 alt={th ? 'ปฏิมา ตั้งปรัชญากูล ผู้อำนวยการ LPN' : 'Patima Tungpuchayakul, LPN Executive Director'}
                 sizes="(min-width: 1024px) 30vw, 100vw"
                 className="h-full w-full object-cover"
@@ -269,6 +317,52 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         </div>
       </div>
     </Container></Section>
+
+    {/* ------------------------------------ WORKER-LED COMMUNITY NETWORKS */}
+    <Section tone="dark" className="border-t border-white/10">
+      <Container>
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="eyebrow text-brand-yellow">
+            {th ? 'เครือข่ายแรงงานร่วมขับเคลื่อน' : 'Worker-Led Community Networks'}
+          </p>
+          <h2 className="t-h2 mt-4 text-white">
+            {th ? 'พลังของแรงงานข้ามชาติในการรวมกลุ่มและพึ่งพาตนเอง' : 'Migrant Workers Organizing for Collective Strength'}
+          </h2>
+          <p className="mt-4 text-sm leading-relaxed text-white/80 sm:text-base">
+            {th
+              ? 'LPN ทำงานเคียงข้างเครือข่ายผู้นำแรงงาน 5 กลุ่ม เพื่อส่งต่อข้อมูล คุ้มครองสิทธิ และสร้างความเข้มแข็งจากภายในชุมชน'
+              : 'LPN works alongside five organized migrant leadership groups to share verified information, monitor conditions, and build community resilience.'}
+          </p>
+        </div>
+
+        <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {networks.map((net) => (
+            <div
+              key={net.abbr}
+              className="flex flex-col items-center justify-center border border-white/15 bg-white/5 p-6 text-center transition-all hover:border-brand-yellow/50 hover:bg-white/10"
+            >
+              <div className="relative h-14 w-24">
+                <Image
+                  src={net.logo}
+                  alt={`${net.abbr} - ${net.name}`}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <span className="mt-4 font-mono text-xs font-bold tracking-wider text-brand-yellow">
+                {net.abbr}
+              </span>
+              <span className="mt-1 text-xs font-semibold text-white">
+                {net.name}
+              </span>
+              <span className="mt-1 text-[11px] text-white/60">
+                {net.sub}
+              </span>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </Section>
 
     {/* --------------------------------------------------------- DATED EVIDENCE */}
     <Section tone="paper"><Container>
@@ -304,11 +398,11 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         </div>
 
         {/* Historical public Wix project image; recheck reuse approval before domain cutover. */}
-        {mediaMap[9] && (
+        {mediaMap.projectLaunch && (
           <figure className="border border-black/10 bg-white p-4 shadow-xs">
             <div className="relative aspect-4/3 w-full overflow-hidden bg-black/5">
               <MediaImage
-                media={mediaMap[9]}
+                media={mediaMap.projectLaunch}
                 alt={th ? 'ผู้แทนหลายหน่วยงานในงานเปิดโครงการ LPN' : 'Representatives at an LPN project launch'}
                 sizes="(min-width: 1024px) 360px, 100vw"
                 className="h-full w-full object-cover"

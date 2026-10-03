@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Menu, X } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { ButtonLink } from './ui'
 
@@ -40,22 +41,7 @@ export function MobileMenu({
         onClick={() => setOpen((v) => !v)}
         className="tactile-icon-btn h-11 w-11 text-white hover:text-brand-yellow"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="h-5 w-5"
-          aria-hidden="true"
-        >
-          {open ? (
-            <path d="M6 6l12 12M18 6L6 18" />
-          ) : (
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          )}
-        </svg>
+        {open ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
       </button>
 
       {open && (

@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import { Mail, MapPin, Phone, PhoneCall } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getFooter } from '@/lib/api'
@@ -67,6 +69,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 href={telHref(h.phone)}
                 className="group flex min-h-11 items-center gap-2 transition-opacity hover:opacity-70"
               >
+                <PhoneCall className="h-3.5 w-3.5 text-black/75 shrink-0" aria-hidden="true" />
                 <span className="t-label text-black/65">{h.label}</span>
                 <span className="border-b border-black/30 font-mono text-sm font-bold text-black group-hover:border-black">
                   {h.phone}
@@ -83,11 +86,18 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
           {/* Brand */}
           <div className="relative pl-5">
             <span className="absolute top-0 left-0 h-full w-1 bg-brand-yellow" aria-hidden="true" />
-            <img
-              src="/logos/lpn-logo-white.svg"
-              alt="LPN Foundation"
-              className="h-16 w-auto md:h-20"
-            />
+            <div className="flex items-center gap-4">
+              <Image
+                src="/logos/masterbrand/lpn-white.png"
+                alt=""
+                width={56}
+                height={45}
+                className="h-14 w-auto"
+              />
+              <span className="text-lg font-black tracking-[0.18em] text-white uppercase">
+                LPN Foundation
+              </span>
+            </div>
             <p className="mt-5 max-w-md text-sm leading-relaxed text-white/65">
               {isThai
                 ? 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน — เคียงข้างแรงงานข้ามชาติและครอบครัว เพื่อการช่วยเหลือในวันนี้และระบบที่ปลอดภัยขึ้นในระยะยาว'
@@ -122,20 +132,23 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
             <h3 className="t-label text-brand-yellow">
               {isThai ? 'สำนักงานใหญ่ประเทศไทย' : 'Thailand Headquarters'}
             </h3>
-            <address className="mt-5 text-sm leading-relaxed text-white/70 not-italic">
-              {isThai ? OFFICE.addressTh : OFFICE.addressEn}
+            <address className="mt-5 flex items-start gap-2.5 text-sm leading-relaxed text-white/70 not-italic">
+              <MapPin className="h-4 w-4 text-brand-yellow shrink-0 mt-1" aria-hidden="true" />
+              <span>{isThai ? OFFICE.addressTh : OFFICE.addressEn}</span>
             </address>
-            <p className="mt-3 font-mono text-sm text-white/85">
-              {isThai ? OFFICE.phoneTh : OFFICE.phoneEn}
+            <p className="mt-3 flex items-center gap-2.5 font-mono text-sm text-white/85">
+              <Phone className="h-4 w-4 text-brand-yellow shrink-0" aria-hidden="true" />
+              <span>{isThai ? OFFICE.phoneTh : OFFICE.phoneEn}</span>
             </p>
             <ul className="mt-3 grid gap-2.5 text-sm">
               {OFFICE.emails.map((e) => (
                 <li key={e}>
                   <a
                     href={`mailto:${e}`}
-                    className="inline-flex min-h-11 items-center font-mono text-white/70 transition-colors hover:text-brand-yellow"
+                    className="inline-flex min-h-11 items-center gap-2.5 font-mono text-white/70 transition-colors hover:text-brand-yellow"
                   >
-                    {e}
+                    <Mail className="h-4 w-4 text-brand-yellow shrink-0" aria-hidden="true" />
+                    <span>{e}</span>
                   </a>
                 </li>
               ))}

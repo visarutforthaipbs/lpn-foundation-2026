@@ -11,12 +11,21 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
   images: {
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     localPatterns: [
       {
         pathname: '/api/media/file/**',
       },
       {
         pathname: '/images/**',
+      },
+      {
+        pathname: '/icons/**',
+      },
+      {
+        pathname: '/logos/**',
       },
     ],
     remotePatterns: [
