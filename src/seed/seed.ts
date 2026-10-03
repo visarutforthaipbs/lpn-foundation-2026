@@ -13,7 +13,7 @@ import config from '../payload.config'
 import { lexical, para, heading, bulletList } from './lexical'
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@lpnfoundation.org'
-const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'changeme123!'
+const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD
 
 type SeedPage = {
   slug: string
@@ -170,11 +170,13 @@ async function main() {
   // 1. Admin user
   const users = await payload.find({ collection: 'users', limit: 1 })
   if (users.totalDocs === 0) {
+    // No default password: a guessable one would end up on the live /admin.
+    if (!ADMIN_PASSWORD) throw new Error('No users exist yet. Set SEED_ADMIN_PASSWORD to create the first admin.')
     await payload.create({
       collection: 'users',
       data: { email: ADMIN_EMAIL, password: ADMIN_PASSWORD },
     })
-    payload.logger.info(`Created admin user: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD} (change this!)`)
+    payload.logger.info(`Created admin user: ${ADMIN_EMAIL}`)
   }
 
   // 2. Categories
@@ -244,12 +246,15 @@ async function main() {
         para('Samut Sakhon, Thailand'),
       ]),
       hotlines: [
-        { language: 'Thai', phone: '+66 84 121 1609' },
-        { language: 'Khmer', phone: '+66 85 534 1595' },
-        { language: 'Lao', phone: '+66 92 321 1516' },
-        { language: 'Burmese', phone: '+66 34 434 726' },
+        { language: 'ภาษาไทย (Thai)', phone: '+66 84 121 1609' },
+        { language: 'និយាយជាមួយនរណាម្នាក់ជាភាសាខ្មែរ (Khmer)', phone: '+66 85 534 1595' },
+        { language: 'ເວົ້າກັບຄົນອື່ນໃນລາວ (Lao)', phone: '+66 92 321 1516' },
+        { language: 'မြန်မာလိုပြောသည်။ (Burmese)', phone: '0963812069' },
       ],
-      socials: [{ platform: 'Facebook', url: 'https://www.facebook.com/LPNFoundation' }],
+      socials: [
+        { platform: 'Facebook', url: 'https://www.facebook.com/LPN-Foundation-1406397336075427' },
+        { platform: 'Facebook', url: 'https://www.facebook.com/Labour-Rights-Promotion-Network-371018579290' },
+      ],
       bankDetails: lexical([
         para('Account Name: Labour Rights Promotion Network'),
         para('Bank: Krungthai Bank PCL, Chamchuri Square branch'),
@@ -625,7 +630,7 @@ async function main() {
             para('Thai: +66 84 121 1609'),
             para('Khmer: +66 85 534 1595'),
             para('Lao: +66 92 321 1516'),
-            para('Burmese: +66 34 434 726'),
+            para('Burmese: 0963812069'),
             para('Office: Labour Rights Promotion Network Foundation, Samut Sakhon, Thailand'),
           ]),
         },
@@ -937,7 +942,7 @@ async function main() {
             para('ไทย: +66 84 121 1609'),
             para('เขมร: +66 85 534 1595'),
             para('ลาว: +66 92 321 1516'),
-            para('พม่า: +66 34 434 726'),
+            para('พม่า: 0963812069'),
             para('สำนักงาน: มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน จังหวัดสมุทรสาคร'),
           ]),
         },

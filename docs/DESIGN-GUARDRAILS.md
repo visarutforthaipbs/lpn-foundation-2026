@@ -80,6 +80,10 @@ A user with low attention and high stress should understand the highest-value me
 
 - Use dark-first hero and shell treatments where appropriate to align with LPN visual language.
 - Keep accent color usage sparse and purposeful (CTA, separators, emphasis only).
+- Buttons use flat fills, 1px borders, and 2px corners. Avoid gradients, bevels, glow, and movement on hover.
+- Use yellow with black text for the primary action, an outline for secondary actions, and solid black on yellow sections.
+- Button labels use sentence case, 14px semibold type, and minimal tracking. Keep flexible 48px targets with room for Thai tone marks; utility icons and filters need at least 44px.
+- Keep hover, pressed, selected, disabled, and keyboard focus states distinct without changing control dimensions. Filters show selection with a solid black fill and white text.
 - For content migration pages (home/about/team/services/partners):
   - Start each page with one high-surprisal statement.
   - Break long narratives into compact chunks with clear section headings.

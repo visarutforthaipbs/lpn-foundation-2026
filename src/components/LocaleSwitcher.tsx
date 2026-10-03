@@ -15,15 +15,22 @@ export function LocaleSwitcher() {
     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em]">
       {routing.locales.map((loc, i) => (
         <span key={loc} className="flex items-center gap-2">
-          {i > 0 && <span className="text-white/25">/</span>}
+          {i > 0 && (
+            <span className="text-white/70" aria-hidden="true">
+              /
+            </span>
+          )}
           <Link
             href={pathname}
             locale={loc}
-            className={
+            lang={loc}
+            aria-current={loc === active ? 'true' : undefined}
+            aria-label={loc === 'th' ? 'สลับเป็นภาษาไทย' : 'Switch to English'}
+            className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${
               loc === active
-                ? 'text-brand-yellow'
-                : 'text-white/55 transition-colors hover:text-white'
-            }
+                ? 'text-brand-yellow font-black'
+                : 'text-white/75 transition-colors hover:text-white'
+            }`}
           >
             {labels[loc] ?? loc.toUpperCase()}
           </Link>

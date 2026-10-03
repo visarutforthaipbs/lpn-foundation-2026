@@ -1,10 +1,19 @@
 import { setRequestLocale } from 'next-intl/server'
-import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
-import Image from 'next/image'
+import { ALT_LINES, OFFICE, FACEBOOK_URL, telHref } from '@/lib/content'
+import { getHelpChannels } from '@/lib/help-channels'
+import {
+  Container,
+  Section,
+  SectionHeading,
+  PageHero,
+  CtaBand,
+  ButtonLink,
+  MarkLink,
+} from '@/components/ui'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -23,204 +32,158 @@ export async function generateMetadata(props: { params: Promise<{ locale: Locale
   })
 }
 
-const HOTLINES = [
-  { code: 'TH', lang: 'ภาษาไทย (Thai)', phone: '+66 84 121 1609' },
-  { code: 'MM', lang: 'မြန်မာဘာသာ (Burmese)', phone: '+66 34 434 726' },
-  { code: 'KH', lang: 'ភាសាខ្មែរ (Khmer)', phone: '+66 85 534 1595' },
-  { code: 'LA', lang: 'ພາສາລາວ (Lao)', phone: '+66 92 321 1516' },
-]
+// Rich bilingual language labels kept from the original page; numbers come from
+// the shared content module (src/lib/content.ts) so they can't drift apart.
+const LANG_LABELS: Record<string, string> = {
+  TH: 'ภาษาไทย (Thai)',
+  MM: 'မြန်မာဘာသာ (Burmese)',
+  KH: 'ភាសាខ្មែរ (Khmer)',
+  LA: 'ພາສາລາວ (Lao)',
+}
 
 export default async function ContactPage(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
   setRequestLocale(locale)
   const isThai = locale === 'th'
-
-  const stats = isThai
-    ? [
-        { value: '24/7', label: 'สายด่วนรับเรื่อง' },
-        { value: '4', label: 'ภาษาที่ให้บริการ' },
-        { value: '100%', label: 'รักษาความลับ' },
-      ]
-    : [
-        { value: '24/7', label: 'hotline coverage' },
-        { value: '4', label: 'languages supported' },
-        { value: '100%', label: 'confidential' },
-      ]
-
-  const office = isThai
-    ? {
-        name: 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน',
-        address: 'จังหวัดสมุทรสาคร ประเทศไทย',
-        email: 'info@lpnfoundation.org',
-        hours: 'จันทร์–ศุกร์ 09:00–17:00 น.',
-      }
-    : {
-        name: 'Labour Rights Promotion Network Foundation',
-        address: 'Samut Sakhon, Thailand',
-        email: 'info@lpnfoundation.org',
-        hours: 'Mon–Fri, 09:00–17:00 ICT',
-      }
+  const hotlines = await getHelpChannels(locale)
 
   return (
     <>
-      {/* HERO */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-black text-white">
-        <Image
-          src="/images/trawler-hero.jpg"
-          alt="Fishing trawler hero background"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-25"
-          {...({ fetchPriority: 'high' } as any)}
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-black/30" />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-32">
-          <div className="max-w-3xl">
-            <span className="inline-flex rounded glass-tag px-3 py-1 text-[10px] font-black uppercase tracking-[0.25em] text-brand-yellow">
-              {isThai ? 'ติดต่อ LPN' : 'Contact LPN'}
-            </span>
-            <h1 className="mt-6 text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-6xl">
-              {isThai
-                ? 'หากคุณตกอยู่ในอันตราย — โทรหาเรา ตอนนี้'
-                : 'If you are in danger — call us. Right now.'}
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 md:text-lg">
-              {isThai
-                ? 'สายด่วนของเราเปิดรับการแจ้งเหตุและคำขอความช่วยเหลือเป็นความลับ ในหลายภาษา ตลอด 24 ชั่วโมง'
-                : 'Our hotlines take reports and assistance requests confidentially, in four languages, around the clock.'}
-            </p>
-          </div>
+      {/* ---------------------------------------------------------------- HERO */}
+      <PageHero
+        compact
+        backgroundImage="/images/field-action.jpg"
+        backgroundAlt={isThai ? 'การปฏิบัติการภาคสนามของ LPN' : 'LPN field operations'}
+        eyebrow={isThai ? 'ช่องทางติดต่อเรา' : 'Get in touch'}
+        title={isThai ? 'ติดต่อ LPN โดยตรง' : 'Contact LPN directly.'}
+        lede={
+          isThai
+            ? 'สำหรับความช่วยเหลือเร่งด่วน โปรดติดต่อเราโดยตรงผ่านทางโทรศัพท์หรือส่งข้อความถึงเราบน Facebook สำหรับการสอบถามที่ไม่เร่งด่วน กรุณาใช้อีเมล การทำงานส่วนใหญ่ของเรา มักจะอยู่ในพื้นที่ซึ่งอาจจะทำให้ล้าช้าในการตอบกลับอยู่บ้าง'
+            : 'For urgent assistance please call us directly or message us on facebook. For less urgent inquires, please use email. We are often in the field unexpectedly and may take a few days to respond. Thank you for your understanding.'
+        }
+      />
 
-          <dl className="mt-12 grid max-w-2xl grid-cols-3 gap-4 border-l-4 border-brand-yellow pl-6">
-            {stats.map((s) => (
-              <div key={s.label}>
-                <dt className="text-[10px] font-bold uppercase tracking-widest text-white/55">
-                  {s.label}
-                </dt>
-                <dd className="mt-1 text-2xl font-black md:text-3xl">{s.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
-      {/* HOTLINE CARDS */}
-      <section className="border-b border-black bg-brand-yellow py-20 text-black md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-12 max-w-2xl">
-            <span className="inline-block rounded bg-black px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-brand-yellow">
-              {isThai ? 'การช่วยเหลือฉุกเฉิน' : 'Emergency action'}
-            </span>
-            <h2 className="mt-4 text-3xl font-black uppercase tracking-tight md:text-5xl">
-              {isThai ? 'สายด่วนหลายภาษา' : 'Multilingual hotlines'}
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-black/80">
-              {isThai
-                ? 'พูดในภาษาของคุณ ปลอดภัย เป็นความลับ และเชื่อมต่อกับทีมภาคสนามทันที'
-                : 'Speak in your language. Safe, confidential, and connected to our field team in real time.'}
-            </p>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {HOTLINES.map((h) => (
-              <a
-                key={h.code}
-                href={`tel:${h.phone.replace(/\s+/g, '')}`}
-                className="group relative flex flex-col overflow-hidden rounded border border-black bg-white p-6 transition-all duration-300 hover:-translate-y-1"
-              >
+      {/* ------------------------------------------------------ HOTLINE CARDS */}
+      <Section tone="yellow" className="on-light">
+        <Container>
+          <SectionHeading
+            eyebrow={isThai ? 'การช่วยเหลือฉุกเฉิน' : 'Emergency action'}
+            title={isThai ? 'หากต้องการขอความช่วยเหลือด่วน' : 'Get help now'}
+            lede={
+              isThai
+                ? 'แจ้งความคดี ขอความช่วยเหลือ ขอข้อมูลกฎหมายแรงงาน หรือขั้นตอนการลงทะเบียนของทางราชการ ติดต่อโดยตรง เราพูดภาษาไทย เขมร ลาว และพม่า'
+                : 'To report a case, request assistance, get information on labor laws or government registration process, get in touch directly. We speak Thai, Khmer, Lao & Burmese.'
+            }
+          />
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {hotlines.map((h) => (
+              <a key={h.code} href={telHref(h.phone)} className="card card-marked group flex flex-col p-6">
                 <div className="flex items-center justify-between">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-black bg-brand-yellow text-xs font-black text-black">
+                  <span
+                    className="tactile-badge h-11 w-11 text-xs font-black text-black"
+                    aria-hidden="true"
+                  >
                     {h.code}
                   </span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-black/45">
-                    {isThai ? 'โทรเลย' : 'Tap to call'}
-                  </span>
+                  <span className="t-label text-black/70">{isThai ? 'โทรเลย' : 'Tap to call'}</span>
                 </div>
-                <div className="mt-6 text-xs font-bold text-black/65">{h.lang}</div>
-                <div className="mt-2 text-xl font-black tracking-tight text-black border-b-2 border-brand-yellow pb-1 group-hover:border-black transition-colors">
-                  {h.phone}
+                <div className="mt-5 text-xs font-bold text-black/80">{LANG_LABELS[h.code]}</div>
+                <div className="tactile-well mt-3 w-full px-3 py-2 text-center">
+                  <span className="font-mono text-base font-black tracking-tight text-black transition-colors group-hover:underline group-hover:decoration-brand-yellow group-hover:decoration-2 group-hover:underline-offset-4">
+                    {h.phone}
+                  </span>
                 </div>
               </a>
             ))}
           </div>
-        </div>
-      </section>
+          {/* General lines printed on the live contact page */}
+          <p className="mt-8 text-sm text-black/75">
+            {isThai ? 'โทรศัพท์สำนักงาน: ' : 'Office lines: '}
+            <a href={telHref(ALT_LINES.office1)} className="font-mono font-bold text-black underline decoration-brand-yellow underline-offset-4">
+              {ALT_LINES.office1}
+            </a>
+            {' · '}
+            <a
+              href={telHref(isThai ? ALT_LINES.office3 : ALT_LINES.office2)}
+              className="font-mono font-bold text-black underline decoration-brand-yellow underline-offset-4"
+            >
+              {isThai ? ALT_LINES.office3 : ALT_LINES.office2}
+            </a>
+          </p>
+        </Container>
+      </Section>
 
-      {/* OFFICE & EMAIL */}
-      <section className="border-b border-white/10 bg-black py-20 text-white md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
+      {/* ------------------------------------------------------------- FACEBOOK */}
+      <Section tone="dark" className="border-y border-white/10">
+        <Container>
           <div className="grid gap-10 md:grid-cols-2">
-            <article className="relative overflow-hidden glass-dark rounded p-8">
-              <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" />
-              <div className="text-[10px] font-bold uppercase tracking-widest text-brand-yellow">
-                {isThai ? 'สำนักงาน' : 'Office'}
+            <article className="glass-dark relative rounded p-8">
+              <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
+              <div className="t-label text-brand-yellow">
+                {isThai ? 'เชื่อมต่อบน Facebook' : 'Connect on Facebook'}
               </div>
-              <h3 className="mt-3 text-2xl font-black uppercase tracking-tight">{office.name}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-white/75">{office.address}</p>
-              <dl className="mt-6 grid gap-3 text-sm text-white/85">
-                <div>
-                  <dt className="text-[10px] font-bold uppercase tracking-widest text-white/55">
-                    {isThai ? 'เวลาทำการ' : 'Office hours'}
-                  </dt>
-                  <dd className="mt-1">{office.hours}</dd>
-                </div>
-              </dl>
-            </article>
-
-            <article className="relative overflow-hidden glass-dark rounded p-8">
-              <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" />
-              <div className="text-[10px] font-bold uppercase tracking-widest text-brand-yellow">
-                {isThai ? 'อีเมล' : 'Email'}
-              </div>
-              <h3 className="mt-3 text-2xl font-black uppercase tracking-tight">
-                {isThai ? 'เขียนหาเรา' : 'Write to us'}
-              </h3>
+              <h2 className="t-h3 mt-3 text-white">{isThai ? 'ส่งข้อความหาเรา' : 'Message us on Facebook'}</h2>
               <p className="mt-4 text-sm leading-relaxed text-white/75">
                 {isThai
-                  ? 'สำหรับการร่วมงาน สื่อมวลชน หรือคำถามเชิงโครงการ ทีมงานจะตอบกลับภายใน 2 วันทำการ'
-                  : 'For partnerships, press, or programme questions. We respond within two business days.'}
+                  ? 'หากต้องการเรียนรู้เพิ่มเติมเกี่ยวกับ LPN ถามคำถามเกี่ยวกับงานของเรา หรือขอเข้าร่วมการประชุมหรืออภิปราย โปรดติดต่อเราทางอีเมลที่ลิงก์ด้านล่าง'
+                  : 'To learn more about LPN, ask questions about our work, or request attendance in conferences or panel discussions, please contact us by email at the link below.'}
               </p>
-              <a
-                href={`mailto:${office.email}`}
-                className="mt-6 inline-flex items-center text-base font-black tracking-tight text-white border-b-2 border-brand-yellow pb-0.5 transition-colors hover:border-white"
-              >
-                {office.email} →
-              </a>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <ButtonLink href={FACEBOOK_URL} variant="primary">
+                  {isThai ? 'ติดต่อเราได้ที่ Facebook' : 'Message us on Facebook'}
+                </ButtonLink>
+                <ButtonLink href={`mailto:${OFFICE.email}`} variant="ghostLight">
+                  {isThai ? 'ส่งอีเมลตอนนี้' : 'Email now'}
+                </ButtonLink>
+              </div>
+            </article>
+            <article className="glass-dark relative rounded p-8">
+              <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
+              <div className="t-label text-brand-yellow">
+                {isThai ? 'สำนักงานใหญ่ประเทศไทย' : 'Thailand Headquarters'}
+              </div>
+              <h2 className="t-h3 mt-3 text-white">
+                {isThai ? OFFICE.nameTh : OFFICE.nameEn}
+              </h2>
+              <address className="mt-4 text-sm leading-relaxed text-white/75 not-italic">
+                {isThai ? OFFICE.addressTh : OFFICE.addressEn}
+              </address>
+              <p className="mt-4 font-mono text-sm text-white/85">
+                {isThai ? OFFICE.phoneTh : OFFICE.phoneEn}
+              </p>
+              <ul className="mt-3">
+                {OFFICE.emails.map((e) => (
+                  <li key={e}>
+                    <MarkLink href={`mailto:${e}`} className="text-white hover:text-brand-yellow">
+                      {e}
+                    </MarkLink>
+                  </li>
+                ))}
+              </ul>
             </article>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* CTA */}
-      <section className="bg-brand-yellow py-16 text-black">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 md:flex-row md:items-center md:justify-between">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl font-black uppercase tracking-tight md:text-4xl">
-              {isThai ? 'ไม่ใช่กรณีฉุกเฉิน?' : 'Not an emergency?'}
-            </h2>
-            <p className="mt-3 text-sm text-black/80 md:text-base">
-              {isThai
-                ? 'เรียนรู้บริการของเราหรือร่วมสนับสนุนงานของ LPN'
-                : 'Explore what we do, or help fund the work.'}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/services"
-              className="rounded bg-black px-6 py-3 text-xs font-black uppercase tracking-widest text-brand-yellow transition-all hover:bg-white hover:text-black border border-black"
-            >
+      {/* ---------------------------------------------------------------- CTA */}
+      <CtaBand
+        heading={isThai ? 'ไม่ใช่กรณีฉุกเฉิน?' : 'Not an emergency?'}
+        body={
+          isThai
+            ? 'เรียนรู้บริการของเราหรือร่วมสนับสนุนงานของ LPN'
+            : 'Explore what we do, or help fund the work.'
+        }
+        actions={
+          <>
+            <ButtonLink href="/services" variant="solidDark">
               {isThai ? 'บริการของเรา' : 'See our services'}
-            </Link>
-            <Link
-              href="/donate"
-              className="rounded border border-black bg-transparent px-6 py-3 text-xs font-black uppercase tracking-widest text-black transition-all hover:bg-black hover:text-brand-yellow"
-            >
+            </ButtonLink>
+            <ButtonLink href="/donate" variant="ghostDark">
               {isThai ? 'บริจาค' : 'Donate'}
-            </Link>
-          </div>
-        </div>
-      </section>
+            </ButtonLink>
+          </>
+        }
+      />
     </>
   )
 }

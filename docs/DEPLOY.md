@@ -31,10 +31,13 @@ Point your local `.env` `DATABASE_URL`/`BLOB_READ_WRITE_TOKEN` at the production
 values (or run from a one-off environment), then:
 ```bash
 pnpm seed            # admin user, categories, globals, core pages
-pnpm migrate:blog    # imports the 19 posts from the live Wix site
+pnpm migrate:blog    # imports published posts and unpublished drafts from Wix
 ```
 Then log in at `/admin`, change the admin password, and review/translate content.
 (Imported post bodies are best-effort — a few image/link-heavy posts need a cleanup pass.)
+
+For the completed inventory and page/media migration commands, see
+[`MIGRATION-STATUS.md`](./MIGRATION-STATUS.md).
 
 ## 5. DNS cutover (the only step Claude can't do for you)
 This switches the live domain from Wix to Vercel. Do it after QA on a Vercel preview URL.

@@ -1,32 +1,32 @@
 @import 'tailwindcss';
 
-/* LPN Foundation brand theme tuned to the live site's black/white documentary look. */
+/* ==========================================================================
+   LPN Foundation — design system
+   Brand: high-contrast documentary (black / white / brand-yellow).
+   Source of truth: docs/DESIGN-GUARDRAILS.md (LPN brand + Signal 39).
+   Yellow is structure and accent — never body text on white.
+   ========================================================================== */
 @theme {
   --color-black: #000000;
   --color-white: #ffffff;
   --color-brand-yellow: #ffd43b;
 
-  --color-brand-50: #ffffff;
-  --color-brand-100: #ffffff;
-  --color-brand-200: #000000;
-  --color-brand-300: #000000;
-  --color-brand-400: #000000;
-  --color-brand-500: #000000;
-  --color-brand-600: #000000;
-  --color-brand-700: #000000;
-  --color-brand-800: #000000;
-  --color-brand-900: #000000;
+  --color-ink: #0a0a0a;
+  --color-ink-soft: rgba(10, 10, 10, 0.72);
+  --color-ink-faint: rgba(10, 10, 10, 0.5);
+  --color-paper: #fafafa;
 
-  --color-accent-400: #ffd43b;
-  --color-accent-500: #ffd43b;
-  --color-accent-600: #ffd43b;
-
-  --color-sand: #ffffff;
+  /* Semantic roles (thai-agency-frontend-standards): keep themes modular. */
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-primary: #ffd43b;
+  --color-primary-foreground: #000000;
+  --color-border: rgba(0, 0, 0, 0.14);
+  --color-muted: #fafafa;
 
   --font-sans:
     var(--font-latin), var(--font-thai), 'DB Helvethaica X', ui-sans-serif, system-ui, -apple-system,
     sans-serif;
-
   --font-heading:
     var(--font-latin), var(--font-thai), 'DB Helvethaica X', ui-sans-serif, system-ui, -apple-system,
     sans-serif;
@@ -34,20 +34,66 @@
 
 html {
   -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--color-white);
-  color: var(--color-black);
+  color: var(--color-ink);
   font-family: var(--font-sans);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
+  text-wrap: balance;
+  /* Long Thai compound words must wrap, never overflow (agency standard). */
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
-button, nav a, .font-heading {
-  font-family: var(--font-heading);
+p {
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Focus states — high-visibility dual outline across dark, light, yellow, and image surfaces. */
+:focus-visible {
+  outline: 2px solid var(--color-brand-yellow);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.9);
+  border-radius: 3px;
+}
+
+.on-light :focus-visible,
+.card :focus-visible,
+.tactile-well :focus-visible {
+  outline-color: var(--color-black);
+  box-shadow: 0 0 0 3px rgba(255, 212, 59, 0.85);
+}
+
+/* Skip link for keyboard users. */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 100;
+  background: var(--color-brand-yellow);
+  color: var(--color-black);
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  transition: top 0.2s ease;
+}
+.skip-link:focus-visible {
+  top: 16px;
 }
 
 /*
@@ -57,16 +103,15 @@ button, nav a, .font-heading {
  */
 :lang(th) {
   letter-spacing: normal !important;
-  line-height: 1.7; /* Comfortable reading height for Thai body text */
+  line-height: 1.75;
 }
-
 :lang(th) h1,
 :lang(th) h2,
 :lang(th) h3,
 :lang(th) h4,
 :lang(th) h5,
 :lang(th) h6 {
-  line-height: 1.4; /* Perfect height to prevent tone-mark clipping in headings */
+  line-height: 1.45;
   letter-spacing: normal !important;
 }
 
@@ -77,13 +122,230 @@ button, nav a, .font-heading {
   }
 }
 
-/*
- * Glassmorphism system (medium intensity) — reusable frosted surfaces that keep the
- * high-contrast documentary brand while adding translucent depth. Apply these classes
- * instead of hand-tuning backdrop-blur per element.
- */
+/* ==========================================================================
+   Type scale — fluid, semantic. Use these instead of ad-hoc text-* stacks.
+   ========================================================================== */
 @layer components {
-  /* Sticky shell bar — frosted dark glass over scrolling content. */
+  .t-display {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: clamp(2.25rem, 1.35rem + 3.8vw, 4.5rem);
+    line-height: 1.03;
+    letter-spacing: -0.022em;
+  }
+
+  .t-display-sm {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: clamp(1.9rem, 1.35rem + 2.4vw, 3.25rem);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+  }
+
+  .t-h2 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(1.65rem, 1.25rem + 1.7vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+
+  .t-h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.5rem);
+    line-height: 1.25;
+  }
+
+  .t-lede {
+    font-size: clamp(1.02rem, 0.98rem + 0.3vw, 1.2rem);
+    line-height: 1.75;
+  }
+
+  /* Small uppercase label — eyebrows, metadata, stat captions. */
+  .t-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    line-height: 1.6;
+  }
+
+  .t-label-lg {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    line-height: 1.6;
+  }
+
+  /* ==========================================================================
+     Editorial buttons — flat color, clear hierarchy, stable 48px targets.
+     ========================================================================== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    /* Flexible height and leading leave room for Thai tone marks and wrapped labels. */
+    min-height: 48px;
+    padding: 0.7rem 1.25rem;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: none;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .btn > svg {
+    flex-shrink: 0;
+  }
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Yellow identifies the main action; the dark edge works on light surfaces too. */
+  .btn-primary {
+    background: var(--color-brand-yellow);
+    color: var(--color-black);
+    border-color: var(--color-black);
+  }
+  .btn-primary:hover {
+    background: #f2c62f;
+  }
+  .btn-primary:active {
+    background: #e6b923;
+  }
+
+  /* Secondary action on dark surfaces. */
+  .btn-ghost-light {
+    background: transparent;
+    color: var(--color-white);
+    border-color: rgba(255, 255, 255, 0.65);
+  }
+  .btn-ghost-light:hover {
+    background: var(--color-white);
+    color: var(--color-black);
+    border-color: var(--color-white);
+  }
+  .btn-ghost-light:active {
+    background: #e4e4e7;
+    color: var(--color-black);
+  }
+
+  /* Secondary action on light surfaces. */
+  .btn-ghost-dark {
+    background: transparent;
+    color: var(--color-black);
+    border-color: var(--color-black);
+  }
+  .btn-ghost-dark:hover {
+    background: var(--color-black);
+    color: var(--color-white);
+  }
+  .btn-ghost-dark:active {
+    background: #292929;
+    color: var(--color-white);
+  }
+
+  /* Strong action on yellow or light surfaces. */
+  .btn-solid-dark {
+    background: var(--color-black);
+    color: var(--color-white);
+    border-color: var(--color-black);
+  }
+  .btn-solid-dark:hover {
+    background: #292929;
+  }
+  .btn-solid-dark:active {
+    background: #404040;
+  }
+
+  /* Understated text link with animated underline. */
+  .link-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    padding-bottom: 3px;
+    border-bottom: 2px solid var(--color-brand-yellow);
+    transition: border-color 0.25s ease;
+  }
+  .link-mark:hover {
+    border-color: currentColor;
+  }
+
+  /* ==========================================================================
+     Eyebrow — one accent chip style, used sparingly (max one per section).
+     ========================================================================== */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 1.5rem;
+    height: 2px;
+    background: var(--color-brand-yellow);
+  }
+
+  /* ==========================================================================
+     Surfaces — section rhythm. Alternate tones instead of repeating one grid.
+     ========================================================================== */
+  .section {
+    padding-top: clamp(3.5rem, 2.5rem + 3vw, 6rem);
+    padding-bottom: clamp(3.5rem, 2.5rem + 3vw, 6rem);
+  }
+  .section-tight {
+    padding-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+    padding-bottom: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+  .container-page {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 80rem;
+    padding-inline: 1rem;
+  }
+  .container-narrow {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 52rem;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-page,
+    .container-narrow {
+      padding-inline: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-page,
+    .container-narrow {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* ==========================================================================
+     Glass system (medium intensity) — frosted depth over imagery/dark sections.
+     Use only where a translucent layer is genuinely doing work.
+     ========================================================================== */
   .glass-bar {
     background: color-mix(in srgb, #000 62%, transparent);
     backdrop-filter: blur(14px) saturate(140%);
@@ -91,102 +353,278 @@ button, nav a, .font-heading {
     border-color: rgba(255, 255, 255, 0.12);
   }
 
-  /* Frosted dark card for use on black / dark spotlight sections. */
   .glass-dark {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(12px) saturate(135%);
-    -webkit-backdrop-filter: blur(12px) saturate(135%);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: linear-gradient(145deg, rgba(28, 28, 33, 0.88) 0%, rgba(12, 12, 14, 0.96) 100%);
+    backdrop-filter: blur(14px) saturate(135%);
+    -webkit-backdrop-filter: blur(14px) saturate(135%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 8px 32px rgba(0, 0, 0, 0.25);
-    transition: background 0.3s ease, border-color 0.3s ease;
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      inset 0 0 16px rgba(255, 255, 255, 0.02),
+      0 10px 30px rgba(0, 0, 0, 0.45),
+      0 2px 6px rgba(0, 0, 0, 0.3);
+    transition:
+      background 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .glass-dark:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.24);
+    background: linear-gradient(145deg, rgba(36, 36, 42, 0.92) 0%, rgba(16, 16, 19, 0.98) 100%);
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      0 16px 40px rgba(0, 0, 0, 0.6),
+      0 4px 10px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
   }
 
-  /* Frosted light card for use on white / light sections. */
   .glass-light {
-    background: rgba(255, 255, 255, 0.55);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.85) 0%, rgba(245, 245, 247, 0.95) 100%);
     backdrop-filter: blur(12px) saturate(135%);
     -webkit-backdrop-filter: blur(12px) saturate(135%);
     border: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.18);
+    border-radius: 8px;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.6),
-      0 8px 32px rgba(0, 0, 0, 0.08);
-    transition: background 0.3s ease, border-color 0.3s ease;
-  }
-  .glass-light:hover {
-    background: rgba(255, 255, 255, 0.72);
-    border-color: rgba(0, 0, 0, 0.18);
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 8px 24px rgba(0, 0, 0, 0.06),
+      0 2px 4px rgba(0, 0, 0, 0.03);
   }
 
-  /* Frosted tag / pill that floats over hero imagery (eyebrows, stat chips). */
   .glass-tag {
-    background: color-mix(in srgb, #000 35%, transparent);
+    background: color-mix(in srgb, #000 45%, transparent);
     backdrop-filter: blur(10px) saturate(130%);
     -webkit-backdrop-filter: blur(10px) saturate(130%);
-    border: 1px solid rgba(255, 212, 59, 0.55);
+    border: 1px solid rgba(255, 212, 59, 0.65);
+    border-radius: 4px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
-  /* Tinted yellow glass for accent surfaces (e.g. CTA chips on dark). */
-  .glass-yellow {
-    background: color-mix(in srgb, #ffd43b 22%, transparent);
-    backdrop-filter: blur(10px) saturate(140%);
-    -webkit-backdrop-filter: blur(10px) saturate(140%);
-    border: 1px solid rgba(255, 212, 59, 0.45);
+  /* ==========================================================================
+     Cards — tactile high-contrast slabs with physical rim lighting & soft depth.
+     ========================================================================== */
+  .card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.11);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background: linear-gradient(180deg, #ffffff 0%, #fafafc 100%);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.03),
+      0 8px 24px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 1);
+    transition:
+      transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.25s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 0, 0, 0.22);
+    border-bottom-color: rgba(0, 0, 0, 0.32);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.04),
+      0 18px 40px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 1);
+  }
+  .card-marked {
+    border-color: rgba(0, 0, 0, 0.22);
+    border-left: 5px solid var(--color-brand-yellow);
+    box-shadow:
+      0 3px 6px rgba(0, 0, 0, 0.04),
+      0 12px 28px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 1);
+  }
+
+  /* ==========================================================================
+     Tactile Neumorphic utilities — physical depth, recessed wells, embossed coins.
+     ========================================================================== */
+  /* Recessed/inset well for display data, phone inputs, reading slots */
+  .tactile-well {
+    background: #f1f2f5;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    border-radius: 6px;
+    box-shadow:
+      inset 0 2px 4px rgba(0, 0, 0, 0.1),
+      inset 0 1px 2px rgba(0, 0, 0, 0.08),
+      0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+  .tactile-well-dark {
+    background: #09090b;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    box-shadow:
+      inset 0 2px 5px rgba(0, 0, 0, 0.75),
+      inset 0 1px 2px rgba(0, 0, 0, 0.9),
+      0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* Tactile Embossed Coin / Badge (e.g. TH, MM, KH, LA flags/codes) */
+  .tactile-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: linear-gradient(145deg, #ffe066 0%, #ffd43b 60%, #eab815 100%);
+    border: 1px solid #d4a917;
+    border-bottom: 2px solid #b88f0a;
+    box-shadow:
+      0 3px 8px rgba(0, 0, 0, 0.15),
+      0 1px 3px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.75),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* Flat filters and utility controls; legacy class names keep existing callers working. */
+  .tactile-pill,
+  .tactile-icon-btn,
+  .tactile-icon-btn-light {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    border-radius: 2px;
+    border: 1px solid;
+    background: transparent;
+    box-shadow: none;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .tactile-pill,
+  .tactile-icon-btn-light {
+    border-color: #767676;
+    color: var(--color-black);
+  }
+  .tactile-pill:hover,
+  .tactile-icon-btn-light:hover {
+    background: #f1f1f1;
+    border-color: var(--color-black);
+  }
+  .tactile-pill:active,
+  .tactile-pill.active,
+  .tactile-pill[aria-pressed='true'],
+  .tactile-icon-btn-light:active {
+    background: var(--color-black);
+    color: var(--color-white);
+    border-color: var(--color-black);
+  }
+  .tactile-icon-btn {
+    border-color: rgba(255, 255, 255, 0.65);
+    color: var(--color-white);
+  }
+  .tactile-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--color-white);
+  }
+  .tactile-icon-btn:active {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Stat box tactile bracket */
+  .tactile-bracket {
+    background: linear-gradient(145deg, rgba(24, 24, 28, 0.8) 0%, rgba(10, 10, 12, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 5px solid var(--color-brand-yellow);
+    border-right: 5px solid var(--color-brand-yellow);
+    border-radius: 8px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+      0 14px 40px rgba(0, 0, 0, 0.55);
+  }
+
+  /* Stat figure — restrained display numerals (no "monument stat" inflation). */
+  .stat-value {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: clamp(1.75rem, 1.45rem + 1.3vw, 2.6rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ==========================================================================
+     Rich text (Lexical) — editorial, readable, Thai-safe.
+     ========================================================================== */
+  .prose-lpn {
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: var(--color-ink-soft);
+  }
+  .prose-lpn :where(h2) {
+    @apply mt-12 mb-4 text-2xl font-bold text-black;
+  }
+  .prose-lpn :where(h3) {
+    @apply mt-9 mb-3 text-xl font-semibold text-black;
+  }
+  .prose-lpn :where(h4) {
+    @apply mt-7 mb-2 text-base font-bold uppercase tracking-wide text-black;
+  }
+  .prose-lpn :where(p) {
+    @apply my-5 leading-relaxed;
+  }
+  .prose-lpn :where(strong) {
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+  .prose-lpn :where(a) {
+    @apply text-black underline underline-offset-4 decoration-brand-yellow/70 transition-colors hover:decoration-brand-yellow;
+  }
+  .prose-lpn :where(ul) {
+    @apply my-5 list-disc pl-6;
+  }
+  .prose-lpn :where(ol) {
+    @apply my-5 list-decimal pl-6;
+  }
+  .prose-lpn :where(li) {
+    @apply my-2;
+  }
+  .prose-lpn :where(blockquote) {
+    @apply my-8 border-l-2 border-brand-yellow pl-6 italic text-black;
+  }
+  .prose-lpn :where(img) {
+    @apply my-8 rounded-lg;
   }
 }
 
-/* Base styling for rendered rich text (Lexical) content */
-.prose-lpn :where(h2) {
-  @apply mt-10 mb-4 text-2xl font-bold text-black;
-}
-.prose-lpn :where(h3) {
-  @apply mt-8 mb-3 text-xl font-semibold text-black;
-}
-.prose-lpn :where(p) {
-  @apply my-4 leading-relaxed;
-}
-.prose-lpn :where(a) {
-  @apply text-black underline underline-offset-2 hover:text-brand-yellow;
-}
-.prose-lpn :where(ul) {
-  @apply my-4 list-disc pl-6;
-}
-.prose-lpn :where(ol) {
-  @apply my-4 list-decimal pl-6;
-}
-.prose-lpn :where(blockquote) {
-  @apply my-6 border-l-4 border-brand-yellow pl-4 italic text-black;
-}
-.prose-lpn :where(img) {
-  @apply my-6 rounded-lg;
-}
-
-/*
- * CSS Rendering Containment:
- * Speeds up page rendering by skipping layout and paint for offscreen/below-the-fold components
- * while utilizing contain-intrinsic-size to prevent layout shift (CLS).
- */
+/* ==========================================================================
+   Rendering containment — skip layout/paint below the fold (CLS-safe).
+   ========================================================================== */
 .contain-pillars {
   content-visibility: auto;
   contain-intrinsic-size: auto 550px;
 }
-
 .contain-testimony {
   content-visibility: auto;
   contain-intrinsic-size: auto 350px;
 }
-
 .contain-hotline {
   content-visibility: auto;
   contain-intrinsic-size: auto 500px;
 }
-
 .contain-footer {
   content-visibility: auto;
   contain-intrinsic-size: auto 400px;
+}
+
+/* ==========================================================================
+   Motion discipline — respect user preference.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

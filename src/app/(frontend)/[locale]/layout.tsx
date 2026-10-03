@@ -9,7 +9,7 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import '../styles.css'
 
-import { SITE_URL } from '@/lib/seo'
+import { SITE_URL_OBJ } from '@/lib/seo'
 
 // Latin — clean geometric sans-serif that anchors the documentary, high-contrast look.
 const ibmPlexSans = IBM_Plex_Sans({
@@ -43,13 +43,13 @@ const dbHelvethaicaX = localFont({
 })
 
 export const metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: SITE_URL_OBJ,
   title: {
     default: 'LPN Foundation',
     template: '%s · LPN Foundation',
   },
   description:
-    'Labour Rights Promotion Network (LPN) Foundation — ending human trafficking and forced labour, protecting migrant workers.',
+    'LPN works alongside migrant workers and families in Thailand to access protection today and build safer systems for tomorrow.',
 }
 
 export function generateStaticParams() {
@@ -75,10 +75,15 @@ export default async function LocaleLayout(props: {
   return (
     <html lang={locale} className={`${ibmPlexSans.variable} ${dbHelvethaicaX.variable}`}>
       <body>
+        <a href="#main" className="skip-link">
+          {locale === 'th' ? 'ข้ามไปยังเนื้อหา' : 'Skip to content'}
+        </a>
         <NextIntlClientProvider messages={messages}>
           <div className="flex min-h-screen flex-col">
             <SiteHeader locale={locale as Locale} />
-            <main className="flex-1">{children}</main>
+            <main id="main" className="flex-1">
+              {children}
+            </main>
             <SiteFooter locale={locale as Locale} />
           </div>
         </NextIntlClientProvider>

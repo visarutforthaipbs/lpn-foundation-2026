@@ -41,7 +41,7 @@ async function fetchWixImage(filename: string): Promise<{ buf: Buffer; mimetype:
   
   // 1. Wix ID with collision suffix removed (e.g., -3) and _mv2 converted back to ~mv2
   const baseName = withoutExt.replace(/-\d+$/, '')
-  const standardWixId = baseName.replace(/_mv(\d+)$/, '~mv$1') + '.' + ext
+  const standardWixId = baseName.replace(/_mv(\d+)(?=_|$)/, '~mv$1') + '.' + ext
 
   // 2. Wix ID with just collision suffix removed (e.g., in case it didn't have ~)
   const cleanFilename = baseName + '.' + ext
@@ -71,9 +71,6 @@ async function fetchWixImage(filename: string): Promise<{ buf: Buffer; mimetype:
 }
 
 async function main() {
-  console.log('Connecting to database:', process.env.DATABASE_URL)
-  console.log('BLOB_READ_WRITE_TOKEN exists:', !!process.env.BLOB_READ_WRITE_TOKEN)
-
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     console.error('Error: BLOB_READ_WRITE_TOKEN is missing in environment variables. Cannot upload to Vercel Blob!')
     process.exit(1)
@@ -89,7 +86,16 @@ async function main() {
 
   console.log(`Total media documents in database: ${mediaResult.totalDocs}`)
 
-  const mediaToRepair = mediaResult.docs
+  const idsArg = process.argv.find((arg) => arg.startsWith('--ids='))
+  const requestedIds = idsArg
+    ? new Set(idsArg.slice('--ids='.length).split(',').map((id) => Number(id)))
+    : null
+  const mediaToRepair = requestedIds
+    ? mediaResult.docs.filter((doc) => requestedIds.has(doc.id))
+    : mediaResult.docs
+  if (requestedIds && mediaToRepair.length !== requestedIds.size) {
+    throw new Error('One or more requested media IDs were not found')
+  }
   const progressList = getProgress()
   console.log(`Loaded progress: ${progressList.length} items already repaired.`)
 
@@ -173,7 +179,7 @@ async function main() {
   console.log(`- Failed: ${failedCount}`)
   console.log(`========================================`)
 
-  process.exit(0)
+  process.exit(failedCount ? 1 : 0)
 }
 
 main().catch(console.error)
