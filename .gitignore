@@ -55,3 +55,6 @@ node_modules/
 /.migration/
 /media/
 /.design-previews/
+
+# Brand design package (252MB, .ai + hi-res photos) — kept locally / on NAS, not in git
+LPN Masterbrand logos/
