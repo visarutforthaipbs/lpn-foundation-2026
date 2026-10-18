@@ -174,7 +174,7 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
                       className="h-24 w-24 rounded-full border border-black/10 object-cover"
                     />
                   ) : (
-                    <div className="flex h-24 w-24 items-center justify-center rounded-full border border-black bg-brand-yellow text-xs font-black text-black">
+                    <div className="flex h-24 w-24 items-center justify-center rounded-full border border-black bg-brand-yellow text-xs font-semibold text-black">
                       LPN
                     </div>
                   )}

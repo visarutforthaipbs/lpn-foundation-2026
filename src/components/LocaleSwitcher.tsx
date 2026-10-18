@@ -12,7 +12,7 @@ export function LocaleSwitcher() {
   const pathname = usePathname()
 
   return (
-    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em]">
+    <div className="flex items-center gap-2 text-xs font-semibold ">
       {routing.locales.map((loc, i) => (
         <span key={loc} className="flex items-center gap-2">
           {i > 0 && (

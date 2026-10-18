@@ -80,7 +80,7 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
               <a key={h.code} href={telHref(h.phone)} className="card card-marked group flex flex-col p-6">
                 <div className="flex items-center justify-between">
                   <span
-                    className="tactile-badge h-11 w-11 text-xs font-black text-black"
+                    className="tactile-badge h-11 w-11 text-xs font-semibold text-black"
                     aria-hidden="true"
                   >
                     {h.code}
@@ -118,8 +118,8 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
         <Container>
           <div className="grid gap-10 md:grid-cols-2">
             <article className="glass-dark relative rounded p-8">
-              <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
-              <div className="t-label text-brand-yellow">
+              <span className="absolute top-0 left-0 h-1.5 w-12 bg-current" aria-hidden="true" />
+              <div className="t-label text-current/70">
                 {isThai ? 'เชื่อมต่อบน Facebook' : 'Connect on Facebook'}
               </div>
               <h2 className="t-h3 mt-3 text-white">{isThai ? 'ส่งข้อความหาเรา' : 'Message us on Facebook'}</h2>
@@ -138,8 +138,8 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
               </div>
             </article>
             <article className="glass-dark relative rounded p-8">
-              <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
-              <div className="t-label text-brand-yellow">
+              <span className="absolute top-0 left-0 h-1.5 w-12 bg-current" aria-hidden="true" />
+              <div className="t-label text-current/70">
                 {isThai ? 'สำนักงานใหญ่ประเทศไทย' : 'Thailand Headquarters'}
               </div>
               <h2 className="t-h3 mt-3 text-white">

@@ -176,7 +176,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
         </div>
 
         <div className="container-page relative z-10 py-20 md:py-28">
-          <p className="eyebrow text-brand-yellow">{th ? 'เกี่ยวกับ LPN' : 'About LPN'}</p>
+          <p className="eyebrow text-white/70">{th ? 'เกี่ยวกับ LPN' : 'About LPN'}</p>
           <h1 className="t-display mt-7 max-w-4xl text-white">
             {th
               ? 'องค์กรแนวหน้าด้านสิทธิแรงงานข้ามชาติในประเทศไทย'
@@ -243,8 +243,8 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
         />
         <ol className="mt-12 grid gap-6">
           {timeline.map((t) => (
-            <li key={t.year} className="border-l-2 border-brand-yellow pl-6">
-              <span className="t-label text-brand-yellow">{t.year}</span>
+            <li key={t.year} className="border-l-2 border-current pl-6">
+              <span className="t-label text-current/70">{t.year}</span>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/85">{t.body}</p>
             </li>
           ))}
@@ -299,7 +299,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
                 {m.photo && typeof m.photo !== 'number' ? (
                   <MediaImage media={m.photo} className="h-20 w-20 rounded-full object-cover" />
                 ) : (
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-yellow/20 text-xs font-black text-black/50">LPN</div>
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-yellow/20 text-xs font-semibold text-black/50">LPN</div>
                 )}
                 <h3 className="t-h3 mt-4">{m.name}</h3>
                 {m.role && <div className="t-label mt-1 text-black/55">{m.role}</div>}
@@ -313,7 +313,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
       <Section tone="dark" className="border-t border-white/10">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow text-brand-yellow">
+            <p className="eyebrow text-white/70">
               {th ? 'เครือข่ายแรงงานร่วมขับเคลื่อน' : 'Worker-Led Community Networks'}
             </p>
             <h2 className="t-h2 mt-4 text-white">
@@ -330,7 +330,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
             {networks.map((net) => (
               <div
                 key={net.abbr}
-                className="flex flex-col items-center justify-center border border-white/15 bg-white/5 p-6 text-center transition-all hover:border-brand-yellow/50 hover:bg-white/10"
+                className="flex flex-col items-center justify-center border border-white/15 bg-white/5 p-6 text-center transition-all hover:border-current/50 hover:bg-white/10"
               >
                 <div className="relative h-14 w-24">
                   <Image
@@ -346,7 +346,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
                 <span className="mt-1 text-xs font-semibold text-white">
                   {net.name}
                 </span>
-                <span className="mt-1 text-[11px] text-white/60">
+                <span className="mt-1 text-xs text-white/60">
                   {net.sub}
                 </span>
               </div>

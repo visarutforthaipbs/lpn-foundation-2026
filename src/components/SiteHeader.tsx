@@ -43,18 +43,18 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   const primaryHotline = cmsHotline ? { phone: cmsHotline.phone } : { phone: HOTLINES[0].phone }
 
   return (
-    <header className="sticky top-0 z-50 bg-black text-white">
+    <header className="sticky top-0 z-50 glass-bar bg-black text-white">
       {/* Utility strip — emergency hotline + locale */}
       <div className="border-b border-white/10">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4">
           {primaryHotline ? (
             <a
               href={telHref(primaryHotline.phone)}
-              className="group flex items-center gap-2 text-white/70 transition-colors hover:text-brand-yellow"
+              className="group flex min-h-11 items-center gap-2 text-white/70 transition-colors hover:text-white"
             >
-              <PhoneCall className="h-3.5 w-3.5 text-brand-yellow shrink-0" aria-hidden="true" />
-              <span className="t-label text-brand-yellow">{isThai ? 'สายด่วน' : 'Hotline'}</span>
-              <span className="font-mono text-xs text-white/85 group-hover:text-brand-yellow">
+              <PhoneCall className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <span className="t-label">{isThai ? 'สายด่วน' : 'Hotline'}</span>
+              <span className="font-mono text-sm text-white/85 group-hover:text-white">
                 {primaryHotline.phone}
               </span>
             </a>
@@ -67,8 +67,8 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
 
       {/* Main bar */}
       <div className="relative border-b border-white/10">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4">
-          <Link href="/" className="group flex items-center py-1" aria-label="LPN Foundation">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
+          <Link href="/" className="flex items-center py-1" aria-label="LPN Foundation">
             <Image
               src="/logos/LPN_logo.svg"
               alt="LPN Foundation"
@@ -76,19 +76,19 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               height={44}
               priority
               unoptimized
-              className="h-10 sm:h-11 w-auto brightness-0 invert transition-transform duration-200 group-hover:scale-105"
+              className="h-10 sm:h-11 w-auto brightness-0 invert"
             />
           </Link>
 
-          <nav aria-label={isThai ? 'เมนูหลัก' : 'Main menu'} className="hidden items-center gap-5 xl:gap-7 lg:flex">
+          <nav aria-label={isThai ? 'เมนูหลัก' : 'Main menu'} className="hidden items-center gap-1 lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative py-1 text-[11px] font-black uppercase tracking-[0.2em] text-white/80 transition-colors hover:text-white"
+                className="group relative inline-flex min-h-11 items-center px-3 text-[15px] font-semibold text-white/80 transition-colors hover:text-white"
               >
                 <span>{item.label}</span>
-                <span className="absolute -bottom-0.5 left-0 h-0.5 w-0 bg-brand-yellow transition-all duration-300 group-hover:w-full" />
+                <span className="absolute bottom-1.5 left-3 right-3 h-0.5 scale-x-0 bg-brand-yellow transition-transform duration-200 group-hover:scale-x-100" />
               </Link>
             ))}
           </nav>
@@ -102,7 +102,8 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               <Phone className="h-4 w-4" aria-hidden="true" />
             </Link>
 
-            <ButtonLink href={donate.href} variant="primary" className="px-5">
+            {/* Outline here: the page hero owns the one prominent (yellow) action. */}
+            <ButtonLink href={donate.href} variant="ghostLight" className="px-5">
               {donate.label}
             </ButtonLink>
 

@@ -60,7 +60,7 @@ export function ReportLibrary({ reports, locale }: { reports: Report[]; locale: 
       </label>
     </div>
     <p className="mt-5 text-sm text-black/75" aria-live="polite">{th ? `แสดง ${visible.length} จาก ${reports.length} รายงาน` : `Showing ${visible.length} of ${reports.length} reports`}</p>
-    {visible.length ? <div className="mt-5 grid gap-5 md:grid-cols-2">{visible.map((report) => <article key={report.id} className="border-l-4 border-brand-yellow bg-paper p-6">
+    {visible.length ? <div className="mt-5 grid gap-5 md:grid-cols-2">{visible.map((report) => <article key={report.id} className="border-l-4 border-current bg-paper p-6">
       <p className="t-label text-black/70">{report.year} · {kinds[report.kind][locale]} · {report.topic ? topics[report.topic]?.[locale] : (th ? 'ไม่ระบุประเด็น' : 'Uncategorised')} · {report.documentLanguage.toUpperCase()}</p>
       <h3 className="t-h3 mt-3">{report.title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-black/75">{report.summary}</p>

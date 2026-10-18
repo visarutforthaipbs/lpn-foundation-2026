@@ -182,7 +182,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       <div className="pointer-events-none absolute right-0 top-0 z-1 h-full w-[42%] border-l border-white/10 bg-[linear-gradient(135deg,transparent_0%,rgba(255,199,0,0.08)_100%)]" aria-hidden="true" />
 
       <Container className="relative z-10 py-20 md:py-28 lg:py-36">
-        <p className="eyebrow text-brand-yellow">{th ? 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน' : 'Labour Rights Promotion Network Foundation'}</p>
+        <p className="eyebrow text-white/70">{th ? 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน' : 'Labour Rights Promotion Network Foundation'}</p>
         <h1 className="t-display mt-7 max-w-5xl text-white">
           {th ? 'สิทธิที่เข้าถึงได้' : 'Rights within reach.'}
           <span className="block text-brand-yellow">{th ? 'การคุ้มครองที่ยั่งยืน' : 'Protection that lasts.'}</span>
@@ -212,12 +212,12 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         <p className="t-label">{th ? 'สำหรับแรงงานและครอบครัว' : 'For workers and families'}</p>
         <h2 className="t-h2 mt-3">{th ? 'เริ่มตรงนี้' : 'Start here'}</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <Link href="/get-help" className="group flex min-h-40 flex-col justify-between border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
+          <Link href="/get-help" className="group flex min-h-40 flex-col justify-between rounded-xl border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
             <PhoneCall size={38} strokeWidth={1.8} aria-hidden="true" />
             <span className="mt-5 flex items-end justify-between gap-2 text-xl font-black leading-tight sm:text-2xl">{th ? 'ต้องการความช่วยเหลือ' : 'I need help'} <span aria-hidden="true">→</span></span>
             <span className="mt-1 text-sm font-semibold">{th ? 'โทรหา LPN ตามภาษาของคุณ' : 'Call LPN in your language'}</span>
           </Link>
-          <a href={RIGHT_GUIDE} className="group flex min-h-40 flex-col justify-between border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
+          <a href={RIGHT_GUIDE} className="group flex min-h-40 flex-col justify-between rounded-xl border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
             <BookOpen size={38} strokeWidth={1.8} aria-hidden="true" />
             <span className="mt-5 flex items-end justify-between gap-2 text-xl font-black leading-tight sm:text-2xl">{th ? 'อยากรู้สิทธิของฉัน' : 'I want to know my rights'} <span aria-hidden="true">↗</span></span>
             <span className="mt-1 text-sm font-semibold">{th ? 'เปิดคู่มือรู้สิทธิ' : 'Open the Rights Guide'}</span>
@@ -239,9 +239,9 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
                   media={s.media}
                   alt={s.alt}
                   sizes="(min-width: 1024px) 33vw, 100vw"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover"
                 />
-                <div className="absolute top-3 left-3 bg-black text-brand-yellow px-2.5 py-1 text-xs font-black tracking-wider uppercase">
+                <div className="absolute top-3 left-3 bg-black text-brand-yellow px-2.5 py-1 text-xs font-semibold tracking-wider ">
                   {s.n} / {s.category}
                 </div>
               </div>
@@ -275,8 +275,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         <div>
           <ol className="grid gap-6">
             {steps.map(([title, body], i) => (
-              <li key={title} className="border-l-2 border-brand-yellow pl-6">
-                <span className="t-label text-brand-yellow">0{i + 1}</span>
+              <li key={title} className="border-l-2 border-current pl-6">
+                <span className="t-label text-current/70">0{i + 1}</span>
                 <h3 className="t-h3 mt-2 text-white">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/80">{body}</p>
               </li>
@@ -301,7 +301,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
               />
             </div>
           )}
-          <blockquote className="mt-6 border-l-2 border-brand-yellow pl-4">
+          <blockquote className="mt-6 border-l-2 border-current pl-4">
             <p className="text-base font-semibold leading-relaxed text-white italic">
               {th ? '“เป้าหมายของฉันคือการช่วยชีวิตคน”' : '“My goal is to save lives.”'}
             </p>
@@ -322,7 +322,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     <Section tone="dark" className="border-t border-white/10">
       <Container>
         <div className="mx-auto max-w-3xl text-center">
-          <p className="eyebrow text-brand-yellow">
+          <p className="eyebrow text-white/70">
             {th ? 'เครือข่ายแรงงานร่วมขับเคลื่อน' : 'Worker-Led Community Networks'}
           </p>
           <h2 className="t-h2 mt-4 text-white">
@@ -339,7 +339,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
           {networks.map((net) => (
             <div
               key={net.abbr}
-              className="flex flex-col items-center justify-center border border-white/15 bg-white/5 p-6 text-center transition-all hover:border-brand-yellow/50 hover:bg-white/10"
+              className="flex flex-col items-center justify-center border border-white/15 bg-white/5 p-6 text-center transition-all hover:border-current/50 hover:bg-white/10"
             >
               <div className="relative h-14 w-24">
                 <Image
@@ -355,7 +355,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
               <span className="mt-1 text-xs font-semibold text-white">
                 {net.name}
               </span>
-              <span className="mt-1 text-[11px] text-white/60">
+              <span className="mt-1 text-xs text-white/60">
                 {net.sub}
               </span>
             </div>
@@ -376,7 +376,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         <div>
           <div className="grid gap-4 sm:grid-cols-3">
             {metrics.map((m) => (
-              <div key={m.value} className="border-t-4 border-brand-yellow bg-white p-6 sm:p-7 shadow-xs">
+              <div key={m.value} className="border-t-4 border-current bg-white p-6 sm:p-7 shadow-xs">
                 <strong className="block text-4xl sm:text-5xl font-black tracking-tight text-black">{m.value}</strong>
                 <p className="mt-3 text-base sm:text-lg font-bold text-black">{m.label}</p>
                 <p className="mt-1.5 text-xs sm:text-sm text-black/70">{m.detail}</p>
@@ -442,7 +442,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
                 <MediaImage
                   media={post.coverImage}
                   sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-300"
                 />
               </div>
             )}

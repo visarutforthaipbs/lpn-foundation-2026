@@ -58,17 +58,17 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
 
       <Container className="relative z-10 py-12 md:py-20">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow/15 border border-brand-yellow/30 text-brand-yellow">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow/15 border border-current/30 text-brand-yellow">
             <ShieldAlert className="h-4.5 w-4.5" aria-hidden="true" />
           </div>
-          <p className="eyebrow text-brand-yellow">{th ? 'ขอความช่วยเหลือ' : 'Get help'}</p>
+          <p className="eyebrow text-white/70">{th ? 'ขอความช่วยเหลือ' : 'Get help'}</p>
         </div>
         <h1 className="t-display mt-5 max-w-4xl text-white">{th ? 'ต้องการความช่วยเหลือ?' : 'Need help?'}</h1>
         <p className="t-lede mt-4 max-w-2xl text-white/90">{th
           ? 'เลือกติดต่อ LPN หรือเปิดคู่มือรู้สิทธิ'
           : 'Choose how you want to start.'}</p>
         <div className="mt-8 grid max-w-3xl gap-3 sm:grid-cols-2">
-          <a href="#contact" className="group flex min-h-40 flex-col justify-between border-2 border-brand-yellow bg-brand-yellow p-5 text-black transition-colors hover:bg-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow">
+          <a href="#contact" className="group flex min-h-40 flex-col justify-between border-2 border-current bg-brand-yellow p-5 text-black transition-colors hover:bg-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow">
             <PhoneCall size={38} strokeWidth={1.8} aria-hidden="true" />
             <span className="mt-5 flex items-end justify-between gap-3 text-xl font-black leading-tight sm:text-2xl">{th ? 'โทรหา LPN' : 'Call LPN'} <span aria-hidden="true">↗</span></span>
             <span className="mt-1 text-sm font-semibold">{th ? 'เลือกภาษาของคุณ' : 'Choose your language'}</span>
@@ -107,7 +107,7 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
 
     <Section tone="light"><Container>
       <SectionHeading eyebrow={th ? 'เรื่องที่ช่วยได้' : 'What we can discuss'} title={th ? 'เริ่มจากเรื่องของคุณ' : 'Start with your situation'} />
-      <ul className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{issues.map(({ title, icon: Icon }) => <li key={title} className="flex min-h-36 flex-col justify-between border-t-4 border-brand-yellow bg-paper p-4 sm:p-5">
+      <ul className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{issues.map(({ title, icon: Icon }) => <li key={title} className="flex min-h-36 flex-col justify-between border-t-4 border-current bg-paper p-4 sm:p-5">
         <Icon size={36} strokeWidth={1.7} aria-hidden="true" />
         <span className="mt-5 text-base font-bold leading-snug">{title}</span>
       </li>)}</ul>

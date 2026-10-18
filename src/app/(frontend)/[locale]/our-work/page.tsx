@@ -110,7 +110,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
       </div>
 
       <Container className="relative z-10 py-16 md:py-24">
-        <p className="eyebrow text-brand-yellow">{th ? 'งานของเรา' : 'Our work'}</p>
+        <p className="eyebrow text-white/70">{th ? 'งานของเรา' : 'Our work'}</p>
         <h1 className="t-display mt-6 max-w-5xl text-white">{th ? 'ช่วยเหลือวันนี้ สร้างความปลอดภัยในวันหน้า' : 'Protection today. Safer systems tomorrow.'}</h1>
         <p className="t-lede mt-7 max-w-3xl text-white/80">{th
           ? 'งานช่วยเหลือ การเรียนรู้กับชุมชน และการสร้างหลักฐานเชื่อมกันผ่านความต้องการและเสียงของแรงงานข้ามชาติ'
@@ -161,7 +161,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
               />
             </div>
           )}
-          <div className="border-l-4 border-brand-yellow p-6 sm:p-7">
+          <div className="border-l-4 border-current p-6 sm:p-7">
             <h3 className="t-h3">{th ? 'สิ่งที่ทำ' : 'What this includes'}</h3>
             <ul className="mt-5 space-y-3 text-sm leading-relaxed text-black/80">{item.examples.map((e) => <li key={e} className="border-b border-black/10 pb-3">{e}</li>)}</ul>
             <p className="mt-6 text-sm leading-relaxed text-black/70">{item.note}</p>

@@ -56,7 +56,7 @@ export function MobileMenu({
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="flex min-h-12 items-center border-b border-white/10 text-xs font-black uppercase tracking-[0.22em] text-white/85 transition-colors hover:text-brand-yellow"
+                  className="flex min-h-12 items-center border-b border-white/10 text-xs font-semibold  text-white/85 transition-colors hover:text-brand-yellow"
                 >
                   {item.label}
                 </Link>

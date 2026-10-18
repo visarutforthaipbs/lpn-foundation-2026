@@ -78,6 +78,20 @@ A user with low attention and high stress should understand the highest-value me
 
 ## 5) Implementation Defaults for This Repo
 
+> **HIG retrofit (2026-10-18, branch `design/hig-revamp`) — these defaults supersede
+> the older bullets below where they conflict.** Full audit: `docs/design-audit.md`.
+> - Yellow `#ffd43b` has ONE job: the single prominent action per view, selection/hover
+>   indicators, and focus. Never a section background, rail, rule, or decorative bar.
+> - Colours are semantic roles (`--color-surface`, `--color-label`, `--color-separator`,
+>   `--color-on-inverse`…) defined in `src/app/(frontend)/styles.css`; Dark Mode follows
+>   `prefers-color-scheme` with no toggle. Legacy `bg-white` / `text-black/70` utilities are
+>   remapped to those roles — prefer the role names in new code.
+> - Type floor is 13 px (`.t-label`, `.eyebrow`, `text-xs`), sentence case, weight 600.
+> - Controls ≥ 44 px (touch) / 28 px (pointer); buttons 8 px radius, cards 12 px.
+> - Content layer is solid: no glass, gradients, inset shadows, hover lifts or image zoom.
+>   Translucency only on the sticky header (`.glass-bar`).
+> - Body measure ≤ 42 rem (`.container-narrow`, `.prose-lpn`).
+
 - Use dark-first hero and shell treatments where appropriate to align with LPN visual language.
 - Keep accent color usage sparse and purposeful (CTA, separators, emphasis only).
 - Buttons use flat fills, 1px borders, and 2px corners. Avoid gradients, bevels, glow, and movement on hover.
