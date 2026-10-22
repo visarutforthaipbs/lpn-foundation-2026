@@ -644,6 +644,98 @@ p {
   .prose-lpn :where(img) {
     @apply my-8 rounded-xl;
   }
+
+  /* ==========================================================================
+     Help-intake form (M1, PRD v1.1 §7.2) — worker-facing controls.
+     44 px targets, 17 px text, separator borders, brand focus ring.
+     ========================================================================== */
+  .field-input {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--color-separator-strong);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    color: var(--color-label);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    transition: border-color 0.15s ease;
+  }
+  .field-input::placeholder {
+    color: var(--color-label-tertiary);
+  }
+  .field-input:hover {
+    border-color: var(--color-label);
+  }
+  .field-input[aria-invalid='true'] {
+    border-color: var(--color-critical);
+  }
+  select.field-input {
+    appearance: none;
+    padding-right: 2.75rem;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+      linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+  }
+  .field-check {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    margin-top: 2px;
+    accent-color: var(--color-brand);
+  }
+  .field-error {
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 600;
+    color: var(--color-critical-ink);
+  }
+
+  /* Tracking code — IBM Plex Mono, large, grouped 4+4 (brand §08). */
+  .tracking-code {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: clamp(2rem, 1.2rem + 4vw, 3.5rem);
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--color-label);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+    color: var(--color-label);
+    text-align: center;
+    word-break: keep-all;
+    user-select: all;
+  }
+
+  /* Quick Exit (PRD §6.4) — inverse of the surface in both appearances. */
+  .quick-exit {
+    position: fixed;
+    right: 12px;
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--color-on-inverse-separator);
+    border-radius: var(--radius-pill);
+    background: var(--color-label);
+    color: var(--color-surface);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  .quick-exit:active {
+    opacity: 0.85;
+  }
 }
 
 /* ==========================================================================

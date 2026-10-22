@@ -1,11 +1,13 @@
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
 import { BookOpen, HandCoins, Heartbeat, IdentificationCard, Phone, ShieldWarning, UsersThree } from '@phosphor-icons/react/ssr'
 import type { Locale } from '@/i18n/routing'
 import { buildMetadata } from '@/lib/seo'
-import { telHref } from '@/lib/content'
+import { MESSENGER_URL, telHref } from '@/lib/content'
 import { getHelpChannels } from '@/lib/help-channels'
 import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
+import HelpIntakeForm, { type HelpChannel } from '@/components/HelpIntakeForm'
+import QuickExitButton from '@/components/QuickExitButton'
 
 const GUIDE = 'https://www.lpnrightguide.site/'
 
@@ -26,6 +28,7 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
   setRequestLocale(locale)
   const th = locale === 'th'
   const hotlines = await getHelpChannels(locale)
+  const tForm = await getTranslations({ locale, namespace: 'helpForm' })
   const issues = [
     { title: th ? 'ค่าจ้างและงาน' : 'Pay and work', icon: HandCoins },
     { title: th ? 'เอกสารและการเดินทาง' : 'Documents and migration', icon: IdentificationCard },
@@ -40,7 +43,19 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
     LA: { label: 'ພາສາລາວ', lang: 'lo' },
   }
 
+  // Hotline channels for the form's fallback panel — same CMS-backed list as the cards above.
+  const formChannels: HelpChannel[] = hotlines.map((h) => ({
+    code: h.code,
+    label: th ? h.langTh : h.langEn,
+    native: h.code === 'TH' ? undefined : nativeLanguages[h.code]?.label,
+    nativeLang: nativeLanguages[h.code]?.lang,
+    phone: h.phone,
+    href: telHref(h.phone),
+  }))
+
   return <>
+    {/* Worker-facing page → Quick Exit (PRD v1.1 §6.4). */}
+    <QuickExitButton />
     <section className="relative overflow-hidden bg-black text-white">
       {/* Authentic field photography backdrop */}
       <div className="absolute inset-0 z-0">
@@ -103,6 +118,14 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
         : 'Call not connecting? See other ways to contact LPN.'}{' '}
         <a className="font-bold underline underline-offset-4" href={`/${locale}/contact`}>{th ? 'ดูหน้าติดต่อ' : 'View contact page'}</a>
       </p>
+    </Container></Section>
+
+    {/* M1 help form (PRD v1.1 §7.2) — below the phone cards, so calling is never gated by the form. */}
+    <Section tone="light" id="message"><Container>
+      <SectionHeading eyebrow={tForm('eyebrow')} title={tForm('heading')} lede={tForm('lede')} />
+      <div className="mt-9 max-w-3xl">
+        <HelpIntakeForm locale={locale} channels={formChannels} messengerUrl={MESSENGER_URL} />
+      </div>
     </Container></Section>
 
     <Section tone="light"><Container>

@@ -22,5 +22,65 @@
     "readMore": "Read more",
     "languageEnglish": "English",
     "languageThai": "ไทย"
+  },
+  "quickExit": {
+    "label": "Quick exit",
+    "aria": "Quick exit — leave this page and go to Google"
+  },
+  "helpForm": {
+    "eyebrow": "Send a message",
+    "heading": "Or send us a message",
+    "lede": "Tell us what happened in your own words. You do not need to give your real name. LPN staff read every message.",
+    "intro": "You can write in Thai, English, Burmese or Khmer. After you send it, you will get a tracking code.",
+    "required": "(required)",
+    "optional": "(optional)",
+    "fields": {
+      "text": {
+        "label": "What happened?",
+        "hint": "Where you work, what the problem is, and since when. Up to 4,000 characters."
+      },
+      "language": {
+        "label": "Your language"
+      },
+      "province": {
+        "label": "Province",
+        "placeholder": "e.g. Samut Sakhon"
+      },
+      "contact": {
+        "label": "How can we reach you?",
+        "hint": "Phone, LINE ID or Messenger name. Leave empty if you prefer not to say."
+      }
+    },
+    "privacy": {
+      "note": "Your message goes only to LPN Foundation staff and is used only to help with your case. It is not stored on this device and is deleted from LPN's system after the case is closed. You do not have to give your name, phone number or address.",
+      "reviewNote": "Draft wording — pending LPN review (consent {version})",
+      "consent": "I understand and want to send this message to LPN"
+    },
+    "submit": "Send message",
+    "submitting": "Sending…",
+    "submitHint": "Nothing is saved until you press Send.",
+    "errors": {
+      "textRequired": "Please tell us what happened — even one sentence is enough.",
+      "textTooLong": "That is too long. Please keep it under {max} characters.",
+      "contactTooLong": "Contact is too long. Please keep it under {max} characters.",
+      "consentRequired": "Please tick the box to confirm you want to send this message.",
+      "turnstile": "The security check did not complete. Please try sending again, or call the hotline above.",
+      "rateLimited": "Too many messages were sent in a short time. Please wait a few minutes and try again, or call the hotline above.",
+      "rejected": "The system did not accept this message. Check the text and try again, or call the hotline above."
+    },
+    "success": {
+      "badge": "Message sent",
+      "title": "Write this code down — use it to follow your case",
+      "codeLabel": "Tracking code",
+      "writeDown": "Write this code on paper or take a screenshot. It is not saved on this device.",
+      "notSaved": "When you press Done, the code disappears from the screen. Check progress at the Rights Guide's “Track my case” page.",
+      "done": "Done"
+    },
+    "fallback": {
+      "title": "Could not send",
+      "body": "LPN's intake system cannot be reached right now. Your message was not stored anywhere. Please contact staff directly:",
+      "messenger": "Message on Messenger",
+      "tryAgain": "Try sending again"
+    }
   }
 }
