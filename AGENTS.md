@@ -27,8 +27,12 @@ the sole editor and the developer's client; LPN staff review content.
 
 Next.js 16 (App Router) + Payload 3 in one repo (admin at `/admin`, API at
 `/api`), React 19, Tailwind v4, next-intl 4 (`/en`, `/th`, default locale `en`
-in BOTH `src/i18n/routing.ts` and `src/payload.config.ts`), lucide icons.
-Fonts: IBM Plex Sans (Latin) + DB Helvethaica X (Thai). pnpm 12, Node 20+
+in BOTH `src/i18n/routing.ts` and `src/payload.config.ts`), Phosphor icons
+(`@phosphor-icons/react`, `/ssr` in server components; names per
+`~/Documents/ChatGPT/LPN/brand/assets/icons/icons.json`).
+Fonts: IBM Plex Sans + IBM Plex Sans Thai (+ Looped for `.prose-lpn`), all SIL OFL,
+self-hosted in `public/fonts/` via next/font/local — never Google Fonts at runtime,
+never DB Helvethaica X (LPN holds no licence). pnpm 12, Node 20+
 (use `/usr/local/bin/node`; nvm also has 22/24).
 
 ## 3. File map
@@ -160,10 +164,11 @@ a Hermes shell (the Hermes venv poisons tsx/node-gyp otherwise).
 - `.card`/`.glass-*`/`.tactile-*` class NAMES are load-bearing across ~50 call
   sites; restyle them in `styles.css`, don't rename.
 - Design rules that gate every UI change: `docs/DESIGN-GUARDRAILS.md` (brand +
-  Signal 39) and `docs/design-audit.md` (HIG). Yellow `#ffd43b` is the one
-  accent: primary action, selection, focus. Never yellow text on white.
-  Type floor 13 px, controls ≥ 44 px, no hover motion, glass only in the
-  sticky header. The Thai font draws ~20 % smaller than system fonts.
+  Signal 39), `docs/design-audit.md` (HIG) and the consolidated LPN One CI
+  (`~/Documents/ChatGPT/LPN/brand/BRAND.md`). Yellow `#FFC314` (pressed
+  `#e6ac00`) is the one accent: primary action, selection, focus. Never yellow
+  text on white. Type floor 13 px, body 17 px, font weights ≤ 700 (Plex ships
+  400–700), controls ≥ 44 px, no hover motion, glass only in the sticky header.
 - `create-payload-app` needs a TTY; corepack pnpm is broken here (use the
   global pnpm). pnpm's native-build allowlist lives in `pnpm-workspace.yaml`.
 - Hermes browser tool fails when Chrome holds the real profile; use the
