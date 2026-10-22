@@ -71,7 +71,7 @@ scripts/health_check.py           read-only weekly check (stdlib). Exit 1 on FAI
 
 ```bash
 pnpm install                       # after pulling package.json changes
-pnpm dev                           # dev server :3000 (uses .env.local → Neon, see §5)
+pnpm dev                           # dev server :3000, WEBPACK (uses .env.local → Neon, see §5)
 pnpm exec tsc --noEmit             # type-check  (must pass before any commit)
 pnpm lint                          # eslint      (0 errors; ~19 warnings in seed/ are known)
 pnpm build                         # full prerender (~100 static pages), needs DB access
@@ -142,6 +142,18 @@ a Hermes shell (the Hermes venv poisons tsx/node-gyp otherwise).
 ## 8. Traps (learned the hard way)
 
 - `TRUNCATE media CASCADE` wipes pages, team, globals (FK web). Never.
+- **`pnpm dev` is pinned to `next dev --webpack`.** Next 16.2.6 Turbopack runs
+  Tailwind's PostCSS in an unbounded pool of `node .next/dev/build/postcss.js`
+  child processes: one cold `/th/blog` compile added ~870 processes, hit the
+  macOS per-user cap (2666, `spawn EAGAIN`) and froze/rebooted the 16 GB Mac
+  four times on 2026-10-22 (vercel/next.js#95108). With webpack the process
+  table stays flat (+10) and `/th/blog` is 200 in ~36 s cold. The Turbopack
+  `experimental.turbopackPluginRuntimeStrategy: 'workerThreads'` alternative
+  segfaults (EXC_BAD_ACCESS in next-swc napi, Node 21 and 22). Don't remove
+  `--webpack` until a Next release fixes the pool; `next build` is unaffected.
+- Payload dev schema push: `pnpm dev` logs "Pulling schema from database" —
+  the postgres adapter's dev `push` diffs against **production Neon**. Never
+  run `pnpm dev` with an unmigrated schema change in the working tree.
 - Thai slugs: `formatSlug` must allow `\p{L}\p{N}\p{M}`; route params arrive
   percent-encoded → `decodeURIComponent(params.slug)` or Thai posts 404.
 - Localized blocks/arrays align by row `id`: copy saved EN ids onto the TH
