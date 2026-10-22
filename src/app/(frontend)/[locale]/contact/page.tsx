@@ -89,7 +89,7 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
                 </div>
                 <div className="mt-5 text-xs font-bold text-black/80">{LANG_LABELS[h.code]}</div>
                 <div className="tactile-well mt-3 w-full px-3 py-2 text-center">
-                  <span className="font-mono text-base font-black tracking-tight text-black transition-colors group-hover:underline group-hover:decoration-brand-yellow group-hover:decoration-2 group-hover:underline-offset-4">
+                  <span className="font-mono text-base font-bold tracking-tight text-black transition-colors group-hover:underline group-hover:decoration-brand-yellow group-hover:decoration-2 group-hover:underline-offset-4">
                     {h.phone}
                   </span>
                 </div>

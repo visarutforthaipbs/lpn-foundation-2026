@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Mail, MapPin, Phone, PhoneCall } from 'lucide-react'
+import { EnvelopeSimple, MapPin, Phone } from '@phosphor-icons/react/ssr'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getFooter } from '@/lib/api'
@@ -69,7 +69,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 href={telHref(h.phone)}
                 className="group flex min-h-11 items-center gap-2 transition-opacity hover:opacity-70"
               >
-                <PhoneCall className="h-3.5 w-3.5 text-black/75 shrink-0" aria-hidden="true" />
+                <Phone size={20} className="text-black/75 shrink-0" aria-hidden="true" />
                 <span className="t-label text-black/65">{h.label}</span>
                 <span className="border-b border-black/30 font-mono text-sm font-bold text-black group-hover:border-black">
                   {h.phone}
@@ -94,7 +94,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 height={45}
                 className="h-14 w-auto"
               />
-              <span className="text-lg font-black text-white ">
+              <span className="text-lg font-bold text-white ">
                 LPN Foundation
               </span>
             </div>
@@ -133,11 +133,11 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
               {isThai ? 'สำนักงานใหญ่ประเทศไทย' : 'Thailand Headquarters'}
             </h3>
             <address className="mt-5 flex items-start gap-2.5 text-sm leading-relaxed text-white/70 not-italic">
-              <MapPin className="h-4 w-4 text-brand-yellow shrink-0 mt-1" aria-hidden="true" />
+              <MapPin size={20} className="text-brand-yellow shrink-0 mt-0.5" aria-hidden="true" />
               <span>{isThai ? OFFICE.addressTh : OFFICE.addressEn}</span>
             </address>
             <p className="mt-3 flex items-center gap-2.5 font-mono text-sm text-white/85">
-              <Phone className="h-4 w-4 text-brand-yellow shrink-0" aria-hidden="true" />
+              <Phone size={20} className="text-brand-yellow shrink-0" aria-hidden="true" />
               <span>{isThai ? OFFICE.phoneTh : OFFICE.phoneEn}</span>
             </p>
             <ul className="mt-3 grid gap-2.5 text-sm">
@@ -147,7 +147,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                     href={`mailto:${e}`}
                     className="inline-flex min-h-11 items-center gap-2.5 font-mono text-white/70 transition-colors hover:text-brand-yellow"
                   >
-                    <Mail className="h-4 w-4 text-brand-yellow shrink-0" aria-hidden="true" />
+                    <EnvelopeSimple size={20} className="text-brand-yellow shrink-0" aria-hidden="true" />
                     <span>{e}</span>
                   </a>
                 </li>

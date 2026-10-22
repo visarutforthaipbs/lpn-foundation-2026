@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
-import { Globe } from 'lucide-react'
+import { GlobeHemisphereEast } from '@phosphor-icons/react/ssr'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getImpactMetrics, getPosts, getReports } from '@/lib/api'
@@ -63,7 +63,7 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
       <Container className="relative z-10 py-16 md:py-24">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow/15 border border-current/30 text-brand-yellow">
-            <Globe className="h-4.5 w-4.5" aria-hidden="true" />
+            <GlobeHemisphereEast size={20} aria-hidden="true" />
           </div>
           <p className="eyebrow text-white/70">{th ? 'ผลการทำงานและรายงาน' : 'Impact & Reports'}</p>
         </div>
@@ -79,7 +79,7 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
       <div className="mt-10 grid gap-5 md:grid-cols-2">{reviewedMetrics.map((metric) => {
         const source = typeof metric.sourceReport === 'object' && metric.sourceReport ? metric.sourceReport.sourceURL : metric.sourceURL
         return <article key={metric.id} className="border-t-4 border-current bg-white p-6">
-          <p className="text-3xl font-black">{metric.value} <span className="text-base">{metric.unit}</span></p>
+          <p className="text-3xl font-bold">{metric.value} <span className="text-base">{metric.unit}</span></p>
           <h3 className="t-h3 mt-4">{metric.label}</h3>
           <p className="mt-2 text-sm font-semibold">{metric.periodLabel}</p>
           <p className="mt-4 text-sm leading-relaxed text-black/75">{metric.definition}</p>
@@ -97,7 +97,7 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
     <Section tone="paper"><Container>
       <SectionHeading eyebrow={th ? 'รายงานประจำปี' : 'Annual report'} title={th ? 'ผลการทำงานปี 2024' : '2024 results'} lede={th ? 'ตัวเลขด้านล่างมาจากรายงานประจำปี 2024 ของ LPN ซึ่งเผยแพร่ในเดือนพฤษภาคม 2025' : 'These figures come from LPN’s 2024 annual report, published in May 2025.'} />
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{metrics.map((m) => <article key={m.label} className="border-t-4 border-current bg-white p-6">
-        <p className="text-4xl font-black tracking-tight">{m.value} <span className="text-base font-bold">{m.unit}</span></p>
+        <p className="text-4xl font-bold tracking-tight">{m.value} <span className="text-base font-bold">{m.unit}</span></p>
         <h3 className="mt-4 text-lg font-bold">{m.label}</h3>
         <p className="mt-3 text-sm leading-relaxed text-black/75">{m.definition}</p>
       </article>)}</div>

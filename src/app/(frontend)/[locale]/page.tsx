@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
-import { BookOpen, LifeBuoy, PhoneCall, Scale } from 'lucide-react'
+import { BookOpen, GraduationCap, Lifebuoy, Phone, Scales } from '@phosphor-icons/react/ssr'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getPosts, getSiteMedia, getImpactMetrics } from '@/lib/api'
@@ -44,7 +44,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'ตอบสนองและคุ้มครอง',
       category: 'ช่วยเหลือตรง',
       body: 'ช่วยแรงงานและครอบครัวเมื่อเผชิญปัญหาค่าจ้าง เอกสาร สุขภาพ ความปลอดภัย หรือการแสวงหาประโยชน์ และประสานช่องทางช่วยเหลือที่เหมาะสม',
-      icon: LifeBuoy,
+      icon: Lifebuoy,
       media: mediaMap.assistanceCentre,
       alt: 'พิธีเปิดศูนย์ช่วยเหลือแรงงานประมงกับผู้แทนหลายหน่วยงาน',
     },
@@ -54,7 +54,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'เสริมความรู้และชุมชน',
       category: 'การศึกษาและชุมชน',
       body: 'สร้างความรู้เรื่องสิทธิ สนับสนุนเยาวชนและครอบครัว และทำงานร่วมกับเครือข่ายแรงงาน เพื่อป้องกันปัญหาก่อนจะรุนแรงขึ้น',
-      icon: BookOpen,
+      icon: GraduationCap,
       media: mediaMap.familyHome,
       alt: 'ผู้หญิงและเด็กนั่งอยู่ด้วยกันในบ้าน',
     },
@@ -64,7 +64,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'เปลี่ยนระบบ',
       category: 'ขับเคลื่อนนโยบาย',
       body: 'นำประสบการณ์ภาคสนามและเสียงแรงงานมาสร้างหลักฐาน ทำงานกับพันธมิตร และผลักดันระบบที่คุ้มครองคนได้ดีขึ้น',
-      icon: Scale,
+      icon: Scales,
       media: mediaMap.trainingCentre,
       alt: 'พิธีเปิดศูนย์ฝึกอบรมและฟื้นฟูโดยผู้แทนหลายหน่วยงาน',
     },
@@ -75,7 +75,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'Respond and protect',
       category: 'Casework',
       body: 'Help workers and families facing problems with pay, documents, health, safety, or exploitation, and connect them with appropriate support.',
-      icon: LifeBuoy,
+      icon: Lifebuoy,
       media: mediaMap.assistanceCentre,
       alt: 'Opening ceremony of a fishermen’s assistance centre',
     },
@@ -85,7 +85,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'Learn and strengthen communities',
       category: 'Education & Community',
       body: 'Build rights knowledge, support young people and families, and work with worker networks so problems can be prevented earlier.',
-      icon: BookOpen,
+      icon: GraduationCap,
       media: mediaMap.familyHome,
       alt: 'A woman and child sitting together at home',
     },
@@ -95,7 +95,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       title: 'Change systems',
       category: 'Systems Change',
       body: 'Turn field experience and worker voice into evidence, partnerships, and practical changes to the systems people rely on.',
-      icon: Scale,
+      icon: Scales,
       media: mediaMap.trainingCentre,
       alt: 'Opening ceremony of a training and rehabilitation centre',
     },
@@ -213,13 +213,13 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         <h2 className="t-h2 mt-3">{th ? 'เริ่มตรงนี้' : 'Start here'}</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Link href="/get-help" className="group flex min-h-40 flex-col justify-between rounded-xl border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
-            <PhoneCall size={38} strokeWidth={1.8} aria-hidden="true" />
-            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-black leading-tight sm:text-2xl">{th ? 'ต้องการความช่วยเหลือ' : 'I need help'} <span aria-hidden="true">→</span></span>
+            <Phone size={40} weight="duotone" className="pictogram-duotone" aria-hidden="true" />
+            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-bold leading-tight sm:text-2xl">{th ? 'ต้องการความช่วยเหลือ' : 'I need help'} <span aria-hidden="true">→</span></span>
             <span className="mt-1 text-sm font-semibold">{th ? 'โทรหา LPN ตามภาษาของคุณ' : 'Call LPN in your language'}</span>
           </Link>
           <a href={RIGHT_GUIDE} className="group flex min-h-40 flex-col justify-between rounded-xl border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
-            <BookOpen size={38} strokeWidth={1.8} aria-hidden="true" />
-            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-black leading-tight sm:text-2xl">{th ? 'อยากรู้สิทธิของฉัน' : 'I want to know my rights'} <span aria-hidden="true">↗</span></span>
+            <BookOpen size={40} weight="duotone" className="pictogram-duotone" aria-hidden="true" />
+            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-bold leading-tight sm:text-2xl">{th ? 'อยากรู้สิทธิของฉัน' : 'I want to know my rights'} <span aria-hidden="true">↗</span></span>
             <span className="mt-1 text-sm font-semibold">{th ? 'เปิดคู่มือรู้สิทธิ' : 'Open the Rights Guide'}</span>
           </a>
         </div>
@@ -377,7 +377,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
           <div className="grid gap-4 sm:grid-cols-3">
             {metrics.map((m) => (
               <div key={m.value} className="border-t-4 border-current bg-white p-6 sm:p-7 shadow-xs">
-                <strong className="block text-4xl sm:text-5xl font-black tracking-tight text-black">{m.value}</strong>
+                <strong className="block text-4xl sm:text-5xl font-bold tracking-tight text-black">{m.value}</strong>
                 <p className="mt-3 text-base sm:text-lg font-bold text-black">{m.label}</p>
                 <p className="mt-1.5 text-xs sm:text-sm text-black/70">{m.detail}</p>
                 {featuredMetrics.length > 0 && m.source && <a href={m.source} className="mt-4 inline-block text-xs font-bold underline underline-offset-4">{th ? 'ดูแหล่งที่มา' : 'View source'}</a>}

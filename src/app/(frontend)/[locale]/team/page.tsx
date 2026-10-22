@@ -178,7 +178,7 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
                       LPN
                     </div>
                   )}
-                  <h3 className="mt-5 text-base font-black tracking-tight text-black">{m.name}</h3>
+                  <h3 className="mt-5 text-base font-bold tracking-tight text-black">{m.name}</h3>
                   {m.role && <div className="t-label mt-1 text-black/70">{m.role}</div>}
                 </article>
               ))}

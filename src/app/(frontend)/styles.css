@@ -1,23 +1,30 @@
 @import 'tailwindcss';
 
 /* ==========================================================================
-   LPN Foundation — design system (HIG retrofit, see docs/design-audit.md)
-   Brand palette is unchanged: black / white / brand-yellow #ffd43b.
-   What changed: yellow now has ONE job (the prominent action, selection,
-   focus); every other colour is a semantic role so Dark Mode follows the
-   system; type floor is 13 px; controls are 44 px; content surfaces are solid.
+   LPN Foundation — design system (LPN One CI, see brand/BRAND.md and
+   docs/design-audit.md). Palette: black / white / ONE yellow #FFC314.
+   Yellow has three jobs (the prominent action, selection, focus); every
+   other colour is a semantic role so Dark Mode follows the system; type
+   floor 13 px, body 17 px; controls 44 px; content surfaces are solid.
    ========================================================================== */
 @theme {
-  /* --- LPN palette (locked) ------------------------------------------ */
+  /* --- LPN One CI palette (locked; brand/tokens/lpn-tokens.css) ---------
+     ONE yellow: #FFC314 (black on it 13.07:1). #FFD43B is retired. */
   --color-black: #000000;
   --color-white: #ffffff;
-  --color-brand-yellow: #ffd43b;
-  --color-brand: #ffd43b;
-  --color-brand-ink: #000000; /* label on a brand fill: 14.7:1 */
+  --color-brand-yellow: #ffc314;
+  --color-brand: #ffc314;
+  --color-brand-pressed: #e6ac00;
+  --color-brand-ink: #000000; /* label on a brand fill — always black, never white */
+  --color-accent: #ffc314;
+  --color-accent-pressed: #e6ac00;
+  --color-on-accent: #000000;
 
   /* --- semantic roles (light values; dark overrides below) ------------ */
   --color-surface: #ffffff;
   --color-surface-secondary: #f5f5f7;
+  --color-surface-tertiary: #ebebef;
+  --color-surface-elevated: #ffffff;
   --color-surface-inverse: #000000;
   --color-surface-inverse-elevated: #1c1c1e;
   --color-label: #0a0a0a;
@@ -29,6 +36,24 @@
   --color-on-inverse-secondary: rgba(255, 255, 255, 0.72);
   --color-on-inverse-separator: rgba(255, 255, 255, 0.16);
 
+  /* --- status (never yellow): fill = icons/badges, ink = text ≥ 4.5:1, tint = row bg */
+  --color-critical: #d70015;
+  --color-critical-ink: #b42318;
+  --color-critical-tint: #fef3f2;
+  --color-high: #e8590c;
+  --color-high-ink: #b54708;
+  --color-high-tint: #fff6ed;
+  --color-medium: #175cd3;
+  --color-medium-ink: #175cd3;
+  --color-medium-tint: #eff4ff;
+  --color-low: #6b6b70;
+  --color-low-ink: #52525b;
+  --color-low-tint: #f4f4f5;
+  --color-success: #12b76a;
+  --color-success-ink: #067647;
+  --color-success-tint: #ecfdf3;
+  --color-emergency: #d70015; /* 191 / 1669 only */
+
   /* --- legacy aliases (older call sites keep compiling) --------------- */
   --color-ink: var(--color-label);
   --color-ink-soft: var(--color-label-secondary);
@@ -36,25 +61,35 @@
   --color-paper: var(--color-surface-secondary);
   --color-background: var(--color-surface);
   --color-foreground: var(--color-label);
-  --color-primary: #ffd43b;
-  --color-primary-foreground: #000000;
+  --color-primary: var(--color-brand);
+  --color-primary-foreground: var(--color-brand-ink);
   --color-border: var(--color-separator);
   --color-muted: var(--color-surface-secondary);
 
+  --radius-control: 8px; /* buttons, inputs */
   --radius-card: 12px;
-  --radius-control: 8px;
+  --radius-sheet: 16px; /* bottom sheets, modals */
+  --radius-pill: 999px;
 
-  /* Small end of the Tailwind scale, lifted one step: DB Helvethaica X draws
-     ~20 % smaller than system fonts, so 13 px is the real caption floor. */
+  /* Type scale: normal Tailwind sizes. IBM Plex Sans Thai sits on the standard
+     scale (no size lift). Two brand overrides: 13 px caption floor, 17 px body. */
   --text-xs: 0.8125rem;
   --text-xs--line-height: 1.5;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.7;
 
+  /* IBM Plex superfamily (SIL OFL), self-hosted via next/font/local in layout.tsx. */
   --font-sans:
-    var(--font-latin), var(--font-thai), 'DB Helvethaica X', ui-sans-serif, system-ui, -apple-system,
-    sans-serif;
+    var(--font-latin), var(--font-thai), 'IBM Plex Sans', 'IBM Plex Sans Thai', ui-sans-serif,
+    system-ui, -apple-system, sans-serif;
   --font-heading:
-    var(--font-latin), var(--font-thai), 'DB Helvethaica X', ui-sans-serif, system-ui, -apple-system,
-    sans-serif;
+    var(--font-latin), var(--font-thai), 'IBM Plex Sans', 'IBM Plex Sans Thai', ui-sans-serif,
+    system-ui, -apple-system, sans-serif;
+  /* `font-reading` utility: Looped Thai cut for long reads (next/font sets --font-thai-reading on <html>). */
+  --font-reading:
+    var(--font-latin), var(--font-thai-reading), 'IBM Plex Sans Thai Looped', var(--font-thai),
+    system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
 /* Dark appearance follows the system — no in-app toggle (HIG: Dark Mode).
@@ -63,6 +98,8 @@
   :root {
     --color-surface: #000000;
     --color-surface-secondary: #1c1c1e;
+    --color-surface-tertiary: #2c2c2e;
+    --color-surface-elevated: #1c1c1e;
     --color-surface-inverse: #1c1c1e;
     --color-surface-inverse-elevated: #2c2c2e;
     --color-label: #f5f5f7;
@@ -73,6 +110,21 @@
     --color-on-inverse: #f5f5f7;
     --color-on-inverse-secondary: rgba(245, 245, 247, 0.72);
     --color-on-inverse-separator: rgba(255, 255, 255, 0.16);
+    --color-critical: #ff453a;
+    --color-critical-ink: #ff8a80;
+    --color-critical-tint: #3a1210;
+    --color-high: #ff9f0a;
+    --color-high-ink: #ffb35c;
+    --color-high-tint: #3a2410;
+    --color-medium: #4c8dff;
+    --color-medium-ink: #84adff;
+    --color-medium-tint: #10203a;
+    --color-low: #8e8e93;
+    --color-low-ink: #c7c7cc;
+    --color-low-tint: #2c2c2e;
+    --color-success: #32d74b;
+    --color-success-ink: #6ce9a6;
+    --color-success-tint: #0f2e1c;
   }
 }
 
@@ -86,6 +138,9 @@ body {
   background: var(--color-surface);
   color: var(--color-label);
   font-family: var(--font-sans);
+  /* HIG Body 17 px; Thai body leading 1.7 (brand rule 5). */
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
 }
 
 h1,
@@ -119,7 +174,7 @@ p {
 .card :focus-visible,
 .tactile-well :focus-visible {
   outline-color: var(--color-label);
-  box-shadow: 0 0 0 3px rgba(255, 212, 59, 0.85);
+  box-shadow: 0 0 0 3px rgba(255, 195, 20, 0.85);
 }
 
 /* Skip link for keyboard users. */
@@ -150,7 +205,7 @@ p {
  */
 :lang(th) {
   letter-spacing: normal !important;
-  line-height: 1.75;
+  line-height: 1.7;
 }
 :lang(th) h1,
 :lang(th) h2,
@@ -176,7 +231,7 @@ p {
 @layer components {
   .t-display {
     font-family: var(--font-heading);
-    font-weight: 900;
+    font-weight: 700;
     font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
     line-height: 1.03;
     letter-spacing: -0.022em;
@@ -184,7 +239,7 @@ p {
 
   .t-display-sm {
     font-family: var(--font-heading);
-    font-weight: 900;
+    font-weight: 700;
     font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
     line-height: 1.06;
     letter-spacing: -0.02em;
@@ -192,7 +247,7 @@ p {
 
   .t-h2 {
     font-family: var(--font-heading);
-    font-weight: 800;
+    font-weight: 700;
     font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
     line-height: 1.12;
     letter-spacing: -0.015em;
@@ -265,12 +320,12 @@ p {
     border-color: var(--color-brand);
   }
   .btn-primary:hover {
-    background: #f2c62f;
-    border-color: #f2c62f;
+    background: color-mix(in srgb, var(--color-brand) 90%, #000);
+    border-color: color-mix(in srgb, var(--color-brand) 90%, #000);
   }
   .btn-primary:active {
-    background: #e6b923;
-    border-color: #e6b923;
+    background: var(--color-brand-pressed);
+    border-color: var(--color-brand-pressed);
   }
 
   /* Secondary (outline) on inverse surfaces. */
@@ -525,7 +580,7 @@ p {
   /* Stat figure — numbers are ink, never accent. */
   .stat-value {
     font-family: var(--font-heading);
-    font-weight: 800;
+    font-weight: 700;
     font-size: clamp(1.75rem, 1.45rem + 1.3vw, 2.6rem);
     line-height: 1;
     letter-spacing: -0.015em;
@@ -540,6 +595,14 @@ p {
     font-size: 1.0625rem;
     line-height: 1.8;
     color: var(--color-label-secondary);
+  }
+  /* Thai long-form reading uses the Looped cut (brand rule 5); headings stay loopless. */
+  :lang(th) .prose-lpn,
+  .prose-lpn:lang(th) {
+    font-family: var(--font-reading);
+  }
+  :lang(th) .prose-lpn :where(h2, h3, h4) {
+    font-family: var(--font-heading);
   }
   .prose-lpn :where(h2) {
     @apply mt-12 mb-4 text-2xl font-bold;
@@ -581,6 +644,16 @@ p {
   .prose-lpn :where(img) {
     @apply my-8 rounded-xl;
   }
+}
+
+/* ==========================================================================
+   Phosphor duotone pictograms (brand rule 10): the second layer is the brand
+   yellow, not a 20 % tint. Only on topic/programme pictograms ≥ 32 px on
+   neutral surfaces — never inside a status badge or on a yellow button.
+   ========================================================================== */
+.pictogram-duotone path:first-of-type {
+  fill: var(--color-brand);
+  opacity: 1;
 }
 
 /* ==========================================================================
@@ -652,4 +725,5 @@ p {
     scroll-behavior: auto !important;
   }
 }
+
 

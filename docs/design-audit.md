@@ -267,3 +267,57 @@ Dark captures now differ from light (system `prefers-color-scheme` honoured).
 
 Relabels (editorial, listed for the owner): the two in fix 7 only. No navigation
 destinations changed.
+
+---
+
+## One CI migration (2026-10-22, branch `design/one-ci`)
+
+Applies the shared **LPN One CI** (`../brand/BRAND.md`, `../brand/tokens/lpn-tokens.css`)
+on top of the HIG retrofit above. Nothing about navigation or copy changed.
+
+| Area | Before (`design/hig-revamp`) | After (`design/one-ci`) |
+|---|---|---|
+| Yellow | `#ffd43b` (hover `#f2c62f`, active `#e6b923`) | **`#FFC314`** (`--color-brand`; hover brand·90 % black, pressed `#E6AC00`); focus halo `rgba(255,195,20,.85)` |
+| Thai font | DB Helvethaica X (unlicensed, `public/fonts/dbhelvethaicax*.woff2`) | **IBM Plex Sans Thai** 400/500/600/700 + **IBM Plex Sans Thai Looped** 400/600/700 for `.prose-lpn` on `:lang(th)` — SIL OFL, self-hosted |
+| Latin font | IBM Plex Sans via `next/font/google` | IBM Plex Sans 400–700 via `next/font/local` (no Google request) |
+| Type scale | `--text-xs` 13 px (small end lifted for the condensed Thai face) | normal Tailwind scale; `--text-xs` 13 px floor kept, **`--text-base` 17 px / 1.7** (body), Thai body lh 1.75 → 1.7; heading weights 800/900 → 700 (Plex ships 400–700; `font-black` → `font-bold` at 16 call sites) |
+| Icons | `lucide-react` (31 names, 11 files) | **`@phosphor-icons/react`** (`/ssr` entry in server components) per `icons.json`: hotline→`Phone`, menu→`List`, close→`X`, next→`CaretRight`, back→`ArrowLeft`, rescue→`Lifebuoy`, education→`GraduationCap`, rights→`Scales`, unpaid-wages→`HandCoins`, confiscated-docs→`IdentificationCard`, health→`Heartbeat`, global-impact→`GlobeHemisphereEast`, language→`Translate`, audit→`ClipboardText`, employer→`Buildings`, lock→`Lock`, … 20 px in buttons/strips, 24 px nav toggle, `fill` when selected (donate channel), `duotone` + `.pictogram-duotone` (yellow second layer) on ≥ 36 px topic pictograms on neutral surfaces only |
+| Pictograms | 5 × 2019 PNGs (`public/icons/*-black.png`, `*-white.png`, unreferenced) | Phosphor duotone SVGs `public/icons/{advocacy,education,global-impact,rescue,watchdog}.svg` |
+| Tokens | surface/label/separator roles | + `surface-tertiary`, `surface-elevated`, `accent[-pressed]`, `on-accent`, status `critical/high/medium/low/success` (`-ink`, `-tint`, dark overrides), `emergency`, `radius-sheet` 16, `radius-pill`, `--font-mono` IBM Plex Mono |
+
+### Measured (same 11 routes × 390/1280 × light/dark, dev server, `hig_audit_matrix.py --wait 4000`)
+
+| Route | width | hit-target fails | text < 13 px | contrast fails | body |
+|---|---|---|---|---|---|
+| about | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| about | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| blog | 390 | 0 → **0** | 0 → **0** | 0 → **11**¹ | 16px → 17px |
+| blog | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| contact | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| contact | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| donate | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| donate | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| gethelp | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| gethelp | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| home | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| home | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| home_en | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| home_en | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| impact | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| impact | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| ourwork | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| ourwork | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| post | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| post | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| stories | 390 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+| stories | 1280 | 0 → **0** | 0 → **0** | 0 → **0** | 16px → 17px |
+
+Before: `TOTALS {"captures": 44, "target_fails": 0, "low_contrast": 0, "small_text": 0, "h1_not_1": 0}`
+After: `TOTALS {"captures": 44, "target_fails": 0, "low_contrast": 11, "small_text": 0, "h1_not_1": 0}`
+
+¹ The 11 are all `rgb(0,0,238)` (browser default link blue) footer links on the
+blog 390/dark capture — the dev-server CSS chunk had not arrived when the page was
+measured (same artifact noted in the HIG section above). A stable re-capture of
+`/th/blog` alone: `TOTALS {"captures": 4, "target_fails": 0, "low_contrast": 0, "small_text": 0, "h1_not_1": 0}`.
+All 22 dark captures differ from their light twin. Thai headings at 390 px clear
+tone marks (h1 40 px / lh 58 px, Plex Thai; visually checked on home, get-help, post).

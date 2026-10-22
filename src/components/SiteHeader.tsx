@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Phone, PhoneCall } from 'lucide-react'
+import { Phone } from '@phosphor-icons/react/ssr'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getHeader, getFooter } from '@/lib/api'
@@ -52,7 +52,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               href={telHref(primaryHotline.phone)}
               className="group flex min-h-11 items-center gap-2 text-white/70 transition-colors hover:text-white"
             >
-              <PhoneCall className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <Phone size={20} className="shrink-0" aria-hidden="true" />
               <span className="t-label">{isThai ? 'สายด่วน' : 'Hotline'}</span>
               <span className="font-mono text-sm text-white/85 group-hover:text-white">
                 {primaryHotline.phone}
@@ -99,7 +99,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               aria-label={isThai ? 'ติดต่อเรา' : 'Contact'}
               className="tactile-icon-btn h-11 w-11 text-white/80 hover:text-white"
             >
-              <Phone className="h-4 w-4" aria-hidden="true" />
+              <Phone size={20} aria-hidden="true" />
             </Link>
 
             {/* Outline here: the page hero owns the one prominent (yellow) action. */}

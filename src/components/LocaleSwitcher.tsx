@@ -28,7 +28,7 @@ export function LocaleSwitcher() {
             aria-label={loc === 'th' ? 'สลับเป็นภาษาไทย' : 'Switch to English'}
             className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${
               loc === active
-                ? 'text-brand-yellow font-black'
+                ? 'text-brand-yellow font-bold'
                 : 'text-white/75 transition-colors hover:text-white'
             }`}
           >

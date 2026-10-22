@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
-import { FileCheck, Languages, ShieldCheck, TrendingUp, Users } from 'lucide-react'
+import { ClipboardText, ShieldCheck, Translate, TrendUp, UsersThree } from '@phosphor-icons/react/ssr'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage, getTeam, getSiteMedia } from '@/lib/api'
@@ -67,16 +67,16 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
 
   const values = th ? [
     { icon: ShieldCheck, title: 'ความปลอดภัยก่อนสิ่งอื่น', body: 'ช่องทางติดต่อที่ตรวจสอบแล้ว ความคาดหวังที่ตรงตามจริง และไม่บังคับให้กรอกแบบฟอร์มหรือเปิดเผยข้อมูลก่อนได้รับความช่วยเหลือ' },
-    { icon: Users, title: 'ผู้คนที่มีเสียงและทางเลือก', body: 'นำเสนอแรงงานในฐานะผู้มีศักยภาพและเจตจำนง เรื่องราวต้องผ่านความยินยอม และไม่ใช้ภาพความทุกข์ทรมานเป็นภาพหลักขององค์กร' },
-    { icon: FileCheck, title: 'ข้อมูลที่มีบริบท', body: 'ตัวเลขผลการทำงานระบุช่วงเวลา นิยาม และแหล่งที่มา ความสำเร็จในอดีตระบุปีอย่างชัดเจน งานวิจัยไม่ถูกนำเสนอเป็นผลลัพธ์ที่ LPN สร้าง' },
-    { icon: Languages, title: 'ภาษาท้องถิ่นคือส่วนหนึ่งของบริการ', body: 'หน้าเว็บไทยและอังกฤษสมบูรณ์ คำแนะนำสำคัญในภาษาพม่า เขมร และลาว ต้องผ่านการตรวจโดยเจ้าของภาษา' },
-    { icon: TrendingUp, title: 'หนึ่งทฤษฎีการเปลี่ยนแปลงที่เชื่อมกัน', body: 'งานช่วยเหลือโดยตรง ความรู้ชุมชน และการเปลี่ยนแปลงเชิงระบบ เสริมกัน โดยไม่อ้างว่าทุกกรณีนำไปสู่การเปลี่ยนแปลงนโยบาย' },
+    { icon: UsersThree, title: 'ผู้คนที่มีเสียงและทางเลือก', body: 'นำเสนอแรงงานในฐานะผู้มีศักยภาพและเจตจำนง เรื่องราวต้องผ่านความยินยอม และไม่ใช้ภาพความทุกข์ทรมานเป็นภาพหลักขององค์กร' },
+    { icon: ClipboardText, title: 'ข้อมูลที่มีบริบท', body: 'ตัวเลขผลการทำงานระบุช่วงเวลา นิยาม และแหล่งที่มา ความสำเร็จในอดีตระบุปีอย่างชัดเจน งานวิจัยไม่ถูกนำเสนอเป็นผลลัพธ์ที่ LPN สร้าง' },
+    { icon: Translate, title: 'ภาษาท้องถิ่นคือส่วนหนึ่งของบริการ', body: 'หน้าเว็บไทยและอังกฤษสมบูรณ์ คำแนะนำสำคัญในภาษาพม่า เขมร และลาว ต้องผ่านการตรวจโดยเจ้าของภาษา' },
+    { icon: TrendUp, title: 'หนึ่งทฤษฎีการเปลี่ยนแปลงที่เชื่อมกัน', body: 'งานช่วยเหลือโดยตรง ความรู้ชุมชน และการเปลี่ยนแปลงเชิงระบบ เสริมกัน โดยไม่อ้างว่าทุกกรณีนำไปสู่การเปลี่ยนแปลงนโยบาย' },
   ] : [
     { icon: ShieldCheck, title: 'Safety before everything', body: 'Verified contact routes, realistic expectations, and no form, account, or data disclosure required before someone can get help.' },
-    { icon: Users, title: 'People with voices and choices', body: 'Workers are shown with agency. Stories are consented, and distress imagery is not our default identity.' },
-    { icon: FileCheck, title: 'Claims with context', body: 'Outcome figures carry a period, definition, and source. Historic achievements stay clearly dated, and research is not presented as LPN-delivered outcomes.' },
-    { icon: Languages, title: 'Local language is part of service', body: 'Thai and English pages are complete, and core help instructions in Burmese, Khmer, and Lao require native-speaker review before publication.' },
-    { icon: TrendingUp, title: 'One connected theory of change', body: 'Direct response, community knowledge, and system change reinforce each other — without implying every case creates policy change.' },
+    { icon: UsersThree, title: 'People with voices and choices', body: 'Workers are shown with agency. Stories are consented, and distress imagery is not our default identity.' },
+    { icon: ClipboardText, title: 'Claims with context', body: 'Outcome figures carry a period, definition, and source. Historic achievements stay clearly dated, and research is not presented as LPN-delivered outcomes.' },
+    { icon: Translate, title: 'Local language is part of service', body: 'Thai and English pages are complete, and core help instructions in Burmese, Khmer, and Lao require native-speaker review before publication.' },
+    { icon: TrendUp, title: 'One connected theory of change', body: 'Direct response, community knowledge, and system change reinforce each other — without implying every case creates policy change.' },
   ]
 
   // Dated history — PRD: historical accomplishments remain clearly dated.
