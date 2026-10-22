@@ -125,6 +125,10 @@ a Hermes shell (the Hermes venv poisons tsx/node-gyp otherwise).
   (Cloudflare). Pre-cutover gate list: `docs/PRD-IMPLEMENTATION-STATUS.md` §
   "Before public-domain cutover" (hotline confirmation, bank details, story
   consent, usability tests). Cutover steps: `docs/DEPLOY.md` §5. Owner action.
+- **Font licence risk** — the site ships DB Helvethaica X (`public/fonts/`), but LPN holds
+  no licence (owner, One CI review). Replace with IBM Plex Sans Thai (SIL OFL) per the
+  consolidated CI in `~/Documents/ChatGPT/lpn-brand/` (BRAND.md, tokens/, assets/fonts/).
+  Same work: yellow `#ffd43b` → `#FFC314`, icons → Phosphor. Goes through the HIG matrix.
 - **HIG design revamp** (`docs/design-audit.md`, branch `design/hig-revamp`):
   before 56 %; after-matrix measured 0 small-text / 2 target / 2 contrast fails
   with two last fixes unverified. Branch may still be uncommitted on disk —
