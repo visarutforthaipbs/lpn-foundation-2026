@@ -1,5 +1,7 @@
 # AGENTS.md — LPN Foundation website (operating manual)
 
+> Part of the LPN product family — module map: `~/Documents/ChatGPT/LPN/README.md` (website = M1; intake/Right Guide/brand are siblings).
+
 > Read this first, every session. It is the source of truth for how the site is
 > built, shipped, and kept healthy. `PROJECT.md` (May 2026) and `current.md` are
 > historical handoffs — trust this file where they disagree. When you change how
@@ -14,7 +16,7 @@ the sole editor and the developer's client; LPN staff review content.
 
 | Thing | Where |
 |---|---|
-| Repo | `/Users/visarutsankham/Documents/ChatGPT/LPN-website` |
+| Repo | `/Users/visarutsankham/Documents/ChatGPT/LPN/website` |
 | GitHub | `visarutforthaipbs/lpn-foundation-2026` — `main` = production |
 | Vercel project | `lpn-foundation-2026` (team `visarutforthaipbs-projects`, id `prj_24MUqLWExDawMuLv5icZSeAtlDOQ`) |
 | Live Vercel URL | `https://lpn-foundation-2026.vercel.app` (`/th`, `/en`, `/admin`) |
@@ -127,7 +129,7 @@ a Hermes shell (the Hermes venv poisons tsx/node-gyp otherwise).
   consent, usability tests). Cutover steps: `docs/DEPLOY.md` §5. Owner action.
 - **Font licence risk** — the site ships DB Helvethaica X (`public/fonts/`), but LPN holds
   no licence (owner, One CI review). Replace with IBM Plex Sans Thai (SIL OFL) per the
-  consolidated CI in `~/Documents/ChatGPT/lpn-brand/` (BRAND.md, tokens/, assets/fonts/).
+  consolidated CI in `~/Documents/ChatGPT/LPN/brand/` (BRAND.md, tokens/, assets/fonts/).
   Same work: yellow `#ffd43b` → `#FFC314`, icons → Phosphor. Goes through the HIG matrix.
 - **HIG design revamp** (`docs/design-audit.md`, branch `design/hig-revamp`):
   before 56 %; after-matrix measured 0 small-text / 2 target / 2 contrast fails

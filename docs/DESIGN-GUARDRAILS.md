@@ -1,7 +1,7 @@
 # LPN Design Guardrails (Brand + Signal 39)
 
 This project follows two systems at once:
-- LPN visual brand package from public/_ LPN Design Package - Full
+- LPN visual brand package: `~/Documents/ChatGPT/LPN/brand/source/AGO_001-brand-package/` (not in git); consolidated CI: `~/Documents/ChatGPT/LPN/brand/`
 - Signal 39 cognitive design philosophy from 39signel-SKILL.md
 
 Use these rules for all pages, sections, blocks, and components.
