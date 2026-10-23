@@ -41,33 +41,6 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
     getSiteMedia(),
   ])
 
-  const audiences = th ? [
-    {
-      title: 'แรงงานและครอบครัว',
-      body: '“มีใครช่วยเรื่องนี้ได้ไหม อย่างปลอดภัย และในภาษาที่เราเข้าใจ?” — LPN ช่วยเหลือเรื่องค่าจ้าง เอกสาร สุขภาพ ความปลอดภัย และการศึกษาของลูกหลาน',
-    },
-    {
-      title: 'ผู้สนับสนุนและพันธมิตร',
-      body: '“ตอนนี้ LPN ทำอะไร มีหลักฐานอะไร และร่วมสนับสนุนอย่างรับผิดชอบได้อย่างไร?” — เรามีผลการทำงานระบุช่วงเวลาและแหล่งที่มา พร้อมช่องทางสนับสนุนที่ตรวจสอบแล้ว',
-    },
-    {
-      title: 'นักวิจัยและสื่อมวลชน',
-      body: '“LPN เรียนรู้อะไรจากภาคสนาม?” — งานวิจัยและประสบการณ์กรณีเผยให้เห็นจุดที่ระบบล้มเหลว และแนวทางปรับปรุงที่ทำได้จริง',
-    },
-  ] : [
-    {
-      title: 'Workers and families',
-      body: '“Can someone help me safely, in a language I understand?” — LPN helps with pay, documents, health, safety, and children’s education.',
-    },
-    {
-      title: 'Supporters and partners',
-      body: '“What does LPN do now, what evidence supports it, and how can I contribute responsibly?” — dated results with sources, and verified ways to give.',
-    },
-    {
-      title: 'Researchers and journalists',
-      body: '“What does LPN know from the field?” — research and case experience showing where systems fail and what practical changes could help.',
-    },
-  ]
 
   const values = th ? [
     { icon: ShieldCheck, title: 'ความปลอดภัยก่อนสิ่งอื่น', body: 'ช่องทางติดต่อที่ตรวจสอบแล้ว ความคาดหวังที่ตรงตามจริง และไม่บังคับให้กรอกแบบฟอร์มหรือเปิดเผยข้อมูลก่อนได้รับความช่วยเหลือ' },
@@ -206,22 +179,6 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
           </div>
         </div>
       </section>
-
-      {/* WHO LPN SERVES */}
-      <Section tone="light"><Container>
-        <SectionHeading
-          eyebrow={th ? 'เราทำงานเพื่อใคร' : 'Who LPN serves'}
-          title={th ? 'ทุกหน้าของเว็บนี้ตอบคำถามสองคำถามที่เท่าเทียมกัน' : 'Every page answers two equally important questions.'}
-        />
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {audiences.map((a) => (
-            <article key={a.title} className="border border-black/15 bg-paper p-7">
-              <h3 className="t-h3">{a.title}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-black/75">{a.body}</p>
-            </article>
-          ))}
-        </div>
-      </Container></Section>
 
       {/* VALUES */}
       <Section tone="paper"><Container>
