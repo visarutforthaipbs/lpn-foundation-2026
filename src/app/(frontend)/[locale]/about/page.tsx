@@ -5,6 +5,7 @@ import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage, getTeam, getSiteMedia } from '@/lib/api'
 import { TeamCard } from '@/components/TeamCard'
+import { HistoryTimeline, type Milestone } from '@/components/HistoryTimeline'
 
 // Shown in the Leadership section with their bios, so the Team grid skips them (names in either locale).
 const LEADER_NAMES = new Set(['ปฏิมา ตั้งปรัชญากูล', 'Patima Tungpuchayakul', 'สมพงค์ สระแก้ว', 'Sompong Srakaew'])
@@ -84,20 +85,29 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
   ]
 
   // Dated history — PRD: historical accomplishments remain clearly dated.
-  const timeline = th ? [
-    { year: '2547 (2004)', body: 'ก่อตั้งเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน (LPN) โดยปฏิมา ตั้งปรัชญากูล และสมพงษ์ สระแก้ว เพื่อเรียกร้องความเป็นธรรมให้แรงงานข้ามชาติในไทย' },
-    { year: '2551 (2008)', body: 'หลักฐานจากการทำงานร่วมกับแรงงาน มีส่วนผลักดันการแก้ไขพระราชบัญญัติป้องกันและปราบปรามการค้ามนุษย์ เพิ่มโทษผู้กระทำผิดและนายหน้า' },
-    { year: '2557–2559 (2014–2016)', body: 'ปฏิบัติการช่วยเหลือลูกเรือประมงที่ถูกทิ้งบนเกาะในอินโดนีเซีย ร่วมกับสื่อมวลชน IOM และรัฐบาลอินโดนีเซีย — ช่วยเหลือลูกเรือกว่า 2,000 คน' },
-    { year: '2560 (2017)', body: 'ปฏิมา ตั้งปรัชญากูล ได้รับการเสนอชื่อชิงรางวัลโนเบลสาขาสันติภาพ จากการทำงานเพื่อยุติแรงงานทาสในอุตสาหกรรมประมง' },
-    { year: '2562 (2019)', body: 'สารคดี Ghost Fleet ออกฉาย บันทึกภารกิจช่วยเหลือลูกเรือประมงของ LPN' },
-    { year: 'ปัจจุบัน', body: 'งานของ LPN ครอบคลุมการช่วยเหลือรายกรณี การศึกษาและเยาวชน เสียงแรงงาน งานวิจัย และการผลักดันนโยบาย — โดยมีสิทธิของแรงงานข้ามชาติเป็นศูนย์กลาง' },
+  const timeline: Milestone[] = th ? [
+    { from: 2004, label: '2547', kind: 'founding', title: 'ก่อตั้ง LPN', body: 'ก่อตั้งเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน (LPN) โดยปฏิมา ตั้งปรัชญากูล และสมพงษ์ สระแก้ว เพื่อเรียกร้องความเป็นธรรมให้แรงงานข้ามชาติในไทย' },
+    { from: 2008, label: '2551', kind: 'law', title: 'แก้กฎหมายค้ามนุษย์', body: 'หลักฐานจากการทำงานร่วมกับแรงงาน มีส่วนผลักดันการแก้ไขพระราชบัญญัติป้องกันและปราบปรามการค้ามนุษย์ เพิ่มโทษผู้กระทำผิดและนายหน้า' },
+    { from: 2014, to: 2016, label: '2557–2559', kind: 'rescue', title: 'ช่วยลูกเรือกว่า 2,000 คน', body: 'ปฏิบัติการช่วยเหลือลูกเรือประมงที่ถูกทิ้งบนเกาะในอินโดนีเซีย ร่วมกับสื่อมวลชน IOM และรัฐบาลอินโดนีเซีย — ช่วยเหลือลูกเรือกว่า 2,000 คน' },
+    { from: 2017, label: '2560', kind: 'recognition', title: 'เสนอชื่อชิงรางวัลโนเบล', body: 'ปฏิมา ตั้งปรัชญากูล ได้รับการเสนอชื่อชิงรางวัลโนเบลสาขาสันติภาพ จากการทำงานเพื่อยุติแรงงานทาสในอุตสาหกรรมประมง' },
+    { from: 2019, label: '2562', kind: 'film', title: 'สารคดี Ghost Fleet', body: 'สารคดี Ghost Fleet ออกฉาย บันทึกภารกิจช่วยเหลือลูกเรือประมงของ LPN' },
+    { from: 2026, label: 'ปัจจุบัน', kind: 'today', title: 'งานครบทุกด้าน', body: 'งานของ LPN ครอบคลุมการช่วยเหลือรายกรณี การศึกษาและเยาวชน เสียงแรงงาน งานวิจัย และการผลักดันนโยบาย — โดยมีสิทธิของแรงงานข้ามชาติเป็นศูนย์กลาง' },
   ] : [
-    { year: '2004', body: 'The Labour Rights Promotion Network (LPN) is founded by Patima Tungpuchayakul and Sompong Srakaew to seek justice for migrant workers in Thailand.' },
-    { year: '2008', body: 'Evidence from LPN casework contributes to the amendment of Thailand’s Anti-Trafficking in Persons Act, increasing penalties for traffickers and brokers.' },
-    { year: '2014–2016', body: 'Rescue operations for fishers stranded on Indonesian islands, with journalists, IOM, and the Indonesian government — more than 2,000 fishers brought to safety.' },
-    { year: '2017', body: 'Patima Tungpuchayakul is nominated for the Nobel Peace Prize for work ending slavery in the fishing industry.' },
-    { year: '2019', body: 'The documentary “Ghost Fleet” is released, recording LPN’s fisher rescue missions.' },
-    { year: 'Today', body: 'LPN’s work spans direct casework, education and youth, worker voice, research, and advocacy — with migrant workers’ rights at the centre.' },
+    { from: 2004, label: '2004', kind: 'founding', title: 'LPN is founded', body: 'The Labour Rights Promotion Network (LPN) is founded by Patima Tungpuchayakul and Sompong Srakaew to seek justice for migrant workers in Thailand.' },
+    { from: 2008, label: '2008', kind: 'law', title: 'Anti-trafficking law amended', body: 'Evidence from LPN casework contributes to the amendment of Thailand’s Anti-Trafficking in Persons Act, increasing penalties for traffickers and brokers.' },
+    { from: 2014, to: 2016, label: '2014–2016', kind: 'rescue', title: '2,000+ fishers rescued', body: 'Rescue operations for fishers stranded on Indonesian islands, with journalists, IOM, and the Indonesian government — more than 2,000 fishers brought to safety.' },
+    { from: 2017, label: '2017', kind: 'recognition', title: 'Nobel Peace Prize nomination', body: 'Patima Tungpuchayakul is nominated for the Nobel Peace Prize for work ending slavery in the fishing industry.' },
+    { from: 2019, label: '2019', kind: 'film', title: '“Ghost Fleet” released', body: 'The documentary “Ghost Fleet” is released, recording LPN’s fisher rescue missions.' },
+    { from: 2026, label: 'Today', kind: 'today', title: 'The whole picture', body: 'LPN’s work spans direct casework, education and youth, worker voice, research, and advocacy — with migrant workers’ rights at the centre.' },
+  ]
+  const historyStats = th ? [
+    { value: `${2026 - 2004} ปี`, label: 'ทำงานเคียงข้างแรงงานข้ามชาติ ตั้งแต่ 2547' },
+    { value: '2,000+', label: 'ลูกเรือประมงได้รับการช่วยเหลือ 2557–2559' },
+    { value: '2560', label: 'ผู้อำนวยการได้รับการเสนอชื่อชิงรางวัลโนเบลสันติภาพ' },
+  ] : [
+    { value: `${2026 - 2004} years`, label: 'alongside migrant workers, since 2004' },
+    { value: '2,000+', label: 'fishers rescued, 2014–2016' },
+    { value: '2017', label: 'Nobel Peace Prize nomination for our director' },
   ]
 
   const leaders = th ? [
@@ -245,14 +255,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
             ? 'ความกล้าหาญในการช่วยเหลือกลางทะเลเป็นส่วนสำคัญของประวัติศาสตร์เรา — และเป็นเพียงส่วนหนึ่งของงานทั้งหมด'
             : 'Courageous rescues at sea are an important part of our history — and one part of the whole.'}
         />
-        <ol className="mt-12 grid gap-6">
-          {timeline.map((t) => (
-            <li key={t.year} className="border-l-2 border-current pl-6">
-              <span className="t-label text-current/70">{t.year}</span>
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/85">{t.body}</p>
-            </li>
-          ))}
-        </ol>
+        <HistoryTimeline items={timeline} start={2004} end={2026} stats={historyStats} todayLabel={th ? 'ปัจจุบัน' : 'Today'} yearOffset={th ? 543 : 0} />
         <p className="mt-8 max-w-3xl border-l border-white/25 pl-4 text-xs leading-relaxed text-white/60 italic">
           {th
             ? '* เครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน เปลี่ยนชื่อเป็น มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน (Labour Protection Network) เพื่อสะท้อนชื่อย่อ LPN ที่เป็นที่รู้จัก'
