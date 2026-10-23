@@ -5,6 +5,9 @@ import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage, getTeam, getSiteMedia } from '@/lib/api'
 import { TeamCard } from '@/components/TeamCard'
+
+// Shown in the Leadership section with their bios, so the Team grid skips them (names in either locale).
+const LEADER_NAMES = new Set(['ปฏิมา ตั้งปรัชญากูล', 'Patima Tungpuchayakul', 'สมพงค์ สระแก้ว', 'Sompong Srakaew'])
 import { buildMetadata } from '@/lib/seo'
 import { WixIntegratedCopy } from '@/components/WixIntegratedCopy'
 import { MediaImage } from '@/components/MediaImage'
@@ -102,26 +105,26 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
       name: 'ปฏิมา ตั้งปรัชญากูล',
       role: 'ผู้ร่วมก่อตั้งและผู้อำนวยการ',
       body: 'ผู้ได้รับการเสนอชื่อชิงรางวัลโนเบลสาขาสันติภาพปี 2017 นำงานช่วยเหลือและงานรณรงค์ด้านสิทธิแรงงานประมงในระดับภูมิภาค — เรื่องราวของเธอถูกถ่ายทอดในภาพยนตร์สารคดี Ghost Fleet',
-      media: mediaMap.patima,
+      media: mediaMap.patimaPortrait,
     },
     {
       name: 'สมพงษ์ สระแก้ว',
       role: 'ผู้ร่วมก่อตั้งและที่ปรึกษานโยบาย',
       body: 'นักสังคมสงเคราะห์ผู้ก่อตั้ง LPN ในปี 2547 งานหลักฐานของเขาช่วยผลักดันการแก้ไขกฎหมายต่อต้านการค้ามนุษย์ และยังคงทำงานด้านนโยบายแรงงานและช่วยเหลือแรงงานข้ามชาติ',
-      media: mediaMap.sompong,
+      media: mediaMap.sompongPortrait,
     },
   ] : [
     {
       name: 'Patima Tungpuchayakul',
       role: 'Co-founder & Director',
       body: '2017 Nobel Peace Prize nominee. Leads LPN’s assistance work and regional advocacy for fishers’ rights — featured in the award-winning documentary film Ghost Fleet.',
-      media: mediaMap.patima,
+      media: mediaMap.patimaPortrait,
     },
     {
       name: 'Sompong Srakaew',
       role: 'Co-founder & Policy advisor',
       body: 'The social worker who founded LPN in 2004. His evidence-driven advocacy shaped Thailand’s 2008 anti-trafficking law amendment and continues in labour policy.',
-      media: mediaMap.sompong,
+      media: mediaMap.sompongPortrait,
     },
   ]
 
@@ -265,20 +268,17 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
         />
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {leaders.map((l) => (
-            <article key={l.name} className="flex flex-col border border-black/15 bg-paper p-6 sm:p-8">
-              {l.media && (
-                <div className="relative mb-6 aspect-16/10 w-full overflow-hidden border border-black/10 bg-black/5">
-                  <MediaImage
-                    media={l.media}
-                    alt={l.name}
-                    sizes="(min-width: 768px) 50vw, 100vw"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              )}
-              <h3 className="t-h3">{l.name}</h3>
-              <div className="t-label mt-1.5 text-black/70 font-semibold">{l.role}</div>
-              <p className="mt-4 text-sm leading-relaxed text-black/75 flex-1">{l.body}</p>
+            <article key={l.name} className="grid overflow-hidden rounded-xl border border-black/10 bg-paper sm:grid-cols-[minmax(0,14rem)_1fr]">
+              <div className="relative aspect-[3/4] w-full bg-brand-yellow">
+                {l.media && (
+                  <MediaImage media={l.media} alt={l.name} fill sizes="(min-width: 640px) 14rem, 100vw" className="object-cover object-top" />
+                )}
+              </div>
+              <div className="flex flex-col p-6">
+                <h3 className="t-h3">{l.name}</h3>
+                <div className="t-label mt-1.5 font-semibold text-black/70">{l.role}</div>
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-black/75">{l.body}</p>
+              </div>
             </article>
           ))}
         </div>
@@ -295,7 +295,7 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
         </div>
         {team.length > 0 && (
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {team.filter((m) => m.photo && typeof m.photo !== 'number').map((m) => (
+            {team.filter((m) => m.photo && typeof m.photo !== 'number' && !LEADER_NAMES.has(m.name)).map((m) => (
               <TeamCard key={m.id} member={m} />
             ))}
           </div>
