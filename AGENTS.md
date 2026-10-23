@@ -135,6 +135,28 @@ scripts/mock-intake.mjs` (:3100, always returns `K7Q2M9XD`) — never start the 
 10 s timeout or 5xx the form repeats the CMS-backed hotline channels + `MESSENGER_URL` (`src/lib/content.ts`).
 Quick Exit (`src/components/QuickExitButton.tsx`) renders on get-help only.
 
+## Languages — en / th / my / km / lo (2026-10-24)
+Locales `en`, `th`, `my` (Burmese), `km` (Khmer), `lo` (Lao), default `en`, prefix always (`src/i18n/routing.ts` +
+`payload.config.ts`, migration `20261024_120000_migrant_locales`; my/km/lo fall back to English in Payload). Page copy is
+`tx(locale, thai, english)` (`src/i18n/tx.ts`; client components `useTx()` from `src/i18n/tx-client.tsx` inside
+`<TxProvider>`). **Never add a new `th ? A : B` for text.** On my/km/lo the English value is mapped through
+`src/i18n/drafts/<locale>.json` (key = exact English string); next-intl strings in `messages/{my,km,lo}.json`. These are
+MACHINE DRAFTS pending native-speaker review: while `src/i18n/review.ts` has a locale `false`, its pages carry noindex + a
+bilingual draft notice and stay out of hreflang/sitemap. After any copy change: `pnpm dev` → `python3 scripts/i18n_crawl.py
+--locales my,km,lo` → translate `src/i18n/drafts/_missing.txt` (must end empty) → `python3 scripts/export_translations.py`
+(regenerates `docs/translations/lpn-website-translations.csv`, the one reviewer sheet). Reviewed cells come back with
+`scripts/import_translations.py` (`docs/translations/README.md`). Help-critical copy must never fall back to English:
+`python3 scripts/i18n_english_leftovers.py http://localhost:3000/<loc>/get-help`. News posts stay in their original
+language (badge + notice on my/km/lo). Noto Sans Myanmar/Khmer/Lao load only under `html:lang(my|km|lo)`. Use Latin digits
+(`-u-nu-latn`) for my/km/lo numbers/dates — native digits differ between Node and browser and break hydration.
+
+## Local development DB (2026-10-24)
+`.env.local` points `DATABASE_URL` at a local Postgres clone `lpn_website_dev` (prod Neon lines are commented; backup of
+the prod env at `~/.hermes/profiles/lpn-website/audit/env.local-prod-backup-20261024`). Pages load in ~1 s instead of
+minutes. Content edited locally is NOT live: every change is logged in `~/.hermes/profiles/lpn-website/audit/
+pending-prod-content.md` and replayed on prod at ship time (dump affected rows first). Media still lives in Vercel Blob,
+so local media uploads create real blob files but only local DB rows. Refresh the clone with pg_dump (pg 17) → pg_restore.
+
 ## 7. Open items (keep true)
 
 - **DNS cutover to Vercel not done** — `www.lpnfoundation.org` still serves Wix. 2026-10-23: owner
