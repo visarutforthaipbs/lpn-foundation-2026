@@ -132,7 +132,7 @@ a Hermes shell (the Hermes venv poisons tsx/node-gyp otherwise).
   Wix refuses custom nameservers while the domain is assigned to the Wix site, so the NS change = website
   cutover too (registrar is Network Solutions — NS can also be changed there). Proposed window 25 Oct 02:00–03:00
   Bangkok, conditional on the gate list `docs/PRD-IMPLEMENTATION-STATUS.md` § "Before public-domain cutover".
-  Cutover steps: `docs/DEPLOY.md` §5. Owner action. Progress log: `../intake/pm/OWNER-SETUP-PROGRESS.md`.
+  Cutover steps: `docs/DEPLOY.md` §5; full owner-paced plan A–D: `docs/CUTOVER-PLAN.md`. Progress log: `../intake/pm/OWNER-SETUP-PROGRESS.md`.
 - **One CI SHIPPED** 2026-10-23: PR #3 merged (78b8ffd) — IBM Plex Sans Thai (OFL) replaces DB Helvethaica X, yellow
   `#FFC314`, Phosphor icons. Verified live: `lpn-foundation-2026.vercel.app/th` serves IBMPlexSansThai*.woff2.
   Font-licence risk closed. `design/hig-revamp` was folded into that PR.
