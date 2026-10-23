@@ -127,18 +127,18 @@ a Hermes shell (the Hermes venv poisons tsx/node-gyp otherwise).
 
 ## 7. Open items (keep true)
 
-- **DNS cutover to Vercel not done** — `www.lpnfoundation.org` still serves Wix
-  (Cloudflare). Pre-cutover gate list: `docs/PRD-IMPLEMENTATION-STATUS.md` §
-  "Before public-domain cutover" (hotline confirmation, bank details, story
-  consent, usability tests). Cutover steps: `docs/DEPLOY.md` §5. Owner action.
-- **Font licence risk** — the site ships DB Helvethaica X (`public/fonts/`), but LPN holds
-  no licence (owner, One CI review). Replace with IBM Plex Sans Thai (SIL OFL) per the
-  consolidated CI in `~/Documents/ChatGPT/LPN/brand/` (BRAND.md, tokens/, assets/fonts/).
-  Same work: yellow `#ffd43b` → `#FFC314`, icons → Phosphor. Goes through the HIG matrix.
-- **HIG design revamp** (`docs/design-audit.md`, branch `design/hig-revamp`):
-  before 56 %; after-matrix measured 0 small-text / 2 target / 2 contrast fails
-  with two last fixes unverified. Branch may still be uncommitted on disk —
-  check `git status` before assuming.
+- **DNS cutover to Vercel not done** — `www.lpnfoundation.org` still serves Wix. 2026-10-23: owner
+  created Cloudflare zone `lpnfoundation.org` (Free, PENDING; 15 Wix records copied; NS adi/cody.ns.cloudflare.com).
+  Wix refuses custom nameservers while the domain is assigned to the Wix site, so the NS change = website
+  cutover too (registrar is Network Solutions — NS can also be changed there). Proposed window 25 Oct 02:00–03:00
+  Bangkok, conditional on the gate list `docs/PRD-IMPLEMENTATION-STATUS.md` § "Before public-domain cutover".
+  Cutover steps: `docs/DEPLOY.md` §5. Owner action. Progress log: `../intake/pm/OWNER-SETUP-PROGRESS.md`.
+- **One CI SHIPPED** 2026-10-23: PR #3 merged (78b8ffd) — IBM Plex Sans Thai (OFL) replaces DB Helvethaica X, yellow
+  `#FFC314`, Phosphor icons. Verified live: `lpn-foundation-2026.vercel.app/th` serves IBMPlexSansThai*.woff2.
+  Font-licence risk closed. `design/hig-revamp` was folded into that PR.
+- **Help intake form** (M1 of the LPN intake platform): PR #4 `feat/help-intake-form`, rebased on main, open.
+  Needs Vercel env `NEXT_PUBLIC_INTAKE_URL` + `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (site key `0x4AAAAAAFiesoYJtBQ3kfRB`,
+  public) before merge; posts to the intake API (sev02), never to Payload.
 - 13 of 64 Thai posts have no cover image → grey box in the blog grid.
 - Donate page bank details are withheld in Payload until LPN verifies them.
 - `PROJECT.md` / `current.md` are stale handoffs; this file supersedes them.
