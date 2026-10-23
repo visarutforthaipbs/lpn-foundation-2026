@@ -56,7 +56,7 @@ export function HistoryTimeline({ items, start, end, stats, todayLabel, yearOffs
       {/* Desktop: proportional axis */}
       <div className="relative mt-14 hidden h-[26rem] md:block" aria-hidden="true">
         {/* axis */}
-        <DrawLine className="absolute top-1/2 right-0 left-0 h-0.5 -translate-y-1/2 bg-white/50" />
+        <DrawLine className="absolute top-1/2 right-0 left-0 h-0.5 -translate-y-1/2 bg-[var(--color-on-inverse-secondary)]" />
         {ticks.map((y) => (
           <div key={y} className="absolute top-1/2" style={{ left: `${pos(y)}%` }}>
             <div className="h-2 w-px -translate-y-1 bg-white/40" />
@@ -75,10 +75,10 @@ export function HistoryTimeline({ items, start, end, stats, todayLabel, yearOffs
             <div key={m.label}>
               {/* period band */}
               {m.to && (
-                <div className="absolute top-1/2 h-4 -translate-y-1/2 rounded-full bg-white" style={{ left: `${left}%`, width: `${width}%` }} />
+                <div className="absolute top-1/2 h-4 -translate-y-1/2 rounded-full bg-[var(--color-on-inverse)]" style={{ left: `${left}%`, width: `${width}%` }} />
               )}
               {/* dot */}
-              <div className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-black bg-white" style={{ left: `${left}%` }} />
+              <div className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-[var(--color-surface-inverse)] bg-[var(--color-on-inverse)]" style={{ left: `${left}%` }} />
               {/* stem */}
               <div
                 className="absolute w-px bg-white/30"
