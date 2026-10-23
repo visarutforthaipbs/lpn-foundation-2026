@@ -121,7 +121,7 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
     </Container></Section>
 
     <Section tone="paper"><Container>
-      <SectionHeading eyebrow={th ? 'คลังสิ่งพิมพ์' : 'Publications'} title={th ? 'รายงานและบทความที่เกี่ยวข้อง' : 'More reports and publications'} lede={th ? 'คัดจากหมวดสิ่งพิมพ์ในบทความที่ย้ายจาก Wix มายัง Payload' : 'Selected from the Publications category migrated from Wix into Payload.'} />
+      <SectionHeading eyebrow={th ? 'คลังสิ่งพิมพ์' : 'Publications'} title={th ? 'รายงานและบทความที่เกี่ยวข้อง' : 'More reports and publications'} lede={th ? 'รายงานการศึกษา รายงานประจำปี และข้อเสนอเชิงนโยบายของ LPN' : 'LPN studies, annual reports and policy proposals.'} />
       {publications.length ? <div className="mt-9 grid gap-4 md:grid-cols-2">{publications.map((post) => <Link key={post.id} href={`/post/${post.slug}`} className="border-l-4 border-current bg-white p-6 transition-colors hover:bg-brand-yellow/10">
         {post.publishedAt && <time dateTime={post.publishedAt} className="t-label text-black/70">{new Date(post.publishedAt).toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' })}</time>}
         <h3 className="t-h3 mt-3">{post.title}</h3>
