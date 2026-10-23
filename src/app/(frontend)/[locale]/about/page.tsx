@@ -10,7 +10,6 @@ import { HistoryTimeline, type Milestone } from '@/components/HistoryTimeline'
 // Shown in the Leadership section with their bios, so the Team grid skips them (names in either locale).
 const LEADER_NAMES = new Set(['ปฏิมา ตั้งปรัชญากูล', 'Patima Tungpuchayakul', 'สมพงค์ สระแก้ว', 'Sompong Srakaew'])
 import { buildMetadata } from '@/lib/seo'
-import { WixIntegratedCopy } from '@/components/WixIntegratedCopy'
 import { MediaImage } from '@/components/MediaImage'
 import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
 
@@ -350,11 +349,6 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
           </div>
         </Container>
       </Section>
-
-      {/* Archival Wix copy preserved by editors in Payload blocks. */}
-      <Container>
-        <WixIntegratedCopy slug="about" locale={locale} />
-      </Container>
 
       {/* CTA — dual path */}
       <Section tone="dark"><Container className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
