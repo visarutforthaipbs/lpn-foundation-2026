@@ -68,14 +68,9 @@ export default async function PostPage(props: {
         </nav>
 
         {/* Post header */}
-        <header className="relative isolate overflow-hidden rounded bg-black p-8 text-white md:p-12">
-          <div
-            className="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-brand-yellow/10 blur-3xl"
-            aria-hidden="true"
-          />
-          <div className="relative z-10 flex min-h-[180px] flex-col justify-end">
+        <header className="relative isolate overflow-hidden rounded bg-black p-8 text-white md:p-12">          <div className="relative z-10 flex min-h-[180px] flex-col justify-end">
             {post.category && typeof post.category !== 'number' && (
-              <span className="mb-5 inline-flex w-fit rounded-full bg-brand-yellow px-4 py-1.5 text-xs font-black tracking-wider text-black uppercase">
+              <span className="glass-tag mb-5 inline-flex w-fit px-3 py-1">
                 {post.category.title}
               </span>
             )}
@@ -84,7 +79,7 @@ export default async function PostPage(props: {
               {author && (
                 <div className="flex items-center gap-2.5">
                   <div
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-yellow text-[10px] font-black text-black"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-white"
                     aria-hidden="true"
                   >
                     {author.name.slice(0, 2).toUpperCase()}
@@ -139,7 +134,7 @@ export default async function PostPage(props: {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Share on Facebook"
-                  className="tactile-icon-btn-light h-11 w-11 text-xs font-black"
+                  className="tactile-icon-btn-light h-11 w-11 text-xs font-semibold"
                 >
                   FB
                 </a>
@@ -148,7 +143,7 @@ export default async function PostPage(props: {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Share on X"
-                  className="tactile-icon-btn-light h-11 w-11 text-xs font-black"
+                  className="tactile-icon-btn-light h-11 w-11 text-xs font-semibold"
                 >
                   X
                 </a>
@@ -160,8 +155,8 @@ export default async function PostPage(props: {
           <aside className="flex flex-col gap-6 lg:col-span-4">
             {/* Donation CTA */}
             <div className="glass-dark relative overflow-hidden rounded p-7">
-              <span className="absolute top-0 left-0 h-1.5 w-12 bg-brand-yellow" aria-hidden="true" />
-              <span className="t-label text-brand-yellow">
+              <span className="absolute top-0 left-0 h-1.5 w-12 bg-current" aria-hidden="true" />
+              <span className="t-label text-current/70">
                 {isThai ? 'ยืนหยัดร่วมกับ LPN' : 'Stand With Us'}
               </span>
               <h2 className="t-h3 mt-4">
@@ -192,10 +187,10 @@ export default async function PostPage(props: {
                   <a
                     key={h.code}
                     href={telHref(h.phone)}
-                    className="tactile-well flex min-h-11 items-center justify-between p-3 text-xs font-bold text-black transition-transform hover:-translate-y-0.5"
+                    className="tactile-well flex min-h-11 items-center justify-between p-3 text-xs font-bold text-black transition-transform"
                   >
                     <span className="flex items-center gap-2">
-                      <span className="tactile-badge h-6 w-6 text-[10px] font-black text-black">
+                      <span className="tactile-badge h-6 w-6 text-xs font-semibold text-black">
                         {h.code}
                       </span>
                       <span>{isThai ? h.langTh : h.langEn}</span>

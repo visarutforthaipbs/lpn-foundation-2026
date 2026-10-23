@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
-import { Banknote, BookOpen, FileText, HeartPulse, PhoneCall, ShieldAlert, UsersRound } from 'lucide-react'
+import { BookOpen, HandCoins, Heartbeat, IdentificationCard, Phone, ShieldWarning, UsersThree } from '@phosphor-icons/react/ssr'
 import type { Locale } from '@/i18n/routing'
 import { buildMetadata } from '@/lib/seo'
 import { telHref } from '@/lib/content'
@@ -27,11 +27,11 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
   const th = locale === 'th'
   const hotlines = await getHelpChannels(locale)
   const issues = [
-    { title: th ? 'ค่าจ้างและงาน' : 'Pay and work', icon: Banknote },
-    { title: th ? 'เอกสารและการเดินทาง' : 'Documents and migration', icon: FileText },
-    { title: th ? 'ความปลอดภัย' : 'Safety and exploitation', icon: ShieldAlert },
-    { title: th ? 'สุขภาพ' : 'Health and care', icon: HeartPulse },
-    { title: th ? 'เด็กและครอบครัว' : 'Children and family', icon: UsersRound },
+    { title: th ? 'ค่าจ้างและงาน' : 'Pay and work', icon: HandCoins },
+    { title: th ? 'เอกสารและการเดินทาง' : 'Documents and migration', icon: IdentificationCard },
+    { title: th ? 'ความปลอดภัย' : 'Safety and exploitation', icon: ShieldWarning },
+    { title: th ? 'สุขภาพ' : 'Health and care', icon: Heartbeat },
+    { title: th ? 'เด็กและครอบครัว' : 'Children and family', icon: UsersThree },
   ]
   const nativeLanguages: Record<string, { label: string; lang: string }> = {
     TH: { label: 'ภาษาไทย', lang: 'th' },
@@ -58,24 +58,24 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
 
       <Container className="relative z-10 py-12 md:py-20">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow/15 border border-brand-yellow/30 text-brand-yellow">
-            <ShieldAlert className="h-4.5 w-4.5" aria-hidden="true" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow/15 border border-current/30 text-brand-yellow">
+            <ShieldWarning size={20} aria-hidden="true" />
           </div>
-          <p className="eyebrow text-brand-yellow">{th ? 'ขอความช่วยเหลือ' : 'Get help'}</p>
+          <p className="eyebrow text-white/70">{th ? 'ขอความช่วยเหลือ' : 'Get help'}</p>
         </div>
         <h1 className="t-display mt-5 max-w-4xl text-white">{th ? 'ต้องการความช่วยเหลือ?' : 'Need help?'}</h1>
         <p className="t-lede mt-4 max-w-2xl text-white/90">{th
           ? 'เลือกติดต่อ LPN หรือเปิดคู่มือรู้สิทธิ'
           : 'Choose how you want to start.'}</p>
         <div className="mt-8 grid max-w-3xl gap-3 sm:grid-cols-2">
-          <a href="#contact" className="group flex min-h-40 flex-col justify-between border-2 border-brand-yellow bg-brand-yellow p-5 text-black transition-colors hover:bg-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow">
-            <PhoneCall size={38} strokeWidth={1.8} aria-hidden="true" />
-            <span className="mt-5 flex items-end justify-between gap-3 text-xl font-black leading-tight sm:text-2xl">{th ? 'โทรหา LPN' : 'Call LPN'} <span aria-hidden="true">↗</span></span>
+          <a href="#contact" className="group flex min-h-40 flex-col justify-between border-2 border-current bg-brand-yellow p-5 text-black transition-colors hover:bg-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow">
+            <Phone size={40} aria-hidden="true" />
+            <span className="mt-5 flex items-end justify-between gap-3 text-xl font-bold leading-tight sm:text-2xl">{th ? 'โทรหา LPN' : 'Call LPN'} <span aria-hidden="true">↗</span></span>
             <span className="mt-1 text-sm font-semibold">{th ? 'เลือกภาษาของคุณ' : 'Choose your language'}</span>
           </a>
           <a href={GUIDE} className="group flex min-h-40 flex-col justify-between border-2 border-white bg-black/75 p-5 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow">
-            <BookOpen size={38} strokeWidth={1.8} aria-hidden="true" />
-            <span className="mt-5 flex items-end justify-between gap-3 text-xl font-black leading-tight sm:text-2xl">{th ? 'รู้สิทธิของฉัน' : 'Know my rights'} <span aria-hidden="true">↗</span></span>
+            <BookOpen size={40} weight="duotone" className="pictogram-duotone" aria-hidden="true" />
+            <span className="mt-5 flex items-end justify-between gap-3 text-xl font-bold leading-tight sm:text-2xl">{th ? 'รู้สิทธิของฉัน' : 'Know my rights'} <span aria-hidden="true">↗</span></span>
             <span className="mt-1 text-sm font-semibold">{th ? 'เปิดคู่มือรู้สิทธิ' : 'Open the Rights Guide'}</span>
           </a>
         </div>
@@ -94,9 +94,9 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
             <span className="block text-lg" lang={nativeLanguages[h.code]?.lang}>{nativeLanguages[h.code]?.label}</span>
             <span className="mt-1 block text-sm font-semibold">{th ? h.langTh : h.langEn}</span>
           </>}</span>
-          <PhoneCall size={23} strokeWidth={2} aria-hidden="true" />
+          <Phone size={24} aria-hidden="true" />
         </span>
-        <span className="mt-6 font-mono text-xl font-black break-all">{h.phone}</span>
+        <span className="mt-6 font-mono text-xl font-bold break-all">{h.phone}</span>
       </a>)}</div>
       <p className="mt-6 max-w-3xl text-sm leading-relaxed text-black/80">{th
         ? 'โทรไม่ติด? ดูช่องทางอื่นในหน้าติดต่อ'
@@ -107,8 +107,8 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
 
     <Section tone="light"><Container>
       <SectionHeading eyebrow={th ? 'เรื่องที่ช่วยได้' : 'What we can discuss'} title={th ? 'เริ่มจากเรื่องของคุณ' : 'Start with your situation'} />
-      <ul className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{issues.map(({ title, icon: Icon }) => <li key={title} className="flex min-h-36 flex-col justify-between border-t-4 border-brand-yellow bg-paper p-4 sm:p-5">
-        <Icon size={36} strokeWidth={1.7} aria-hidden="true" />
+      <ul className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{issues.map(({ title, icon: Icon }) => <li key={title} className="flex min-h-36 flex-col justify-between border-t-4 border-current bg-paper p-4 sm:p-5">
+        <Icon size={36} weight="duotone" className="pictogram-duotone" aria-hidden="true" />
         <span className="mt-5 text-base font-bold leading-snug">{title}</span>
       </li>)}</ul>
       <p className="mt-6 text-sm text-black/75">{th ? 'ไม่ต้องเลือกหมวดหมู่ก่อนโทร' : 'You do not need to choose a topic before calling.'}</p>

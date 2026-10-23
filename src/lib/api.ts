@@ -39,7 +39,7 @@ export async function getAllPageSlugs() {
   return docs.map((d) => d.slug).filter(Boolean) as string[]
 }
 
-export async function getPosts(locale: Locale, opts: { categorySlug?: string; limit?: number } = {}) {
+export async function getPosts(locale: Locale, opts: { categorySlug?: string; limit?: number; page?: number } = {}) {
   const payload = await getPayloadClient()
   // Each locale's blog shows only posts authored in that language.
   const and: Where[] = [published, { language: { equals: locale } }]
@@ -51,6 +51,7 @@ export async function getPosts(locale: Locale, opts: { categorySlug?: string; li
     locale,
     depth: 2,
     limit: opts.limit ?? 100,
+    page: opts.page ?? 1,
     sort: '-publishedAt',
     where: { and },
     select: {

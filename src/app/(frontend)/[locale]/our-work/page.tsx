@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
-import { BookOpen, LifeBuoy, Scale } from 'lucide-react'
+import { GraduationCap, Lifebuoy, Scales } from '@phosphor-icons/react/ssr'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getSiteMedia } from '@/lib/api'
@@ -32,7 +32,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
   const work = th ? [
     {
       id: 'respond', number: '01', label: 'ตอบสนองและคุ้มครอง',
-      icon: LifeBuoy,
+      icon: Lifebuoy,
       summary: 'เมื่อแรงงานหรือครอบครัวเผชิญปัญหา LPN รับฟัง ประเมินความต้องการ และประสานการช่วยเหลือที่เหมาะสม',
       examples: ['ปัญหาค่าจ้างและสภาพการทำงาน', 'เอกสารและการเดินทาง', 'สุขภาพ ความปลอดภัย และการแสวงหาประโยชน์'],
       note: 'ขอบเขตการช่วยเหลือขึ้นอยู่กับสถานการณ์และทรัพยากรที่มี โปรดติดต่อ LPN เพื่อหารือกรณีของคุณ',
@@ -42,7 +42,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
     },
     {
       id: 'learn', number: '02', label: 'เสริมความรู้และชุมชน',
-      icon: BookOpen,
+      icon: GraduationCap,
       summary: 'ความรู้เรื่องสิทธิและการทำงานร่วมกับเครือข่ายช่วยให้แรงงานรับรู้ทางเลือก ป้องกันความเสี่ยง และส่งต่อปัญหาได้เร็วขึ้น',
       examples: ['การอบรมแรงงานและอาสาสมัคร', 'งานด้านการศึกษาและเยาวชน', 'คู่มือรู้สิทธิ ติดกระเป๋า ภาษาไทย อังกฤษ และพม่า'],
       note: 'คู่มือให้ข้อมูลทั่วไป หากต้องการความช่วยเหลือเกี่ยวกับสถานการณ์ของคุณ ติดต่อ LPN โดยตรงได้',
@@ -52,7 +52,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
     },
     {
       id: 'change', number: '03', label: 'เปลี่ยนระบบ',
-      icon: Scale,
+      icon: Scales,
       summary: 'ประสบการณ์ภาคสนามและเสียงแรงงานช่วยให้ LPN มองเห็นปัญหาที่เกิดซ้ำ และสร้างหลักฐานสำหรับการทำงานกับพันธมิตรและผู้กำหนดนโยบาย',
       examples: ['งานวิจัยและรายงานภาคสนาม', 'ช่องทางรับฟังเสียงแรงงาน', 'ความร่วมมือเพื่อการคุ้มครองที่ดีขึ้น'],
       note: 'รายงานวิจัยแสดงข้อค้นพบตามขอบเขตและวิธีการของแต่ละโครงการ ไม่ใช่ผลลัพธ์ของการช่วยเหลือทุกราย',
@@ -63,7 +63,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
   ] : [
     {
       id: 'respond', number: '01', label: 'Respond and protect',
-      icon: LifeBuoy,
+      icon: Lifebuoy,
       summary: 'When workers or families face a problem, LPN listens, considers their needs, and connects them with appropriate support.',
       examples: ['Pay and working conditions', 'Documents and migration', 'Health, safety, and exploitation'],
       note: 'The support available depends on the situation and LPN’s capacity. Contact LPN to discuss your case.',
@@ -73,7 +73,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
     },
     {
       id: 'learn', number: '02', label: 'Learn and strengthen communities',
-      icon: BookOpen,
+      icon: GraduationCap,
       summary: 'Rights knowledge and community networks help workers understand options, prevent risks, and raise problems earlier.',
       examples: ['Worker and volunteer training', 'Education and youth support', 'Thai, English, and Burmese Rights Guide'],
       note: 'The guide provides general information. For help with your own situation, you can contact LPN directly.',
@@ -83,7 +83,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
     },
     {
       id: 'change', number: '03', label: 'Change systems',
-      icon: Scale,
+      icon: Scales,
       summary: 'Field experience and worker voice reveal recurring barriers and create evidence for work with partners and decision makers.',
       examples: ['Field research and reports', 'Worker-voice channels', 'Partnerships for better protection'],
       note: 'Each research report has its own scope and method. Its findings are not outcomes of every individual assistance case.',
@@ -110,7 +110,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
       </div>
 
       <Container className="relative z-10 py-16 md:py-24">
-        <p className="eyebrow text-brand-yellow">{th ? 'งานของเรา' : 'Our work'}</p>
+        <p className="eyebrow text-white/70">{th ? 'งานของเรา' : 'Our work'}</p>
         <h1 className="t-display mt-6 max-w-5xl text-white">{th ? 'ช่วยเหลือวันนี้ สร้างความปลอดภัยในวันหน้า' : 'Protection today. Safer systems tomorrow.'}</h1>
         <p className="t-lede mt-7 max-w-3xl text-white/80">{th
           ? 'งานช่วยเหลือ การเรียนรู้กับชุมชน และการสร้างหลักฐานเชื่อมกันผ่านความต้องการและเสียงของแรงงานข้ามชาติ'
@@ -161,7 +161,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
               />
             </div>
           )}
-          <div className="border-l-4 border-brand-yellow p-6 sm:p-7">
+          <div className="border-l-4 border-current p-6 sm:p-7">
             <h3 className="t-h3">{th ? 'สิ่งที่ทำ' : 'What this includes'}</h3>
             <ul className="mt-5 space-y-3 text-sm leading-relaxed text-black/80">{item.examples.map((e) => <li key={e} className="border-b border-black/10 pb-3">{e}</li>)}</ul>
             <p className="mt-6 text-sm leading-relaxed text-black/70">{item.note}</p>

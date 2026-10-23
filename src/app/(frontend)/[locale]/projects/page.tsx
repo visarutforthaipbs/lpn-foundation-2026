@@ -135,7 +135,7 @@ export default async function ProjectsPage(props: { params: Promise<{ locale: Lo
             {partners.map((p) => (
               <li
                 key={p}
-                className="flex h-24 items-center justify-center bg-black px-4 text-center text-xs font-black tracking-widest text-white uppercase transition-colors hover:bg-white/5 hover:text-brand-yellow"
+                className="flex h-24 items-center justify-center bg-black px-4 text-center text-xs font-semibold tracking-widest text-white  transition-colors hover:bg-white/5 hover:text-brand-yellow"
               >
                 {p}
               </li>

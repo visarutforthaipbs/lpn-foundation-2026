@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Mail, MapPin, Phone, PhoneCall } from 'lucide-react'
+import { EnvelopeSimple, MapPin, Phone } from '@phosphor-icons/react/ssr'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getFooter } from '@/lib/api'
@@ -34,11 +34,11 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
   return (
     <footer className="mt-20 bg-black text-white contain-footer">
       {/* Emergency hotline strip — the site's most safety-critical content */}
-      <div className="border-y border-black/10 bg-brand-yellow text-black">
+      <div className="border-y border-black/10 bg-paper text-black on-light">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 md:flex-row md:items-start md:justify-between">
           <div className="max-w-md">
             <div className="flex items-center gap-3">
-              <span className="inline-block h-1.5 w-1.5 animate-pulse bg-black" aria-hidden="true" />
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-brand-yellow" aria-hidden="true" />
               <span className="t-label">{isThai ? 'หากท่านต้องการความช่วยเหลือ' : 'Get help now'}</span>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-black/75">
@@ -69,7 +69,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 href={telHref(h.phone)}
                 className="group flex min-h-11 items-center gap-2 transition-opacity hover:opacity-70"
               >
-                <PhoneCall className="h-3.5 w-3.5 text-black/75 shrink-0" aria-hidden="true" />
+                <Phone size={20} className="text-black/75 shrink-0" aria-hidden="true" />
                 <span className="t-label text-black/65">{h.label}</span>
                 <span className="border-b border-black/30 font-mono text-sm font-bold text-black group-hover:border-black">
                   {h.phone}
@@ -85,7 +85,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-[2fr_1fr_1fr]">
           {/* Brand */}
           <div className="relative pl-5">
-            <span className="absolute top-0 left-0 h-full w-1 bg-brand-yellow" aria-hidden="true" />
+            <span className="absolute top-0 left-0 h-full w-1 bg-current" aria-hidden="true" />
             <div className="flex items-center gap-4">
               <Image
                 src="/logos/masterbrand/lpn-white.png"
@@ -94,7 +94,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 height={45}
                 className="h-14 w-auto"
               />
-              <span className="text-lg font-black tracking-[0.18em] text-white uppercase">
+              <span className="text-lg font-bold text-white ">
                 LPN Foundation
               </span>
             </div>
@@ -113,14 +113,14 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
           {/* Sitemap */}
           <nav aria-label={isThai ? 'แผนผังเว็บไซต์' : 'Sitemap'}>
-            <h3 className="t-label text-brand-yellow">{isThai ? 'ลิงก์ภายใน' : 'Sitemap'}</h3>
+            <h3 className="t-label text-current/70">{isThai ? 'ลิงก์ภายใน' : 'Sitemap'}</h3>
             <ul className="mt-5 grid gap-2.5 text-sm">
               {navLinks.map((l) => (
                 <li key={l.href}>
                   {l.href.startsWith('https://') ? (
-                    <a href={l.href} className="inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow">{l.label}</a>
+                    <a href={l.href} className="inline-flex min-h-11 min-w-11 items-center text-white/70 transition-colors hover:text-brand-yellow">{l.label}</a>
                   ) : (
-                    <Link href={l.href} className="inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow">{l.label}</Link>
+                    <Link href={l.href} className="inline-flex min-h-11 min-w-11 items-center text-white/70 transition-colors hover:text-brand-yellow">{l.label}</Link>
                   )}
                 </li>
               ))}
@@ -129,15 +129,15 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
           {/* Connect */}
           <div>
-            <h3 className="t-label text-brand-yellow">
+            <h3 className="t-label text-current/70">
               {isThai ? 'สำนักงานใหญ่ประเทศไทย' : 'Thailand Headquarters'}
             </h3>
             <address className="mt-5 flex items-start gap-2.5 text-sm leading-relaxed text-white/70 not-italic">
-              <MapPin className="h-4 w-4 text-brand-yellow shrink-0 mt-1" aria-hidden="true" />
+              <MapPin size={20} className="text-brand-yellow shrink-0 mt-0.5" aria-hidden="true" />
               <span>{isThai ? OFFICE.addressTh : OFFICE.addressEn}</span>
             </address>
             <p className="mt-3 flex items-center gap-2.5 font-mono text-sm text-white/85">
-              <Phone className="h-4 w-4 text-brand-yellow shrink-0" aria-hidden="true" />
+              <Phone size={20} className="text-brand-yellow shrink-0" aria-hidden="true" />
               <span>{isThai ? OFFICE.phoneTh : OFFICE.phoneEn}</span>
             </p>
             <ul className="mt-3 grid gap-2.5 text-sm">
@@ -147,7 +147,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                     href={`mailto:${e}`}
                     className="inline-flex min-h-11 items-center gap-2.5 font-mono text-white/70 transition-colors hover:text-brand-yellow"
                   >
-                    <Mail className="h-4 w-4 text-brand-yellow shrink-0" aria-hidden="true" />
+                    <EnvelopeSimple size={20} className="text-brand-yellow shrink-0" aria-hidden="true" />
                     <span>{e}</span>
                   </a>
                 </li>
@@ -161,7 +161,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                     href={s.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow"
+                    className="inline-flex min-h-11 min-w-11 items-center text-white/70 transition-colors hover:text-brand-yellow"
                   >
                     {s.platform} →
                   </a>

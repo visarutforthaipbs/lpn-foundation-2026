@@ -41,7 +41,7 @@ export function Section({
     light: 'bg-white text-black on-light',
     paper: 'bg-paper text-black on-light',
     dark: 'bg-black text-white',
-    yellow: 'bg-brand-yellow text-black on-light',
+    yellow: 'bg-paper text-black on-light border-y border-black/15',
   }
   return (
     <section id={id} className={`${tones[tone]} ${tight ? 'section-tight' : 'section'} ${className}`}>
@@ -61,7 +61,7 @@ export function Eyebrow({
   tone?: 'light' | 'dark'
   className?: string
 }) {
-  const textColor = tone === 'dark' ? 'text-black' : 'text-brand-yellow'
+  const textColor = tone === 'dark' ? 'text-black/70' : 'text-white/70'
   return <span className={`eyebrow ${textColor} ${className}`}>{children}</span>
 }
 
@@ -277,7 +277,7 @@ export function PageHero({
           {actions && <div className="mt-9 flex flex-wrap gap-3">{actions}</div>}
           {children}
           {stats && stats.length > 0 && (
-            <StatBand stats={stats} tone="dark" className="mt-14 max-w-2xl border-l-4 border-brand-yellow pl-6" />
+            <StatBand stats={stats} tone="dark" className="mt-14 max-w-2xl border-l-4 border-current pl-6" />
           )}
         </div>
       </div>
@@ -298,7 +298,7 @@ export function CtaBand({
   actions?: React.ReactNode
 }) {
   return (
-    <Section tone="yellow" tight className="border-t border-black">
+    <Section tone="yellow" tight>
       <div className="container-page flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl">
           <h2 className="t-h2">{heading}</h2>
@@ -337,7 +337,7 @@ export function EditorialRow({
       className={`grid gap-x-10 gap-y-4 border-t border-black/15 py-10 md:grid-cols-[auto_1fr_auto] ${className}`}
     >
       {index !== undefined && (
-        <div className="text-xs font-black uppercase tracking-[0.3em] text-black/65 md:pt-1.5">
+        <div className="text-xs font-semibold  text-black/65 md:pt-1.5">
           {index}
         </div>
       )}

@@ -40,11 +40,11 @@ async function TeamGrid({
                   <div className="mb-5 overflow-hidden rounded-full border border-white/20 p-1">
                     <MediaImage
                       media={m.photo}
-                      className="h-28 w-28 rounded-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="h-28 w-28 rounded-full object-cover transition-transform duration-300"
                     />
                   </div>
                 ) : (
-                  <div className="mb-5 flex h-28 w-28 items-center justify-center rounded-full border border-white/20 bg-brand-yellow/10 text-sm font-black text-brand-yellow">
+                  <div className="mb-5 flex h-28 w-28 items-center justify-center rounded-full border border-white/20 bg-brand-yellow/10 text-sm font-bold text-brand-yellow">
                     LPN
                   </div>
                 )}

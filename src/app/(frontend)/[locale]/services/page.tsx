@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server'
-import { ChevronDown, PhoneCall } from 'lucide-react'
+import { CaretDown, Phone } from '@phosphor-icons/react/ssr'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
@@ -33,9 +33,9 @@ function DeepDive({
           {section.items.map((item, i) => (
             <details key={item.title} className="group border border-black/20 bg-white open:border-black">
               <summary className="flex min-h-24 cursor-pointer list-none items-center gap-4 p-5 marker:hidden [&::-webkit-details-marker]:hidden">
-                <span className="text-2xl font-black text-black/40">0{i + 1}</span>
+                <span className="text-2xl font-bold text-black/40">0{i + 1}</span>
                 <span className="flex-1 text-lg font-bold leading-snug">{item.title}</span>
-                <ChevronDown size={22} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+                <CaretDown size={22} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
               </summary>
               <p className="border-t border-black/15 px-5 pb-6 pt-4 text-base leading-relaxed whitespace-pre-line text-black/80">{item.body}</p>
             </details>
@@ -44,7 +44,7 @@ function DeepDive({
         {(section.paras.length > 1 || (section.closing?.length ?? 0) > 0) && <details className="group mt-6 max-w-3xl border-t border-black/20 pt-4">
           <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 font-bold underline decoration-brand-yellow decoration-2 underline-offset-4 marker:hidden [&::-webkit-details-marker]:hidden">
             {isThai ? 'อ่านรายละเอียดเพิ่มเติม' : 'Read more about this work'}
-            <ChevronDown size={20} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+            <CaretDown size={20} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
           </summary>
           {[...section.paras.slice(1), ...(section.closing ?? [])].map((p) => <p key={p.slice(0, 24)} className="mt-5 text-base leading-relaxed text-black/75">{p}</p>)}
         </details>}
@@ -105,7 +105,7 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
       {/* Worker route stays visible before the detailed programme copy. */}
       <Section tone="yellow" tight className="on-light">
         <Container className="grid gap-5 sm:grid-cols-[auto_1fr_auto] sm:items-center">
-          <PhoneCall size={42} strokeWidth={1.7} aria-hidden="true" />
+          <Phone size={40} weight="duotone" className="pictogram-duotone" aria-hidden="true" />
           <p className="t-h3">{isThai ? 'มีปัญหาเรื่องงานหรือความปลอดภัย?' : 'Need help with work or safety?'}</p>
           <ButtonLink href="/get-help" variant="solidDark">{isThai ? 'ติดต่อ LPN' : 'Contact LPN'}</ButtonLink>
         </Container>
@@ -116,7 +116,7 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
           <details className="group max-w-3xl border-b border-black/20 pb-4">
             <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 font-bold underline decoration-brand-yellow decoration-2 underline-offset-4 marker:hidden [&::-webkit-details-marker]:hidden">
               {isThai ? 'เกี่ยวกับงานบริการของ LPN' : 'About LPN’s services'}
-              <ChevronDown size={20} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+              <CaretDown size={20} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
             </summary>
             <p className="mt-5 font-bold">{copy.hero.title}</p>
             <p className="mt-3 text-base leading-relaxed text-black/75">{copy.hero.lede}</p>
@@ -133,9 +133,9 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
             {copy.programs.map((p, i) => (
               <details key={p.title} className="group border border-black/20 bg-white open:border-black">
                 <summary className="flex min-h-28 cursor-pointer list-none items-center gap-4 p-5 marker:hidden [&::-webkit-details-marker]:hidden">
-                  <span className="text-3xl font-black text-black/40">0{i + 1}</span>
+                  <span className="text-3xl font-bold text-black/40">0{i + 1}</span>
                   <span className="flex-1 text-lg font-bold leading-snug">{p.title}</span>
-                  <ChevronDown size={22} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+                  <CaretDown size={22} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
                 </summary>
                 <p className="border-t border-black/15 px-5 pb-6 pt-4 text-base leading-relaxed text-black/80">{p.body}</p>
               </details>
@@ -161,7 +161,7 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
             {journey.map((j, i) => (
               <li key={j.step} className="glass-dark relative rounded p-6">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-black text-brand-yellow">{j.step}</span>
+                  <span className="text-3xl font-bold text-brand-yellow">{j.step}</span>
                   <span className="t-label text-white/70">
                     {isThai ? 'ขั้นที่' : 'Step'} {i + 1}
                   </span>

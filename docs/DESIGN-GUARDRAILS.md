@@ -78,6 +78,39 @@ A user with low attention and high stress should understand the highest-value me
 
 ## 5) Implementation Defaults for This Repo
 
+> **LPN One CI (2026-10-22, branch `design/one-ci`) — the site follows the shared brand
+> system in `../brand/BRAND.md` + `../brand/tokens/lpn-tokens.css`. These defaults
+> supersede the older bullets below where they conflict.** Audit: `docs/design-audit.md`.
+> - ONE yellow: **`#FFC314`** (`--color-brand`, pressed `#E6AC00`). `#ffd43b` is retired.
+>   Yellow has three jobs: the single prominent action per view, selection, focus ring.
+>   Never a section background, rail, rule, or decorative bar. Label on yellow is always
+>   black; never yellow text on white; never white on yellow. The LPN logo stays black/white.
+> - Fonts: **IBM Plex Sans** (Latin) + **IBM Plex Sans Thai** (Thai UI) + **IBM Plex Sans
+>   Thai Looped** (`.prose-lpn` long reads on Thai pages), all SIL OFL, self-hosted from
+>   `public/fonts/` via `next/font/local` (no Google Fonts request). DB Helvethaica X is
+>   removed — LPN holds no licence. Weights 400–700 only (no 800/900 — Plex has none).
+> - Type: body 17 px / line-height 1.7 (`--text-base`), caption floor 13 px (`--text-xs`),
+>   otherwise the normal Tailwind scale (Plex Thai needs no size lift). No letter-spacing
+>   on Thai; Thai headings line-height 1.45.
+> - Icons: **Phosphor** only (`@phosphor-icons/react`; server components import from
+>   `@phosphor-icons/react/ssr`), names from `../brand/assets/icons/icons.json`.
+>   `regular` = default UI at 20 px in buttons/strips, 24 px in nav; `fill` = selected;
+>   `duotone` + `className="pictogram-duotone"` (yellow second layer) only for
+>   topic/programme pictograms ≥ 32 px on neutral surfaces — never on a yellow button or
+>   inside a status badge. Always paired with a word. `public/icons/*.svg` are the
+>   Phosphor duotone pictograms; the 2019 PNGs are gone.
+> - Colours are semantic roles (`--color-surface[-secondary|-tertiary|-elevated]`,
+>   `--color-label[-secondary|-tertiary]`, `--color-separator[-strong]`,
+>   `--color-on-inverse`…) plus status roles (`critical / high / medium / low / success`,
+>   each with `-ink` and `-tint`; status is never yellow) in `src/app/(frontend)/styles.css`.
+>   Dark Mode follows `prefers-color-scheme` with no toggle. Legacy `bg-white` /
+>   `text-black/70` utilities are remapped to those roles — prefer the role names in new code.
+> - Radius: 8 px control, 12 px card, 16 px sheet, pill 999.
+> - Controls ≥ 44 px (touch) / 28 px (pointer).
+> - Content layer is solid: no glass, gradients, inset shadows, hover lifts or image zoom.
+>   Translucency only on the sticky header (`.glass-bar`).
+> - Body measure ≤ 42 rem (`.container-narrow`, `.prose-lpn`).
+
 - Use dark-first hero and shell treatments where appropriate to align with LPN visual language.
 - Keep accent color usage sparse and purposeful (CTA, separators, emphasis only).
 - Buttons use flat fills, 1px borders, and 2px corners. Avoid gradients, bevels, glow, and movement on hover.

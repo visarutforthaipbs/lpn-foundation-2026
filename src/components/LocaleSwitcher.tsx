@@ -12,7 +12,7 @@ export function LocaleSwitcher() {
   const pathname = usePathname()
 
   return (
-    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em]">
+    <div className="flex items-center gap-2 text-xs font-semibold ">
       {routing.locales.map((loc, i) => (
         <span key={loc} className="flex items-center gap-2">
           {i > 0 && (
@@ -28,7 +28,7 @@ export function LocaleSwitcher() {
             aria-label={loc === 'th' ? 'สลับเป็นภาษาไทย' : 'Switch to English'}
             className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${
               loc === active
-                ? 'text-brand-yellow font-black'
+                ? 'text-brand-yellow font-bold'
                 : 'text-white/75 transition-colors hover:text-white'
             }`}
           >

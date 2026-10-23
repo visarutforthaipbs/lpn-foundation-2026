@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { List, X } from '@phosphor-icons/react'
 import { Link } from '@/i18n/navigation'
 import { ButtonLink } from './ui'
 
@@ -41,7 +41,7 @@ export function MobileMenu({
         onClick={() => setOpen((v) => !v)}
         className="tactile-icon-btn h-11 w-11 text-white hover:text-brand-yellow"
       >
-        {open ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+        {open ? <X size={24} aria-hidden="true" /> : <List size={24} aria-hidden="true" />}
       </button>
 
       {open && (
@@ -56,7 +56,7 @@ export function MobileMenu({
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="flex min-h-12 items-center border-b border-white/10 text-xs font-black uppercase tracking-[0.22em] text-white/85 transition-colors hover:text-brand-yellow"
+                  className="flex min-h-12 items-center border-b border-white/10 text-xs font-semibold  text-white/85 transition-colors hover:text-brand-yellow"
                 >
                   {item.label}
                 </Link>
