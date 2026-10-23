@@ -4,6 +4,7 @@ import { ClipboardText, ShieldCheck, Translate, TrendUp, UsersThree } from '@pho
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage, getTeam, getSiteMedia } from '@/lib/api'
+import { TeamCard } from '@/components/TeamCard'
 import { buildMetadata } from '@/lib/seo'
 import { WixIntegratedCopy } from '@/components/WixIntegratedCopy'
 import { MediaImage } from '@/components/MediaImage'
@@ -293,17 +294,9 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
           <ButtonLink href="/team" variant="ghostDark">{th ? 'ดูทีมงานทั้งหมด' : 'Meet the full team'} →</ButtonLink>
         </div>
         {team.length > 0 && (
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {team.slice(0, 4).map((m) => (
-              <article key={m.id} className="border border-black/15 bg-white p-5">
-                {m.photo && typeof m.photo !== 'number' ? (
-                  <MediaImage media={m.photo} className="h-20 w-20 rounded-full object-cover" />
-                ) : (
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-yellow/20 text-xs font-semibold text-black/50">LPN</div>
-                )}
-                <h3 className="t-h3 mt-4">{m.name}</h3>
-                {m.role && <div className="t-label mt-1 text-black/55">{m.role}</div>}
-              </article>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {team.filter((m) => m.photo && typeof m.photo !== 'number').map((m) => (
+              <TeamCard key={m.id} member={m} />
             ))}
           </div>
         )}

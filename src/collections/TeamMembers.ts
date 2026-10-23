@@ -7,7 +7,7 @@ export const TeamMembers: CollectionConfig = {
   access: { read: () => true },
   defaultSort: 'order',
   fields: [
-    { name: 'name', type: 'text', required: true },
+    { name: 'name', type: 'text', required: true, localized: true },
     { name: 'role', type: 'text', localized: true },
     { name: 'photo', type: 'upload', relationTo: 'media' },
     { name: 'bio', type: 'richText', localized: true },

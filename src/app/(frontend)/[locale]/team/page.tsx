@@ -3,7 +3,7 @@ import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage, getTeam } from '@/lib/api'
-import { MediaImage } from '@/components/MediaImage'
+import { TeamCard } from '@/components/TeamCard'
 import { buildMetadata } from '@/lib/seo'
 import {
   Container,
@@ -165,22 +165,9 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
                 : 'No team members yet — add them from the admin panel.'}
             </p>
           ) : (
-            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {team.map((m) => (
-                <article key={m.id} className="card p-6">
-                  {m.photo && typeof m.photo !== 'number' ? (
-                    <MediaImage
-                      media={m.photo}
-                      className="h-24 w-24 rounded-full border border-black/10 object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-24 w-24 items-center justify-center rounded-full border border-black bg-brand-yellow text-xs font-semibold text-black">
-                      LPN
-                    </div>
-                  )}
-                  <h3 className="mt-5 text-base font-bold tracking-tight text-black">{m.name}</h3>
-                  {m.role && <div className="t-label mt-1 text-black/70">{m.role}</div>}
-                </article>
+                <TeamCard key={m.id} member={m} />
               ))}
             </div>
           )}
