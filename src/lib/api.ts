@@ -167,6 +167,7 @@ export const SITE_MEDIA = {
   patimaPortrait: 'team-patima-tungpuchayakul-hOoEE1Sx5ogA6lflpBguxpGL8G9e7b.jpg', // 2026-10 staff portrait (3:4 on brand yellow)
   sompong: 'd6c8d1_fc19f203584146e1905019bbff5a2f1a_mv2_d_2560_1420_s_2-hTdpRb08hhyEpyuTdz9eLy8bH6NAsv.png',
   projectLaunch: 'd90624_0bba1bd8f67544eb888f06f923981aa0_mv2-5-phG8UoxZP3AUjY91WDY4RFqygVDvgy.jpg',
+  fisherHealthReport: 'd90624_43970a2341694e29ac897da6b3a01bc7_mv2-Jv5C9XZa4CAINPX2iU9OTWll5sbwR5.png', // /impact fisher-health study banner
 } as const
 
 export type SiteMediaKey = keyof typeof SITE_MEDIA

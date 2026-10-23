@@ -3,7 +3,8 @@ import Image from 'next/image'
 import { GlobeHemisphereEast } from '@phosphor-icons/react/ssr'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
-import { getImpactMetrics, getPosts, getReports } from '@/lib/api'
+import { getImpactMetrics, getPosts, getReports, getSiteMedia } from '@/lib/api'
+import { MediaImage } from '@/components/MediaImage'
 import { buildMetadata } from '@/lib/seo'
 import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
 import { ReportLibrary } from '@/components/ReportLibrary'
@@ -27,10 +28,11 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
   const { locale } = await props.params
   setRequestLocale(locale)
   const th = locale === 'th'
-  const [{ docs: publications }, reviewedMetrics, reports] = await Promise.all([
+  const [{ docs: publications }, reviewedMetrics, reports, mediaMap] = await Promise.all([
     getPosts(locale, { categorySlug: 'publications', limit: 12 }),
     getImpactMetrics(locale),
     getReports(locale),
+    getSiteMedia(),
   ])
   const metrics = th ? [
     { value: '135', unit: 'กรณี', label: 'กรณีช่วยเหลือแรงงาน', definition: 'จำนวนกรณีช่วยเหลือแรงงานที่ LPN รายงานในปี 2024' },
@@ -54,9 +56,9 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-30 brightness-90 contrast-105"
+          className="object-cover object-center opacity-60"
         />
-        <div className="absolute inset-0 bg-linear-to-r from-black via-black/85 to-black/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-r from-black via-black/70 to-black/10 pointer-events-none" />
         <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40 pointer-events-none" />
       </div>
 
@@ -95,7 +97,12 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
     </Container></Section>}
 
     <Section tone="paper"><Container>
-      <SectionHeading eyebrow={th ? 'รายงานประจำปี' : 'Annual report'} title={th ? 'ผลการทำงานปี 2024' : '2024 results'} lede={th ? 'ตัวเลขด้านล่างมาจากรายงานประจำปี 2024 ของ LPN ซึ่งเผยแพร่ในเดือนพฤษภาคม 2025' : 'These figures come from LPN’s 2024 annual report, published in May 2025.'} />
+      <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,28rem)] lg:items-end">
+        <SectionHeading eyebrow={th ? 'รายงานประจำปี' : 'Annual report'} title={th ? 'ผลการทำงานปี 2024' : '2024 results'} lede={th ? 'ตัวเลขด้านล่างมาจากรายงานประจำปี 2024 ของ LPN ซึ่งเผยแพร่ในเดือนพฤษภาคม 2025' : 'These figures come from LPN’s 2024 annual report, published in May 2025.'} />
+        {mediaMap.assistanceCentre && <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-black/5">
+          <MediaImage media={mediaMap.assistanceCentre} fill sizes="(min-width: 1024px) 28rem, 100vw" className="object-cover" alt={th ? 'ศูนย์ช่วยเหลือแรงงานของ LPN' : 'LPN worker assistance centre'} />
+        </div>}
+      </div>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{metrics.map((m) => <article key={m.label} className="border-t-4 border-current bg-white p-6">
         <p className="text-4xl font-bold tracking-tight">{m.value} <span className="text-base font-bold">{m.unit}</span></p>
         <h3 className="mt-4 text-lg font-bold">{m.label}</h3>
@@ -110,7 +117,8 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
       </div>
     </Container></Section>
 
-    <Section tone="light" id="fisher-health"><Container>
+    <Section tone="light" id="fisher-health"><Container className="grid gap-10 lg:grid-cols-2 lg:items-center">
+      <div>
       <SectionHeading eyebrow={th ? 'งานวิจัยล่าสุด' : 'Recent research'} title={th ? 'แรงงานประมงกับการเข้าถึงสุขภาพ' : 'Fishers’ access to healthcare'} lede={th
         ? 'งานศึกษาที่ LPN เปิดตัวในปี 2026 รวบรวมเสียงของแรงงานประมงและครอบครัว 100 คนใน 8 จังหวัดชายฝั่ง เพื่อทำความเข้าใจการเข้าถึงบริการและสิทธิด้านสุขภาพ'
         : 'An LPN study announced in 2026 gathered accounts from 100 fishers and family members in eight coastal provinces about access to healthcare and health rights.'} />
@@ -118,15 +126,26 @@ export default async function ImpactPage(props: { params: Promise<{ locale: Loca
         ? 'นี่คือขอบเขตของการศึกษา ไม่ใช่จำนวนคนที่ได้รับการช่วยเหลือจาก LPN หรือหลักฐานว่าปัญหาเปลี่ยนแปลงแล้ว'
         : 'This is the study sample, not a count of people assisted by LPN or evidence that conditions have already changed.'}</p>
       <a href={`/th/post/${encodeURIComponent(FISHER_HEALTH_SLUG)}`} className="link-mark mt-7 inline-block text-black">{th ? 'อ่านข่าวเปิดตัวรายงาน' : 'Read the report announcement (Thai)'} →</a>
+      </div>
+      {mediaMap.fisherHealthReport && <div className="relative aspect-[1092/596] overflow-hidden rounded-xl bg-black/5">
+        <MediaImage media={mediaMap.fisherHealthReport} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" alt={th ? 'การเปิดตัวรายงานแรงงานประมงกับการเข้าถึงสุขภาพ' : 'Launch of the fishers’ healthcare report'} />
+      </div>}
     </Container></Section>
 
     <Section tone="paper"><Container>
       <SectionHeading eyebrow={th ? 'คลังสิ่งพิมพ์' : 'Publications'} title={th ? 'รายงานและบทความที่เกี่ยวข้อง' : 'More reports and publications'} lede={th ? 'รายงานการศึกษา รายงานประจำปี และข้อเสนอเชิงนโยบายของ LPN' : 'LPN studies, annual reports and policy proposals.'} />
-      {publications.length ? <div className="mt-9 grid gap-4 md:grid-cols-2">{publications.map((post) => <Link key={post.id} href={`/post/${post.slug}`} className="border-l-4 border-current bg-white p-6 transition-colors hover:bg-brand-yellow/10">
+      {publications.length ? <div className="mt-9 grid gap-4 md:grid-cols-2">{publications.map((post) => <Link key={post.id} href={`/post/${post.slug}`} className="flex flex-col overflow-hidden rounded-xl border border-black/10 bg-white transition-colors hover:bg-brand-yellow/10">
+        <div className="relative aspect-[16/9] bg-brand-yellow">
+          {post.coverImage && typeof post.coverImage !== 'number'
+            ? <MediaImage media={post.coverImage} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" alt="" />
+            : <span className="absolute bottom-4 left-4 text-sm font-bold text-black/70">LPN</span>}
+        </div>
+        <div className="p-6">
         {post.publishedAt && <time dateTime={post.publishedAt} className="t-label text-black/70">{new Date(post.publishedAt).toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' })}</time>}
         <h3 className="t-h3 mt-3">{post.title}</h3>
         {post.excerpt && <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-black/75">{post.excerpt}</p>}
         <span className="link-mark mt-5 inline-block">{th ? 'อ่านบทความ' : 'Read publication'} →</span>
+        </div>
       </Link>)}</div> : <p className="mt-8 text-sm text-black/75">{th ? 'ยังไม่มีบทความในหมวดสิ่งพิมพ์สำหรับภาษานี้' : 'No publication posts are available in this language yet.'}</p>}
     </Container></Section>
 
