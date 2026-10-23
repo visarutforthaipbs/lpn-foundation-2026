@@ -351,25 +351,6 @@ export default async function AboutPage(props: { params: Promise<{ locale: Local
         </Container>
       </Section>
 
-      {/* GOVERNANCE & TRANSPARENCY */}
-      <Section tone="light"><Container>
-        <SectionHeading
-          eyebrow={th ? 'ธรรมาภิบาลและความโปร่งใส' : 'Governance & transparency'}
-          title={th ? 'หลักฐานที่ตรวจสอบได้ คือมาตรฐานของเรา' : 'Evidence you can check is the standard.'}
-        />
-        <div className="mt-8 max-w-3xl">
-          <p className="t-lede text-black/75">
-            {th
-              ? 'LPN เป็นมูลนิธิที่จดทะเบียนในประเทศไทย สำนักงานใหญ่ตั้งอยู่ในจังหวัดปทุมธานี ผลการทำงานและรายงานทั้งหมดแสดงช่วงเวลา นิยาม และแหล่งที่มาในหน้าผลการทำงานและรายงาน รายละเอียดการเงินและบัญชีรับบริจาคจะเผยแพร่เมื่อผ่านการตรวจสอบจาก LPN'
-              : 'LPN is a registered foundation in Thailand, headquartered in Pathum Thani. Every published figure carries a period, definition, and source on our Impact & Reports page. Financial and donation account details are published only after LPN verification.'}
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="/impact" variant="solidDark">{th ? 'ดูผลการทำงานและรายงาน' : 'Impact & Reports'}</ButtonLink>
-            <ButtonLink href="/contact" variant="ghostDark">{th ? 'ติดต่อเรา' : 'Contact LPN'}</ButtonLink>
-          </div>
-        </div>
-      </Container></Section>
-
       {/* Archival Wix copy preserved by editors in Payload blocks. */}
       <Container>
         <WixIntegratedCopy slug="about" locale={locale} />
