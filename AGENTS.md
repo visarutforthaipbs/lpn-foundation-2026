@@ -125,6 +125,16 @@ a Hermes shell (the Hermes venv poisons tsx/node-gyp otherwise).
 5. Never `git push` from a branch to `main` without the checks above; never
    delete branches with unmerged work.
 
+## Help form env (M1 → intake API)
+`/[locale]/get-help` carries the help-intake form (`src/components/HelpIntakeForm.tsx`, PRD v1.1 §7.2). It POSTs JSON
+to `NEXT_PUBLIC_INTAKE_URL/api/intake/form` (contract: `~/Documents/ChatGPT/LPN/intake/docs/API.md`) and never touches
+Payload/Neon. Env (both in `.env.example`, inlined at build time): `NEXT_PUBLIC_INTAKE_URL` (prod
+`https://intake.lpnfoundation.org`, local `http://localhost:3100`) and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (default
+`1x00000000000000000000AA` = Cloudflare always-pass test key; set the real key on Vercel). Local dev: `node
+scripts/mock-intake.mjs` (:3100, always returns `K7Q2M9XD`) — never start the real intake app for website work. On a
+10 s timeout or 5xx the form repeats the CMS-backed hotline channels + `MESSENGER_URL` (`src/lib/content.ts`).
+Quick Exit (`src/components/QuickExitButton.tsx`) renders on get-help only.
+
 ## 7. Open items (keep true)
 
 - **DNS cutover to Vercel not done** — `www.lpnfoundation.org` still serves Wix. 2026-10-23: owner

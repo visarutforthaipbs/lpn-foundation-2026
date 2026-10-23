@@ -88,6 +88,13 @@ export const SOCIALS = [
 
 export const FACEBOOK_URL = 'https://www.facebook.com/LPN-Foundation-1406397336075427'
 
+/**
+ * Messenger deep link for the help-form fallback panel (PRD v1.1 §7.2).
+ * Built from the numeric page id in FACEBOOK_URL; m.me accepts page ids as
+ * well as usernames. LPN to confirm this is the page staff actually monitor.
+ */
+export const MESSENGER_URL = 'https://m.me/1406397336075427'
+
 /** Dial-ready href for a display phone number like "+66 84 121 1609". */
 export const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, '')}`
 
