@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { EnvelopeSimple, MapPin, Phone } from '@phosphor-icons/react/ssr'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
@@ -62,9 +61,8 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
       {/* Main: brand + sitemap on one row, contact on the next */}
       <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-10">
-          <Link href="/" className="flex min-h-11 shrink-0 items-center gap-3" aria-label="LPN Foundation">
-            <Image src="/logos/masterbrand/lpn-white.png" alt="" width={50} height={40} className="h-10 w-auto" />
-            <span className="text-base font-bold">LPN Foundation</span>
+          <Link href="/" className="flex min-h-11 shrink-0 items-center text-base font-bold">
+            LPN Foundation
           </Link>
           <nav aria-label={isThai ? 'แผนผังเว็บไซต์' : 'Sitemap'}>
             <ul className="grid grid-cols-2 gap-x-6 text-sm md:flex md:flex-wrap md:justify-end md:gap-x-5">
