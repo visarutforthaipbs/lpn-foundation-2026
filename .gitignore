@@ -58,3 +58,4 @@ node_modules/
 
 # Brand design package (252MB, .ai + hi-res photos) — kept locally / on NAS, not in git
 LPN Masterbrand logos/
+src/i18n/drafts/_missing.txt

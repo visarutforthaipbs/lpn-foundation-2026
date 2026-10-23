@@ -2,6 +2,21 @@ import type { Where } from 'payload'
 import { getPayloadClient } from './payload'
 import type { Locale } from '@/i18n/routing'
 import type { Media } from '@/payload-types'
+import { isDraftLocale } from '@/i18n/locales'
+
+/**
+ * Posts stay in their original language (Thai rows exist only in `th`, English only in `en`).
+ * Draft locales (my/km/lo) read posts as `th` with English fallback, so every post comes back
+ * with its own-language title/excerpt/content, and list ALL posts regardless of language.
+ */
+function postLocale(locale: Locale) {
+  return isDraftLocale(locale) ? { locale: 'th' as const, fallbackLocale: 'en' as const } : { locale }
+}
+
+/** Reports/metrics/stories hide untranslated rows on en/th; draft locales show the English text. */
+function strictFallback(locale: Locale) {
+  return isDraftLocale(locale) ? ('en' as const) : (false as const)
+}
 
 const published: Where = { _status: { equals: 'published' } }
 
@@ -41,14 +56,14 @@ export async function getAllPageSlugs() {
 
 export async function getPosts(locale: Locale, opts: { categorySlug?: string; limit?: number; page?: number } = {}) {
   const payload = await getPayloadClient()
-  // Each locale's blog shows only posts authored in that language.
-  const and: Where[] = [published, { language: { equals: locale } }]
+  // Each en/th blog shows only posts authored in that language; my/km/lo show all.
+  const and: Where[] = isDraftLocale(locale) ? [published] : [published, { language: { equals: locale } }]
   if (opts.categorySlug) {
     and.push({ 'category.slug': { equals: opts.categorySlug } })
   }
-  return payload.find({
+  const result = await payload.find({
     collection: 'posts',
-    locale,
+    ...postLocale(locale),
     depth: 2,
     limit: opts.limit ?? 100,
     page: opts.page ?? 1,
@@ -61,15 +76,25 @@ export async function getPosts(locale: Locale, opts: { categorySlug?: string; li
       publishedAt: true,
       category: true,
       coverImage: true,
+      language: true,
     },
   })
+  if (!isDraftLocale(locale)) return result
+  // Category chips on draft locales use the English category names, not the Thai ones.
+  const english = new Map((await getCategories('en')).map((c) => [c.id, c.title]))
+  for (const doc of result.docs) {
+    if (doc.category && typeof doc.category === 'object') {
+      doc.category = { ...doc.category, title: english.get(doc.category.id) ?? doc.category.title }
+    }
+  }
+  return result
 }
 
 export async function getPost(slug: string, locale: Locale) {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'posts',
-    locale,
+    ...postLocale(locale),
     depth: 2,
     limit: 1,
     where: { and: [{ slug: { equals: slug } }, published] },
@@ -112,7 +137,7 @@ export async function getTeam(locale: Locale) {
 export async function getReports(locale: Locale) {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
-    collection: 'reports', locale, fallbackLocale: false, depth: 1, limit: 100,
+    collection: 'reports', locale, fallbackLocale: strictFallback(locale), depth: 1, limit: 100,
     sort: '-year', where: published,
   })
   return docs.filter((doc) => doc.title && doc.summary)
@@ -121,7 +146,7 @@ export async function getReports(locale: Locale) {
 export async function getImpactMetrics(locale: Locale) {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
-    collection: 'impact-metrics', locale, fallbackLocale: false, depth: 1, limit: 100,
+    collection: 'impact-metrics', locale, fallbackLocale: strictFallback(locale), depth: 1, limit: 100,
     sort: 'order', where: published,
   })
   return docs.filter((doc) => doc.label && doc.unit && doc.periodLabel && doc.definition)
@@ -130,7 +155,7 @@ export async function getImpactMetrics(locale: Locale) {
 export async function getStories(locale: Locale) {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
-    collection: 'stories', locale, fallbackLocale: false, depth: 1, limit: 100,
+    collection: 'stories', locale, fallbackLocale: strictFallback(locale), depth: 1, limit: 100,
     sort: '-storyDate',
     where: { and: [published, { consentStatus: { equals: 'approved' } }] },
   })
@@ -140,7 +165,7 @@ export async function getStories(locale: Locale) {
 export async function getStory(slug: string, locale: Locale) {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
-    collection: 'stories', locale, fallbackLocale: false, depth: 2, limit: 1,
+    collection: 'stories', locale, fallbackLocale: strictFallback(locale), depth: 2, limit: 1,
     where: { and: [published, { consentStatus: { equals: 'approved' } }, { slug: { equals: slug } }] },
   })
   return docs.find((doc) => doc.title && doc.summary && doc.content) ?? null

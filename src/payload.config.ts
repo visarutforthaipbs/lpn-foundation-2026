@@ -44,6 +44,11 @@ export default buildConfig({
     locales: [
       { label: 'English', code: 'en' },
       { label: 'ไทย', code: 'th' },
+      // Migrant languages (2026-10-24): UI is a machine draft pending native-speaker review;
+      // CMS fields stay English (fallback) until an editor translates them in /admin.
+      { label: 'မြန်မာ', code: 'my', fallbackLocale: 'en' },
+      { label: 'ខ្មែរ', code: 'km', fallbackLocale: 'en' },
+      { label: 'ລາວ', code: 'lo', fallbackLocale: 'en' },
     ],
     defaultLocale: 'en',
     fallback: true,

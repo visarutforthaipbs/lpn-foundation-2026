@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { routing, type Locale } from '@/i18n/routing'
+import { LOCALE_META } from '@/i18n/locales'
+import { isReviewed } from '@/i18n/review'
 
 function resolveSiteUrl(): URL {
   const candidates = [
@@ -38,13 +40,13 @@ export function buildMetadata({
   description?: string
   image?: string
 }): Metadata {
-  const languages = Object.fromEntries(routing.locales.map((l) => [l, `/${l}${path}`]))
+  // hreflang only for locales a native speaker has signed off (src/i18n/review.ts).
+  const reviewed = routing.locales.filter((l) => isReviewed(l))
+  const languages = Object.fromEntries(reviewed.map((l) => [l, `/${l}${path}`]))
 
   // OG wants POSIX-style locales (th_TH), not route codes (th).
-  const ogLocale = locale === 'th' ? 'th_TH' : 'en_US'
-  const ogAlternate = routing.locales
-    .filter((l) => l !== locale)
-    .map((l) => (l === 'th' ? 'th_TH' : 'en_US'))
+  const ogLocale = LOCALE_META[locale]?.og ?? 'en_US'
+  const ogAlternate = reviewed.filter((l) => l !== locale).map((l) => LOCALE_META[l].og)
   const shareImage = image ?? `${SITE_URL}/images/lpn-share.png`
 
   return {
