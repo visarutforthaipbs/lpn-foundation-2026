@@ -3,6 +3,7 @@ import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage, getTeam } from '@/lib/api'
+import { HERO_IMAGES } from '@/lib/hero-images'
 import { TeamCard } from '@/components/TeamCard'
 import { buildMetadata } from '@/lib/seo'
 import {
@@ -96,6 +97,8 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
     <>
       {/* ---------------------------------------------------------------- HERO */}
       <PageHero
+        backgroundImage={HERO_IMAGES.team}
+        backgroundAlt="ทีมงานและอาสาสมัคร LPN"
         compact
         eyebrow={isThai ? 'ทีม LPN' : 'The LPN team'}
         title={

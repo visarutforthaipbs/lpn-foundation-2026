@@ -3,6 +3,7 @@ import Image from 'next/image'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
+import { HERO_IMAGES } from '@/lib/hero-images'
 import { buildMetadata } from '@/lib/seo'
 import { projectsEn, projectsTh, type ProjectsCopy, type Partner } from '@/content/projects'
 import { getPartnerProjects } from '@/content/partnerProjects'
@@ -95,9 +96,9 @@ export default async function ProjectsPage(props: { params: Promise<{ locale: Lo
     <>
       {/* ---------------------------------------------------------------- HERO */}
       <PageHero
+        backgroundImage={HERO_IMAGES.projects}
+        backgroundAlt="กิจกรรมอบรมเยาวชนของ LPN"
         compact
-        backgroundImage="/images/learning-center.jpg"
-        backgroundAlt={isThai ? 'โครงการและความร่วมมือของ LPN' : 'LPN projects and partnerships'}
         eyebrow={isThai ? 'ความร่วมมือและพันธมิตร' : 'Partnerships'}
         title={isThai ? 'การเปลี่ยนแปลงที่ยั่งยืนเกิดจากการทำงานร่วมกัน' : 'Lasting change is built in coalition.'}
         lede={

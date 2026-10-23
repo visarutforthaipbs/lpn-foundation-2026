@@ -3,6 +3,7 @@ import { CaretDown, Phone } from '@phosphor-icons/react/ssr'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
+import { HERO_IMAGES } from '@/lib/hero-images'
 import { buildMetadata } from '@/lib/seo'
 import { servicesEn, servicesTh, type ServicesCopy, type Item } from '@/content/services'
 import {
@@ -94,9 +95,9 @@ export default async function ServicesPage(props: { params: Promise<{ locale: Lo
     <>
       {/* ---------------------------------------------------------------- HERO */}
       <PageHero
+        backgroundImage={HERO_IMAGES.services}
+        backgroundAlt="ทีมภาคสนาม LPN กับชุมชน"
         compact
-        backgroundImage="/images/fisher-protection.jpg"
-        backgroundAlt={isThai ? 'งานคุ้มครองและบริการช่วยเหลือแรงงาน LPN' : 'LPN worker protection services'}
         eyebrow={copy.hero.eyebrow}
         title={isThai ? 'LPN ช่วยแรงงานอย่างไร' : 'How LPN helps workers'}
         lede={isThai ? 'รับฟังปัญหา ช่วยเหลือ และทำงานกับชุมชน' : 'We listen, respond, and work alongside communities.'}

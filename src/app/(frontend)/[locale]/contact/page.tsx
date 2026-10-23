@@ -2,6 +2,7 @@ import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getPage } from '@/lib/api'
+import { HERO_IMAGES } from '@/lib/hero-images'
 import { buildMetadata } from '@/lib/seo'
 import { ALT_LINES, OFFICE, FACEBOOK_URL, telHref } from '@/lib/content'
 import { getHelpChannels } from '@/lib/help-channels'
@@ -51,9 +52,9 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
     <>
       {/* ---------------------------------------------------------------- HERO */}
       <PageHero
+        backgroundImage={HERO_IMAGES.contact}
+        backgroundAlt="การประชุมของ LPN กับภาคี"
         compact
-        backgroundImage="/images/field-action.jpg"
-        backgroundAlt={isThai ? 'การปฏิบัติการภาคสนามของ LPN' : 'LPN field operations'}
         eyebrow={isThai ? 'ช่องทางติดต่อเรา' : 'Get in touch'}
         title={isThai ? 'ติดต่อ LPN โดยตรง' : 'Contact LPN directly.'}
         lede={

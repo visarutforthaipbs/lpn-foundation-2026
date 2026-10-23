@@ -65,9 +65,9 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-55 brightness-90 contrast-105"
+          className="object-cover object-center opacity-70"
         />
-        <div className="absolute inset-0 bg-linear-to-r from-black via-black/80 to-black/45 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-r from-black via-black/75 to-black/10 pointer-events-none" />
         <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40 pointer-events-none" />
       </div>
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { HeroBackdrop } from '@/components/HeroBackdrop'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Link } from '@/i18n/navigation'
 
@@ -253,21 +254,8 @@ export function PageHero({
 }) {
   return (
     <section className="relative isolate overflow-hidden bg-black text-white">
-      {backgroundImage && (
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={backgroundImage}
-            alt={backgroundAlt}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center opacity-30 brightness-90 contrast-105"
-          />
-          <div className="absolute inset-0 bg-linear-to-r from-black via-black/85 to-black/60 pointer-events-none" />
-          <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40 pointer-events-none" />
-        </div>
-      )}
-      <div className="pointer-events-none absolute right-0 top-0 z-1 h-full w-[42%] border-l border-white/10 bg-[linear-gradient(135deg,transparent_0%,rgba(255,199,0,0.12)_100%)]" aria-hidden="true" />
+      {backgroundImage && <HeroBackdrop src={backgroundImage} alt={backgroundAlt} />}
+      {!backgroundImage && <div className="pointer-events-none absolute right-0 top-0 z-1 h-full w-[42%] border-l border-white/10 bg-[linear-gradient(135deg,transparent_0%,rgba(255,199,0,0.12)_100%)]" aria-hidden="true" />}
 
       <div className={`container-page relative z-10 ${compact ? 'py-20 md:py-24' : 'py-24 md:py-32'}`}>
         <div className="max-w-4xl">

@@ -2,6 +2,8 @@ import { setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getPosts, getCategories } from '@/lib/api'
+import { HERO_IMAGES } from '@/lib/hero-images'
+import { HeroBackdrop } from '@/components/HeroBackdrop'
 import { MediaImage } from '@/components/MediaImage'
 import { Container, Section, StatBand, ButtonLink, CtaBand, Eyebrow } from '@/components/ui'
 
@@ -48,6 +50,7 @@ export default async function BlogIndex(props: {
     <>
       {/* ------------------------------------------------------- COMPACT HERO */}
       <section className="relative isolate overflow-hidden bg-black text-white">
+        <HeroBackdrop src={HERO_IMAGES.news} alt="" />
         <div className="container-page relative z-10 py-16 md:py-20">
           <div className="max-w-3xl">
             <Eyebrow>{isThai ? 'ข่าวสาร' : 'News'}</Eyebrow>
