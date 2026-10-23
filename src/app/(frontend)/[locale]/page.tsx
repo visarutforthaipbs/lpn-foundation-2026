@@ -291,13 +291,14 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
 
         {/* Leadership documentary portrait & statement */}
         <div className="border border-white/15 bg-white/5 p-6 sm:p-8 backdrop-blur-xs">
-          {mediaMap.patima && (
-            <div className="relative aspect-16/10 w-full overflow-hidden border border-white/10 bg-black/40">
+          {mediaMap.patimaPortrait && (
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-brand-yellow">
               <MediaImage
-                media={mediaMap.patima}
+                media={mediaMap.patimaPortrait}
+                fill
                 alt={th ? 'ปฏิมา ตั้งปรัชญากูล ผู้อำนวยการ LPN' : 'Patima Tungpuchayakul, LPN Executive Director'}
                 sizes="(min-width: 1024px) 30vw, 100vw"
-                className="h-full w-full object-cover"
+                className="object-cover object-top"
               />
             </div>
           )}

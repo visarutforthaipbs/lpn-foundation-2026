@@ -164,6 +164,7 @@ export const SITE_MEDIA = {
   trainingCentre: 'd90624_f19e0c74863d4b18b4b511304872bc17_mv2-V0AF88o2gf7pWVxWtQRljOdfqJVXyJ.jpg',
   familyHome: '72011e_1e727aa47c4a4156afe2c44c36349674_mv2_d_4893_3262_s_4_2-wxLtzd2ii5k38FoO59Bi3GRvsYEFjm.jpg',
   patima: 'd6c8d1_9595357407c44b0a812e5807508cc7ea_mv2-mCSnvguSXqnHD9Zuielutn8jbq5fAl.jpg',
+  patimaPortrait: 'team-patima-tungpuchayakul-hOoEE1Sx5ogA6lflpBguxpGL8G9e7b.jpg', // 2026-10 staff portrait (3:4 on brand yellow)
   sompong: 'd6c8d1_fc19f203584146e1905019bbff5a2f1a_mv2_d_2560_1420_s_2-hTdpRb08hhyEpyuTdz9eLy8bH6NAsv.png',
   projectLaunch: 'd90624_0bba1bd8f67544eb888f06f923981aa0_mv2-5-phG8UoxZP3AUjY91WDY4RFqygVDvgy.jpg',
 } as const
