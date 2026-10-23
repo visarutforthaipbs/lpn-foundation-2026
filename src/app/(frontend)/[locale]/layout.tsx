@@ -6,6 +6,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server'
 import { routing, type Locale } from '@/i18n/routing'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { MotionProvider } from '@/components/motion'
 import '../styles.css'
 
 import { SITE_URL_OBJ } from '@/lib/seo'
@@ -88,7 +89,7 @@ export default async function LocaleLayout(props: {
           <div className="flex min-h-screen flex-col">
             <SiteHeader locale={locale as Locale} />
             <main id="main" className="flex-1">
-              {children}
+              <MotionProvider>{children}</MotionProvider>
             </main>
             <SiteFooter locale={locale as Locale} />
           </div>

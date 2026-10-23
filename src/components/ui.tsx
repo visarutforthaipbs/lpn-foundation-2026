@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { HeroBackdrop } from '@/components/HeroBackdrop'
+import { Reveal, CountUp } from '@/components/motion'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Link } from '@/i18n/navigation'
 
@@ -83,7 +84,7 @@ export function SectionHeading({
   className?: string
 }) {
   return (
-    <div
+    <Reveal
       className={`max-w-3xl ${align === 'center' ? 'mx-auto text-center' : ''} ${className}`}
     >
       {eyebrow && (
@@ -101,7 +102,7 @@ export function SectionHeading({
           {lede}
         </p>
       )}
-    </div>
+    </Reveal>
   )
 }
 
@@ -215,11 +216,11 @@ export function StatBand({
   }[tone]
   return (
     <dl className={`grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 ${className}`}>
-      {stats.map((s) => (
-        <div key={s.label} className={`border-l pl-4 ${item}`}>
+      {stats.map((s, i) => (
+        <Reveal key={s.label} delay={i * 0.08} className={`border-l pl-4 ${item}`}>
           <dt className={`t-label mt-2 ${label}`}>{s.label}</dt>
-          <dd className="stat-value mt-1.5">{s.value}</dd>
-        </div>
+          <dd className="stat-value mt-1.5"><CountUp value={s.value} /></dd>
+        </Reveal>
       ))}
     </dl>
   )

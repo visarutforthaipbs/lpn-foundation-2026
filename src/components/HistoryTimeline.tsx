@@ -1,5 +1,6 @@
 import { FilmSlate, FlagBanner, HandHeart, Lifebuoy, Medal, Scales } from '@phosphor-icons/react/ssr'
 import type { Icon } from '@phosphor-icons/react'
+import { Reveal, DrawLine, CountUp } from '@/components/motion'
 
 export type Milestone = {
   /** first year (CE) — positions the mark on the axis */
@@ -44,18 +45,18 @@ export function HistoryTimeline({ items, start, end, stats, todayLabel, yearOffs
     <div className="mt-12">
       {/* Key figures, taken from the milestones below */}
       <dl className="grid gap-px overflow-hidden rounded-xl border border-white/15 bg-white/15 sm:grid-cols-3">
-        {stats.map((s) => (
-          <div key={s.label} className="bg-black p-5">
+        {stats.map((s, i) => (
+          <Reveal key={s.label} delay={i * 0.08} className="bg-black p-5">
             <dt className="text-sm text-white/70">{s.label}</dt>
-            <dd className="mt-1 text-3xl font-bold tracking-tight text-white">{s.value}</dd>
-          </div>
+            <dd className="mt-1 text-3xl font-bold tracking-tight text-white"><CountUp value={s.value} /></dd>
+          </Reveal>
         ))}
       </dl>
 
       {/* Desktop: proportional axis */}
       <div className="relative mt-14 hidden h-[26rem] md:block" aria-hidden="true">
         {/* axis */}
-        <div className="absolute top-1/2 right-0 left-0 h-0.5 -translate-y-1/2 bg-white/50" />
+        <DrawLine className="absolute top-1/2 right-0 left-0 h-0.5 -translate-y-1/2 bg-white/50" />
         {ticks.map((y) => (
           <div key={y} className="absolute top-1/2" style={{ left: `${pos(y)}%` }}>
             <div className="h-2 w-px -translate-y-1 bg-white/40" />
@@ -105,14 +106,14 @@ export function HistoryTimeline({ items, start, end, stats, todayLabel, yearOffs
         {items.map((m) => {
           const Icon = ICONS[m.kind]
           return (
-            <li key={m.label} className="relative border-l border-white/25 pl-6">
+            <Reveal as="li" key={m.label} delay={0} className="relative border-l border-white/25 pl-6">
               <span className="absolute top-0.5 -left-[11px] flex h-[22px] w-[22px] items-center justify-center rounded-full bg-black text-white">
                 <Icon size={18} weight="duotone" aria-hidden="true" />
               </span>
               <span className="text-sm font-bold text-white tabular-nums">{m.label}</span>
               <p className="mt-1 font-semibold text-white">{m.title}</p>
               <p className="mt-1 text-sm leading-relaxed text-white/75">{m.body}</p>
-            </li>
+            </Reveal>
           )
         })}
       </ol>
