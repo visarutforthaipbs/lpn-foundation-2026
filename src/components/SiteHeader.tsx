@@ -7,6 +7,8 @@ import { HOTLINES, telHref } from '@/lib/content'
 import { ButtonLink } from './ui'
 import dynamic from 'next/dynamic'
 import { MobileMenu } from './MobileMenu'
+import { tx } from '@/i18n/tx'
+import { isDraftLocale } from '@/i18n/locales'
 
 const LocaleSwitcher = dynamic(() => import('./LocaleSwitcher').then((mod) => mod.LocaleSwitcher), {
   loading: () => <span className="t-label text-white/75">...</span>,
@@ -25,14 +27,15 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
     { href: '/blog', en: 'News', th: 'ข่าวสาร' },
   ]
   const cmsItems = header?.navItems ?? []
-  const cmsReady = ALLOWED.every((item) => cmsItems.some((cms) => cms.href === item.href))
+  // Draft locales (my/km/lo) use the code labels below: CMS labels there are English fallbacks.
+  const cmsReady = !isDraftLocale(locale) && ALLOWED.every((item) => cmsItems.some((cms) => cms.href === item.href))
   const navItems = cmsReady
     ? cmsItems.filter((item) => ALLOWED.some((allowed) => allowed.href === item.href)).map((item) => ({ href: item.href, label: item.label }))
-    : ALLOWED.map((item) => ({ href: item.href, label: isThai ? item.th : item.en }))
+    : ALLOWED.map((item) => ({ href: item.href, label: tx(locale, item.th, item.en) }))
 
   const donate = {
     href: header?.donateHref || '/donate',
-    label: header?.donateLabel || (isThai ? 'บริจาค' : 'Donate'),
+    label: (!isDraftLocale(locale) && header?.donateLabel) || tx(locale, 'บริจาค', 'Donate'),
   }
 
   // Locale-appropriate hotline: CMS footer first, canonical list as fallback.
@@ -53,7 +56,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               className="group flex min-h-11 items-center gap-2 text-white/70 transition-colors hover:text-white"
             >
               <Phone size={20} className="shrink-0" aria-hidden="true" />
-              <span className="t-label">{isThai ? 'สายด่วน' : 'Hotline'}</span>
+              <span className="t-label">{tx(locale, 'สายด่วน', 'Hotline')}</span>
               <span className="font-mono text-sm text-white/85 group-hover:text-white">
                 {primaryHotline.phone}
               </span>
@@ -61,7 +64,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
           ) : (
             <span className="t-label text-white/75">LPN Foundation</span>
           )}
-          <LocaleSwitcher />
+          <LocaleSwitcher label={tx(locale, 'ภาษา', 'Language')} />
         </div>
       </div>
 
@@ -80,7 +83,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
             />
           </Link>
 
-          <nav aria-label={isThai ? 'เมนูหลัก' : 'Main menu'} className="hidden items-center gap-1 lg:flex">
+          <nav aria-label={tx(locale, 'เมนูหลัก', 'Main menu')} className="hidden items-center gap-1 lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -96,7 +99,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
           <div className="flex items-center gap-2">
             <Link
               href="/contact"
-              aria-label={isThai ? 'ติดต่อเรา' : 'Contact'}
+              aria-label={tx(locale, 'ติดต่อเรา', 'Contact')}
               className="tactile-icon-btn h-11 w-11 text-white/80 hover:text-white"
             >
               <Phone size={20} aria-hidden="true" />
@@ -107,7 +110,15 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
               {donate.label}
             </ButtonLink>
 
-            <MobileMenu items={navItems} donate={donate} isThai={isThai} />
+            <MobileMenu
+              items={navItems}
+              donate={donate}
+              labels={{
+                open: tx(locale, 'เปิดเมนู', 'Open menu'),
+                nav: tx(locale, 'เมนูหลัก', 'Main menu'),
+                language: tx(locale, 'ภาษา', 'Language'),
+              }}
+            />
           </div>
         </div>
       </div>

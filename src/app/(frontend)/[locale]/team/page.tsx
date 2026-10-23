@@ -14,6 +14,7 @@ import {
   CtaBand,
   ButtonLink,
 } from '@/components/ui'
+import { tx } from '@/i18n/tx'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -35,24 +36,20 @@ export async function generateMetadata(props: { params: Promise<{ locale: Locale
 export default async function TeamPage(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
   setRequestLocale(locale)
-  const isThai = locale === 'th'
 
   const team = await getTeam(locale)
 
-  const stats = isThai
-    ? [
+  const stats = tx(locale, [
         { value: '20+', label: 'ปีของการเคลื่อนไหว' },
         { value: '10+', label: 'สัญชาติของแรงงานที่ทำงานด้วย' },
         { value: '1', label: 'เครือข่ายเยาวชนข้ามชาติ' },
-      ]
-    : [
+      ], [
         { value: '20+', label: 'years of organising' },
         { value: '10+', label: 'worker nationalities supported' },
         { value: '1', label: 'migrant youth network' },
-      ]
+      ])
 
-  const leaders = isThai
-    ? [
+  const leaders = tx(locale, [
         {
           name: 'ปฏิมา ตั้งปรัชญากูล',
           role: 'ผู้อำนวยการ & ผู้ร่วมก่อตั้ง',
@@ -71,8 +68,7 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
           quote: '"ทุกชีวิตคุ้มค่าแก่การกลับบ้าน"',
           body: 'มีบทบาทสำคัญในการกู้ภัยลูกเรือประมงกว่า 2,000 คนจากอินโดนีเซีย ผู้รับรางวัลนักปกป้องสิทธิมนุษยชนปี 2562',
         },
-      ]
-    : [
+      ], [
         {
           name: 'Patima Tungpuchayakul',
           role: 'Director & Co-founder',
@@ -91,7 +87,7 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
           quote: '"Every life deserves to come home."',
           body: 'Central to the rescue of 2,000+ fishers trafficked to Indonesia. Recipient of the 2019 Human Rights Defender award for anti-trafficking expertise.',
         },
-      ]
+      ])
 
   return (
     <>
@@ -100,16 +96,12 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
         backgroundImage={HERO_IMAGES.team}
         backgroundAlt="ทีมงานและอาสาสมัคร LPN"
         compact
-        eyebrow={isThai ? 'ทีม LPN' : 'The LPN team'}
+        eyebrow={tx(locale, 'ทีม LPN', 'The LPN team')}
         title={
-          isThai
-            ? 'นักกิจกรรม นักสังคมสงเคราะห์ และอดีตแรงงานที่ปฏิเสธจะยอมแพ้'
-            : 'Activists, social workers, and former workers who refuse to look away.'
+          tx(locale, 'นักกิจกรรม นักสังคมสงเคราะห์ และอดีตแรงงานที่ปฏิเสธจะยอมแพ้', 'Activists, social workers, and former workers who refuse to look away.')
         }
         lede={
-          isThai
-            ? 'เครือข่ายของเราเป็นทั้งหน่วยกู้ภัย หน่วยกฎหมาย ครู และผู้นำชุมชน รวมพลังกันเพื่อหยุดวงจรการแสวงหาประโยชน์จากแรงงาน'
-            : 'Our network is at once rescue team, legal aid, teachers, and community leaders — joined in the work of breaking labour exploitation.'
+          tx(locale, 'เครือข่ายของเราเป็นทั้งหน่วยกู้ภัย หน่วยกฎหมาย ครู และผู้นำชุมชน รวมพลังกันเพื่อหยุดวงจรการแสวงหาประโยชน์จากแรงงาน', 'Our network is at once rescue team, legal aid, teachers, and community leaders — joined in the work of breaking labour exploitation.')
         }
         stats={stats}
       />
@@ -119,15 +111,13 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
         <Container>
           <div className="flex flex-wrap items-end justify-between gap-8">
             <SectionHeading
-              title={isThai ? 'ผู้นำองค์กร' : 'Leadership'}
+              title={tx(locale, 'ผู้นำองค์กร', 'Leadership')}
               lede={
-                isThai
-                  ? 'ผู้ร่วมก่อตั้งและหัวหน้าฝ่ายภาคสนามที่กำหนดทิศทางของ LPN มากว่าสองทศวรรษ'
-                  : 'Co-founders and frontline leads who have shaped LPN’s direction for two decades.'
+                tx(locale, 'ผู้ร่วมก่อตั้งและหัวหน้าฝ่ายภาคสนามที่กำหนดทิศทางของ LPN มากว่าสองทศวรรษ', 'Co-founders and frontline leads who have shaped LPN’s direction for two decades.')
               }
             />
             <ButtonLink href="/about" variant="ghostDark">
-              {isThai ? 'อ่านเรื่องราวของเรา →' : 'Our story →'}
+              {tx(locale, 'อ่านเรื่องราวของเรา →', 'Our story →')}
             </ButtonLink>
           </div>
 
@@ -156,16 +146,14 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
       <Section tone="dark" className="border-y border-white/10">
         <Container>
           <SectionHeading
-            eyebrow={isThai ? 'สมาชิกทีม' : 'Team members'}
+            eyebrow={tx(locale, 'สมาชิกทีม', 'Team members')}
             tone="light"
-            title={isThai ? 'หลายเสียง ภารกิจเดียวกัน' : 'Many voices. One mission.'}
+            title={tx(locale, 'หลายเสียง ภารกิจเดียวกัน', 'Many voices. One mission.')}
           />
 
           {team.length === 0 ? (
             <p className="mt-10 text-white/75">
-              {isThai
-                ? 'ยังไม่มีข้อมูลทีมงานในระบบ — โปรดเพิ่มข้อมูลในแผงควบคุม'
-                : 'No team members yet — add them from the admin panel.'}
+              {tx(locale, 'ยังไม่มีข้อมูลทีมงานในระบบ — โปรดเพิ่มข้อมูลในแผงควบคุม', 'No team members yet — add them from the admin panel.')}
             </p>
           ) : (
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -179,19 +167,17 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
 
       {/* ------------------------------------------------------------- CTA BAND */}
       <CtaBand
-        heading={isThai ? 'ทำงานกับเรา' : 'Work with us.'}
+        heading={tx(locale, 'ทำงานกับเรา', 'Work with us.')}
         body={
-          isThai
-            ? 'ทั้งบทบาทอาสาสมัคร นักศึกษาฝึกงาน หรือพันธมิตรองค์กร เราต้อนรับคนที่พร้อมยืนข้างแรงงาน'
-            : 'Volunteer, intern, or partner — we welcome anyone ready to stand with workers.'
+          tx(locale, 'ทั้งบทบาทอาสาสมัคร นักศึกษาฝึกงาน หรือพันธมิตรองค์กร เราต้อนรับคนที่พร้อมยืนข้างแรงงาน', 'Volunteer, intern, or partner — we welcome anyone ready to stand with workers.')
         }
         actions={
           <>
             <ButtonLink href="/contact" variant="solidDark">
-              {isThai ? 'ติดต่อทีม' : 'Contact the team'}
+              {tx(locale, 'ติดต่อทีม', 'Contact the team')}
             </ButtonLink>
             <ButtonLink href="/donate" variant="ghostDark">
-              {isThai ? 'สนับสนุนภารกิจ' : 'Fund the mission'}
+              {tx(locale, 'สนับสนุนภารกิจ', 'Fund the mission')}
             </ButtonLink>
           </>
         }

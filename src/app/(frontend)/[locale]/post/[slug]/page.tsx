@@ -1,5 +1,6 @@
 import { notFound, permanentRedirect } from 'next/navigation'
 import { setRequestLocale } from 'next-intl/server'
+import { dateLocale, isDraftLocale } from '@/i18n/locales'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getPost, getAllPostSlugs } from '@/lib/api'
@@ -10,6 +11,7 @@ import { RichText } from '@/components/RichText'
 import { buildMetadata } from '@/lib/seo'
 import { legacyPostDestination } from '@/lib/legacy-posts'
 import { ButtonLink, MarkLink } from '@/components/ui'
+import { tx } from '@/i18n/tx'
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale; slug: string }>
@@ -47,8 +49,7 @@ export default async function PostPage(props: {
     if (destination) permanentRedirect(destination)
     notFound()
   }
-
-  const isThai = locale === 'th'
+  const postLang = isDraftLocale(locale) ? (post.language ?? 'en') : undefined
   const author = post.author && typeof post.author !== 'number' ? post.author : null
   const share = buildShareUrls(locale, slug)
   // Sidebar offers the Thai + Khmer lines first (highest call volume).
@@ -58,14 +59,23 @@ export default async function PostPage(props: {
     <div className="bg-paper py-10 on-light">
       <article className="container-page">
         {/* Breadcrumb */}
-        <nav aria-label={isThai ? 'เส้นทางนำทาง' : 'Breadcrumb'} className="mb-8">
+        <nav aria-label={tx(locale, 'เส้นทางนำทาง', 'Breadcrumb')} className="mb-8">
           <Link
             href="/blog"
             className="t-label inline-flex min-h-11 items-center gap-2 text-black/70 transition-colors hover:text-black"
           >
-            ← {isThai ? 'กลับไปที่บทความ' : 'Back to Voices & Stories'}
+            ← {tx(locale, 'กลับไปที่บทความ', 'Back to Voices & Stories')}
           </Link>
         </nav>
+
+        {/* my/km/lo: posts are shown in their original language — say so in the reader's language. */}
+        {postLang && (
+          <p role="note" className="mb-6 rounded border border-black/15 bg-white px-4 py-3 text-base text-black/80">
+            {postLang === 'th'
+              ? tx(locale, 'บทความนี้เป็นภาษาไทย', 'This article is in Thai.')
+              : tx(locale, 'บทความนี้เป็นภาษาอังกฤษ', 'This article is in English.')}
+          </p>
+        )}
 
         {/* Post header */}
         <header className="relative isolate overflow-hidden rounded bg-black p-8 text-white md:p-12">          <div className="relative z-10 flex min-h-[180px] flex-col justify-end">
@@ -74,7 +84,7 @@ export default async function PostPage(props: {
                 {post.category.title}
               </span>
             )}
-            <h1 className="t-display-sm text-white">{post.title}</h1>
+            <h1 className="t-display-sm text-white" lang={postLang}>{post.title}</h1>
             <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-white/10 pt-6">
               {author && (
                 <div className="flex items-center gap-2.5">
@@ -90,7 +100,7 @@ export default async function PostPage(props: {
               {author && post.publishedAt && <span className="text-white/30">·</span>}
               {post.publishedAt && (
                 <time dateTime={post.publishedAt} className="text-sm font-semibold text-white/80">
-                  {new Date(post.publishedAt).toLocaleDateString(locale, {
+                  {new Date(post.publishedAt).toLocaleDateString(dateLocale(locale), {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
@@ -121,12 +131,14 @@ export default async function PostPage(props: {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
           {/* Article body */}
           <div className="rounded border border-black/8 bg-white p-6 shadow-xs lg:col-span-8 md:p-10">
-            <RichText data={post.content} className="prose-lpn text-black/85" />
+            <div lang={postLang}>
+              <RichText data={post.content} className="prose-lpn text-black/85" />
+            </div>
 
             {/* Share row */}
             <div className="mt-12 flex items-center justify-between border-t border-black/10 pt-6">
               <span className="t-label text-black/70">
-                {isThai ? 'แชร์บทความนี้' : 'Share this Story'}
+                {tx(locale, 'แชร์บทความนี้', 'Share this Story')}
               </span>
               <div className="flex gap-2">
                 <a
@@ -157,30 +169,24 @@ export default async function PostPage(props: {
             <div className="glass-dark relative overflow-hidden rounded p-7">
               <span className="absolute top-0 left-0 h-1.5 w-12 bg-current" aria-hidden="true" />
               <span className="t-label text-current/70">
-                {isThai ? 'ยืนหยัดร่วมกับ LPN' : 'Stand With Us'}
+                {tx(locale, 'ยืนหยัดร่วมกับ LPN', 'Stand With Us')}
               </span>
               <h2 className="t-h3 mt-4">
-                {isThai
-                  ? 'ร่วมยุติการค้ามนุษย์และคุ้มครองสิทธิ์แรงงาน'
-                  : 'End Human Trafficking & Protect Workers'}
+                {tx(locale, 'ร่วมยุติการค้ามนุษย์และคุ้มครองสิทธิ์แรงงาน', 'End Human Trafficking & Protect Workers')}
               </h2>
               <p className="mt-4 text-xs leading-relaxed text-white/70">
-                {isThai
-                  ? 'มูลนิธิ LPN ดำเนินงานเพื่อช่วยเหลือแรงงานที่ถูกบังคับ ยุติการค้าทาสสมัยใหม่ และสร้างความมั่นใจในสิทธิความเป็นมนุษย์ที่เท่าเทียม'
-                  : 'LPN Foundation works tirelessly to rescue abused workers, combat modern slavery, and secure justice for migrant communities.'}
+                {tx(locale, 'มูลนิธิ LPN ดำเนินงานเพื่อช่วยเหลือแรงงานที่ถูกบังคับ ยุติการค้าทาสสมัยใหม่ และสร้างความมั่นใจในสิทธิความเป็นมนุษย์ที่เท่าเทียม', 'LPN Foundation works tirelessly to rescue abused workers, combat modern slavery, and secure justice for migrant communities.')}
               </p>
               <ButtonLink href="/donate" variant="primary" className="mt-6 w-full">
-                {isThai ? 'ร่วมบริจาคสนับสนุน' : 'Support Our Mission'}
+                {tx(locale, 'ร่วมบริจาคสนับสนุน', 'Support Our Mission')}
               </ButtonLink>
             </div>
 
             {/* Hotline card */}
             <div className="card p-7">
-              <h2 className="t-label text-black">{isThai ? 'ต้องการความช่วยเหลือ?' : 'Need Assistance?'}</h2>
+              <h2 className="t-label text-black">{tx(locale, 'ต้องการความช่วยเหลือ?', 'Need Assistance?')}</h2>
               <p className="mt-3 text-xs leading-relaxed text-black/60">
-                {isThai
-                  ? 'ติดต่อ LPN ผ่านหมายเลขตามภาษาที่ต้องการ หากโทรไม่ติด สามารถดูช่องทางอื่นได้ในหน้าขอความช่วยเหลือ'
-                  : 'Contact LPN using the number for your language. If a call does not connect, find other channels on Get Help.'}
+                {tx(locale, 'ติดต่อ LPN ผ่านหมายเลขตามภาษาที่ต้องการ หากโทรไม่ติด สามารถดูช่องทางอื่นได้ในหน้าขอความช่วยเหลือ', 'Contact LPN using the number for your language. If a call does not connect, find other channels on Get Help.')}
               </p>
               <div className="mt-5 flex flex-col gap-2.5">
                 {sidebarHotlines.map((h) => (
@@ -193,14 +199,14 @@ export default async function PostPage(props: {
                       <span className="tactile-badge h-6 w-6 text-xs font-semibold text-black">
                         {h.code}
                       </span>
-                      <span>{isThai ? h.langTh : h.langEn}</span>
+                      <span>{tx(locale, h.langTh, h.langEn)}</span>
                     </span>
                     <span className="font-mono text-xs font-bold text-black">{h.phone}</span>
                   </a>
                 ))}
               </div>
               <MarkLink href="/contact" className="mt-5 text-black">
-                {isThai ? 'ดูช่องทางช่วยเหลือทั้งหมด' : 'All support channels'} →
+                {tx(locale, 'ดูช่องทางช่วยเหลือทั้งหมด', 'All support channels')} →
               </MarkLink>
             </div>
 

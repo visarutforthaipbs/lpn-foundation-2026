@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { List, X } from '@phosphor-icons/react'
 import { Link } from '@/i18n/navigation'
 import { ButtonLink } from './ui'
+import { LocaleSwitcher } from './LocaleSwitcher'
 
 type NavItem = { href: string; label: string }
 
@@ -14,11 +15,11 @@ type NavItem = { href: string; label: string }
 export function MobileMenu({
   items,
   donate,
-  isThai,
+  labels,
 }: {
   items: NavItem[]
   donate: NavItem
-  isThai: boolean
+  labels: { open: string; nav: string; language: string }
 }) {
   const [open, setOpen] = useState(false)
 
@@ -37,7 +38,7 @@ export function MobileMenu({
         type="button"
         aria-expanded={open}
         aria-controls="mobile-nav"
-        aria-label={isThai ? 'เปิดเมนู' : 'Open menu'}
+        aria-label={labels.open}
         onClick={() => setOpen((v) => !v)}
         className="tactile-icon-btn h-11 w-11 text-white hover:text-brand-yellow"
       >
@@ -47,7 +48,7 @@ export function MobileMenu({
       {open && (
         <nav
           id="mobile-nav"
-          aria-label={isThai ? 'เมนูหลัก' : 'Main menu'}
+          aria-label={labels.nav}
           className="absolute inset-x-0 top-full border-b border-white/10 bg-black/97 backdrop-blur-lg"
         >
           <ul className="mx-auto max-w-7xl px-4 py-3">
@@ -63,7 +64,11 @@ export function MobileMenu({
               </li>
             ))}
           </ul>
-          <div className="mx-auto max-w-7xl px-4 pb-5 pt-2">
+          <div className="mx-auto max-w-7xl px-4 pt-3">
+            <p className="t-label mb-2 text-white/70">{labels.language}</p>
+            <LocaleSwitcher variant="menu" label={labels.language} />
+          </div>
+          <div className="mx-auto max-w-7xl px-4 pb-5 pt-4">
             <ButtonLink
               href={donate.href}
               variant="primary"

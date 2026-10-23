@@ -7,9 +7,10 @@ import type { Locale } from './routing'
 export const LOCALE_META: Record<Locale, { native: string; english: string; date: string; og: string }> = {
   en: { native: 'English', english: 'English', date: 'en', og: 'en_US' },
   th: { native: 'ไทย', english: 'Thai', date: 'th', og: 'th_TH' },
-  my: { native: 'မြန်မာ', english: 'Burmese', date: 'my-MM', og: 'my_MM' },
-  km: { native: 'ខ្មែរ', english: 'Khmer', date: 'km-KH', og: 'km_KH' },
-  lo: { native: 'ລາວ', english: 'Lao', date: 'lo-LA', og: 'lo_LA' },
+  // `-u-nu-latn`: month names in the language, digits stay 0–9 like every other number on the site.
+  my: { native: 'မြန်မာ', english: 'Burmese', date: 'my-MM-u-nu-latn', og: 'my_MM' },
+  km: { native: 'ខ្មែរ', english: 'Khmer', date: 'km-KH-u-nu-latn', og: 'km_KH' },
+  lo: { native: 'ລາວ', english: 'Lao', date: 'lo-LA-u-nu-latn', og: 'lo_LA' },
 }
 
 /** Locales whose UI copy is a machine draft served from src/i18n/drafts/<locale>.json. */

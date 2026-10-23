@@ -217,6 +217,51 @@ p {
   letter-spacing: normal !important;
 }
 
+/*
+ * Migrant-language scripts (my Burmese, km Khmer, lo Lao) — Noto Sans, self-hosted
+ * (layout.tsx). The stacks switch only on html:lang(...), so en/th pages never fetch
+ * these fonts; Thai text inside a my/km/lo page (original-language posts) still gets
+ * IBM Plex Sans Thai. Stacked Burmese medials and Khmer subscripts need tall lines:
+ * body ≥ 1.8, display/heading/tight utilities lifted so nothing is clipped. Unlayered,
+ * so it overrides Tailwind `leading-*` / `tracking-*` utilities on those pages only.
+ */
+html:lang(my) {
+  --font-sans: var(--font-latin), var(--font-myanmar), var(--font-thai), 'Noto Sans Myanmar', system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-reading: var(--font-sans);
+}
+html:lang(km) {
+  --font-sans: var(--font-latin), var(--font-khmer), var(--font-thai), 'Noto Sans Khmer', system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-reading: var(--font-sans);
+}
+html:lang(lo) {
+  --font-sans: var(--font-latin), var(--font-lao), var(--font-thai), 'Noto Sans Lao', system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-reading: var(--font-sans);
+}
+:is(:lang(my), :lang(km), :lang(lo)) {
+  letter-spacing: normal !important;
+  line-height: 1.8;
+}
+:is(:lang(my), :lang(km), :lang(lo))
+  :is(h1, h2, h3, h4, h5, h6, .t-display, .t-display-sm, .t-h1, .t-h2, .t-h3, .t-lede, .eyebrow, .t-label, .t-label-lg, .stat-value, .leading-none, .leading-tight, .leading-snug) {
+  line-height: 1.6;
+  letter-spacing: normal !important;
+}
+:lang(my) :is(h1, h2, .t-display, .t-display-sm, .t-h1, .t-h2) {
+  line-height: 1.75; /* Burmese stacks above and below the line */
+}
+/* Elements inside [lang=th]/[lang=en] (original-language posts) no longer match :lang(my|km|lo),
+   so they keep the Thai/Latin rhythm automatically. */
+/* Burmese/Khmer/Lao marks are tiny at 13 px: captions start at 14 px, mobile menu items at 16 px. */
+:is(:lang(my), :lang(km), :lang(lo)) :is(.t-label, .eyebrow, .text-xs) {
+  font-size: 0.875rem;
+}
+:is(:lang(my), :lang(km), :lang(lo)) #mobile-nav li a {
+  font-size: 1rem;
+}
+
 @layer base {
   img {
     max-width: 100%;

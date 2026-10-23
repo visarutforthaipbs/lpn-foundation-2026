@@ -1,4 +1,5 @@
 import { setRequestLocale } from 'next-intl/server'
+import { dateLocale, isDraftLocale } from '@/i18n/locales'
 import Image from 'next/image'
 import { BookOpen, GraduationCap, Lifebuoy, Phone, Scales } from '@phosphor-icons/react/ssr'
 import { Link } from '@/i18n/navigation'
@@ -9,6 +10,7 @@ import { telHref } from '@/lib/content'
 import { getHelpChannels } from '@/lib/help-channels'
 import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
 import { MediaImage } from '@/components/MediaImage'
+import { tx } from '@/i18n/tx'
 
 const REPORT_2024 = 'https://d90624d9-477d-4d0e-8335-c4795fa13a13.usrfiles.com/ugd/d90624_78b68c9d8aff4a41856fc475cd1d5c37.pdf'
 const RIGHT_GUIDE = 'https://www.lpnrightguide.site/'
@@ -18,17 +20,14 @@ export async function generateMetadata(props: { params: Promise<{ locale: Locale
   return buildMetadata({
     locale,
     path: '',
-    title: locale === 'th' ? 'LPN | สิทธิที่เข้าถึงได้ การคุ้มครองที่ยั่งยืน' : 'LPN | Rights within reach. Protection that lasts.',
-    description: locale === 'th'
-      ? 'LPN เคียงข้างแรงงานข้ามชาติและครอบครัวในประเทศไทย เพื่อให้เข้าถึงความช่วยเหลือและสร้างระบบที่ปลอดภัยขึ้น'
-      : 'LPN helps migrant workers and families in Thailand access protection today and builds safer systems for tomorrow.',
+    title: tx(locale, 'LPN | สิทธิที่เข้าถึงได้ การคุ้มครองที่ยั่งยืน', 'LPN | Rights within reach. Protection that lasts.'),
+    description: tx(locale, 'LPN เคียงข้างแรงงานข้ามชาติและครอบครัวในประเทศไทย เพื่อให้เข้าถึงความช่วยเหลือและสร้างระบบที่ปลอดภัยขึ้น', 'LPN helps migrant workers and families in Thailand access protection today and builds safer systems for tomorrow.'),
   })
 }
 
 export default async function HomePage(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
   setRequestLocale(locale)
-  const th = locale === 'th'
 
   const [{ docs: posts }, hotlines, mediaMap, publishedMetrics] = await Promise.all([
     getPosts(locale, { limit: 3 }),
@@ -37,7 +36,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     getImpactMetrics(locale),
   ])
 
-  const streams = th ? [
+  const streams = tx(locale, [
     {
       n: '01',
       id: 'respond',
@@ -68,7 +67,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       media: mediaMap.trainingCentre,
       alt: 'พิธีเปิดศูนย์ฝึกอบรมและฟื้นฟูโดยผู้แทนหลายหน่วยงาน',
     },
-  ] : [
+  ], [
     {
       n: '01',
       id: 'respond',
@@ -99,18 +98,18 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       media: mediaMap.trainingCentre,
       alt: 'Opening ceremony of a training and rehabilitation centre',
     },
-  ]
+  ])
 
   const featuredMetrics = publishedMetrics.filter((metric) => metric.featured).slice(0, 3)
-  const fallbackMetrics = th ? [
+  const fallbackMetrics = tx(locale, [
     { value: '135', label: 'กรณีช่วยเหลือแรงงาน', detail: 'มีผู้ได้รับประโยชน์ 707 คน' },
     { value: '832', label: 'แรงงานได้รับการอบรม', detail: 'ความรู้และการป้องกัน' },
     { value: '80', label: 'เยาวชนในโครงการ', detail: 'การศึกษาและการสนับสนุน' },
-  ] : [
+  ], [
     { value: '135', label: 'worker-assistance cases', detail: 'benefiting 707 people' },
     { value: '832', label: 'workers trained', detail: 'rights knowledge and prevention' },
     { value: '80', label: 'young people supported', detail: 'education and support project' },
-  ]
+  ])
   const metrics = featuredMetrics.length ? featuredMetrics.map((metric) => ({
     value: metric.value,
     label: metric.label,
@@ -118,45 +117,45 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     source: typeof metric.sourceReport === 'object' && metric.sourceReport ? metric.sourceReport.sourceURL : metric.sourceURL,
   })) : fallbackMetrics.map((metric) => ({ ...metric, source: REPORT_2024 }))
 
-  const steps = th ? [
+  const steps = tx(locale, [
     ['ฟังและช่วยเหลือ', 'รับฟังปัญหา ประเมินความต้องการ และประสานความช่วยเหลือที่ปลอดภัยและทันท่วงที'],
     ['เรียนรู้ร่วมกับชุมชน', 'แบ่งปันความรู้เรื่องสิทธิ และรับฟังรูปแบบปัญหาที่เกิดขึ้นซ้ำในชุมชน'],
     ['สร้างหลักฐานเพื่อเปลี่ยนระบบ', 'ใช้ข้อค้นพบที่ตรวจสอบได้ในการทำงานกับพันธมิตร ผู้กำหนดนโยบาย และเวทีระหว่างประเทศ'],
-  ] : [
+  ], [
     ['Listen and respond', 'Understand the problem and connect people with safe, appropriate support.'],
     ['Learn with communities', 'Share rights knowledge and identify recurring systemic barriers.'],
     ['Build evidence for change', 'Use verified findings with partners, policy makers, and international forums.'],
-  ]
+  ])
 
   const networks = [
     {
       abbr: 'FLG',
-      name: th ? 'กลุ่มผู้นำแรงงานประมง' : 'Fishermen Leaders Group',
-      sub: th ? 'เฝ้าระวังและช่วยเหลือแรงงานประมง' : 'Maritime worker leadership',
+      name: tx(locale, 'กลุ่มผู้นำแรงงานประมง', 'Fishermen Leaders Group'),
+      sub: tx(locale, 'เฝ้าระวังและช่วยเหลือแรงงานประมง', 'Maritime worker leadership'),
       logo: '/logos/subbrands/flg-white.png',
     },
     {
       abbr: 'MLN',
-      name: th ? 'เครือข่ายผู้นำแรงงานข้ามชาติ' : 'Migrant Leaders Network',
-      sub: th ? 'เครือข่ายประสานงานระหว่างกลุ่ม' : 'Cross-sector worker leadership',
+      name: tx(locale, 'เครือข่ายผู้นำแรงงานข้ามชาติ', 'Migrant Leaders Network'),
+      sub: tx(locale, 'เครือข่ายประสานงานระหว่างกลุ่ม', 'Cross-sector worker leadership'),
       logo: '/logos/subbrands/mln-white.png',
     },
     {
       abbr: 'MMLG',
-      name: th ? 'กลุ่มผู้นำแรงงานเมียนมา' : 'Myanmar Migrant Leaders Group',
-      sub: th ? 'สื่อสารและดูแลชุมชนเมียนมา' : 'Community solidarity & rights',
+      name: tx(locale, 'กลุ่มผู้นำแรงงานเมียนมา', 'Myanmar Migrant Leaders Group'),
+      sub: tx(locale, 'สื่อสารและดูแลชุมชนเมียนมา', 'Community solidarity & rights'),
       logo: '/logos/subbrands/mmlg-white.png',
     },
     {
       abbr: 'CMLG',
-      name: th ? 'กลุ่มผู้นำแรงงานกัมพูชา' : 'Cambodian Migrant Leaders Group',
-      sub: th ? 'การประสานความช่วยเหลือในชุมชน' : 'Community outreach & assistance',
+      name: tx(locale, 'กลุ่มผู้นำแรงงานกัมพูชา', 'Cambodian Migrant Leaders Group'),
+      sub: tx(locale, 'การประสานความช่วยเหลือในชุมชน', 'Community outreach & assistance'),
       logo: '/logos/subbrands/cmlg-white.png',
     },
     {
       abbr: 'LMLG',
-      name: th ? 'กลุ่มผู้นำแรงงานลาว' : 'Lao Migrant Leaders Group',
-      sub: th ? 'การคุ้มครองและสวัสดิการแรงงาน' : 'Workplace welfare & mutual aid',
+      name: tx(locale, 'กลุ่มผู้นำแรงงานลาว', 'Lao Migrant Leaders Group'),
+      sub: tx(locale, 'การคุ้มครองและสวัสดิการแรงงาน', 'Workplace welfare & mutual aid'),
       logo: '/logos/subbrands/lmlg-white.png',
     },
   ]
@@ -168,7 +167,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/trawler-hero.jpg"
-          alt={th ? 'การปฏิบัติงานภาคสนามคุ้มครองสิทธิแรงงานประมง LPN' : 'LPN frontline operations protecting fisher rights'}
+          alt={tx(locale, 'การปฏิบัติงานภาคสนามคุ้มครองสิทธิแรงงานประมง LPN', 'LPN frontline operations protecting fisher rights')}
           fill
           priority
           sizes="100vw"
@@ -182,24 +181,22 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       <div className="pointer-events-none absolute right-0 top-0 z-1 h-full w-[42%] border-l border-white/10 bg-[linear-gradient(135deg,transparent_0%,rgba(255,199,0,0.08)_100%)]" aria-hidden="true" />
 
       <Container className="relative z-10 py-20 md:py-28 lg:py-36">
-        <p className="eyebrow text-white/70">{th ? 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน' : 'Labour Rights Promotion Network Foundation'}</p>
+        <p className="eyebrow text-white/70">{tx(locale, 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน', 'Labour Rights Promotion Network Foundation')}</p>
         <h1 className="t-display mt-7 max-w-5xl text-white">
-          {th ? 'สิทธิที่เข้าถึงได้' : 'Rights within reach.'}
-          <span className="block text-brand-yellow">{th ? 'การคุ้มครองที่ยั่งยืน' : 'Protection that lasts.'}</span>
+          {tx(locale, 'สิทธิที่เข้าถึงได้', 'Rights within reach.')}
+          <span className="block text-brand-yellow">{tx(locale, 'การคุ้มครองที่ยั่งยืน', 'Protection that lasts.')}</span>
         </h1>
         <p className="t-lede mt-8 max-w-2xl text-white/90">
-          {th
-            ? 'เราช่วยแรงงานข้ามชาติและครอบครัวให้เข้าถึงความช่วยเหลือและสิทธิที่ควรได้รับ'
-            : 'We help migrant workers and families access support and their rights.'}
+          {tx(locale, 'เราช่วยแรงงานข้ามชาติและครอบครัวให้เข้าถึงความช่วยเหลือและสิทธิที่ควรได้รับ', 'We help migrant workers and families access support and their rights.')}
         </p>
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <ButtonLink href="/get-help" variant="primary" className="sm:min-w-48">{th ? 'ขอความช่วยเหลือ' : 'Get help'}</ButtonLink>
-          <ButtonLink href="/donate" variant="ghostLight" className="sm:min-w-48">{th ? 'ร่วมสนับสนุน' : 'Support the work'}</ButtonLink>
+          <ButtonLink href="/get-help" variant="primary" className="sm:min-w-48">{tx(locale, 'ขอความช่วยเหลือ', 'Get help')}</ButtonLink>
+          <ButtonLink href="/donate" variant="ghostLight" className="sm:min-w-48">{tx(locale, 'ร่วมสนับสนุน', 'Support the work')}</ButtonLink>
         </div>
         <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/75">
-          <p>{th ? 'ต้องการติดต่อโดยตรง? ' : 'Need to speak with someone? '}
+          <p>{tx(locale, 'ต้องการติดต่อโดยตรง? ', 'Need to speak with someone? ')}
             <a className="font-semibold text-white underline decoration-brand-yellow underline-offset-4" href={telHref(hotlines[0].phone)}>
-              {th ? 'โทร LPN ' : 'Call LPN '}{hotlines[0].phone}
+              {tx(locale, 'โทร LPN ', 'Call LPN ')}{hotlines[0].phone}
             </a>
           </p>
         </div>
@@ -209,18 +206,18 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     {/* ------------------------------------------------- FOR WORKERS & FAMILIES */}
     <Section tone="yellow" tight>
       <Container>
-        <p className="t-label">{th ? 'สำหรับแรงงานและครอบครัว' : 'For workers and families'}</p>
-        <h2 className="t-h2 mt-3">{th ? 'เริ่มตรงนี้' : 'Start here'}</h2>
+        <p className="t-label">{tx(locale, 'สำหรับแรงงานและครอบครัว', 'For workers and families')}</p>
+        <h2 className="t-h2 mt-3">{tx(locale, 'เริ่มตรงนี้', 'Start here')}</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Link href="/get-help" className="group flex min-h-40 flex-col justify-between rounded-xl border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
             <Phone size={40} weight="duotone" className="pictogram-duotone" aria-hidden="true" />
-            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-bold leading-tight sm:text-2xl">{th ? 'ต้องการความช่วยเหลือ' : 'I need help'} <span aria-hidden="true">→</span></span>
-            <span className="mt-1 text-sm font-semibold">{th ? 'โทรหา LPN ตามภาษาของคุณ' : 'Call LPN in your language'}</span>
+            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-bold leading-tight sm:text-2xl">{tx(locale, 'ต้องการความช่วยเหลือ', 'I need help')} <span aria-hidden="true">→</span></span>
+            <span className="mt-1 text-sm font-semibold">{tx(locale, 'โทรหา LPN ตามภาษาของคุณ', 'Call LPN in your language')}</span>
           </Link>
           <a href={RIGHT_GUIDE} className="group flex min-h-40 flex-col justify-between rounded-xl border-2 border-black bg-white p-5 text-black transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
             <BookOpen size={40} weight="duotone" className="pictogram-duotone" aria-hidden="true" />
-            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-bold leading-tight sm:text-2xl">{th ? 'อยากรู้สิทธิของฉัน' : 'I want to know my rights'} <span aria-hidden="true">↗</span></span>
-            <span className="mt-1 text-sm font-semibold">{th ? 'เปิดคู่มือรู้สิทธิ' : 'Open the Rights Guide'}</span>
+            <span className="mt-5 flex items-end justify-between gap-2 text-xl font-bold leading-tight sm:text-2xl">{tx(locale, 'อยากรู้สิทธิของฉัน', 'I want to know my rights')} <span aria-hidden="true">↗</span></span>
+            <span className="mt-1 text-sm font-semibold">{tx(locale, 'เปิดคู่มือรู้สิทธิ', 'Open the Rights Guide')}</span>
           </a>
         </div>
       </Container>
@@ -228,7 +225,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
 
     {/* --------------------------------------------- THREE WORKSTREAMS (PILLARS) */}
     <Section tone="light"><Container>
-      <SectionHeading eyebrow={th ? 'งานของเรา' : 'Our work'} title={th ? 'ช่วยเหลือวันนี้ ป้องกันปัญหาในวันหน้า' : 'Help today. Prevent harm tomorrow.'} lede={th ? 'งานทั้งสามด้านเชื่อมกัน แต่ละด้านเริ่มจากความต้องการและเสียงของแรงงาน' : 'Three connected streams begin with workers’ needs and voices.'} />
+      <SectionHeading eyebrow={tx(locale, 'งานของเรา', 'Our work')} title={tx(locale, 'ช่วยเหลือวันนี้ ป้องกันปัญหาในวันหน้า', 'Help today. Prevent harm tomorrow.')} lede={tx(locale, 'งานทั้งสามด้านเชื่อมกัน แต่ละด้านเริ่มจากความต้องการและเสียงของแรงงาน', 'Three connected streams begin with workers’ needs and voices.')} />
 
       <div className="mt-12 grid gap-6 lg:grid-cols-3">
         {streams.map((s) => (
@@ -255,7 +252,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
               </div>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-black/80">{s.body}</p>
               <Link href={`/our-work#${s.id}`} className="link-mark mt-7 self-start text-black">
-                {th ? 'ดูงานด้านนี้' : 'Explore this work'} →
+                {tx(locale, 'ดูงานด้านนี้', 'Explore this work')} →
               </Link>
             </div>
           </article>
@@ -266,8 +263,8 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     {/* --------------------------------------------- CASE TO CHANGE + LEADERSHIP */}
     <Section tone="dark"><Container>
       <SectionHeading
-        eyebrow={th ? 'จากกรณีสู่การเปลี่ยนแปลง' : 'From a case to wider change'}
-        title={th ? 'ประสบการณ์จริงช่วยให้เราเห็นจุดที่ระบบต้องเปลี่ยน' : 'Field experience reveals where systems need to change.'}
+        eyebrow={tx(locale, 'จากกรณีสู่การเปลี่ยนแปลง', 'From a case to wider change')}
+        title={tx(locale, 'ประสบการณ์จริงช่วยให้เราเห็นจุดที่ระบบต้องเปลี่ยน', 'Field experience reveals where systems need to change.')}
         tone="light"
       />
 
@@ -283,9 +280,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
             ))}
           </ol>
           <p className="mt-8 text-sm text-white/70">
-            {th
-              ? 'ไม่ใช่ทุกกรณีจะนำไปสู่การเปลี่ยนแปลงเชิงนโยบายโดยตรง แต่การทำงานภาคสนามช่วยให้ LPN เห็นปัญหาที่ต้องแก้ไข'
-              : 'Not every case leads directly to policy change. Fieldwork helps LPN understand which barriers need attention.'}
+            {tx(locale, 'ไม่ใช่ทุกกรณีจะนำไปสู่การเปลี่ยนแปลงเชิงนโยบายโดยตรง แต่การทำงานภาคสนามช่วยให้ LPN เห็นปัญหาที่ต้องแก้ไข', 'Not every case leads directly to policy change. Fieldwork helps LPN understand which barriers need attention.')}
           </p>
         </div>
 
@@ -296,7 +291,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
               <MediaImage
                 media={mediaMap.patimaPortrait}
                 fill
-                alt={th ? 'ปฏิมา ตั้งปรัชญากูล ผู้อำนวยการ LPN' : 'Patima Tungpuchayakul, LPN Executive Director'}
+                alt={tx(locale, 'ปฏิมา ตั้งปรัชญากูล ผู้อำนวยการ LPN', 'Patima Tungpuchayakul, LPN Executive Director')}
                 sizes="(min-width: 1024px) 30vw, 100vw"
                 className="object-cover object-top"
               />
@@ -304,14 +299,14 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
           )}
           <blockquote className="mt-6 border-l-2 border-current pl-4">
             <p className="text-base font-semibold leading-relaxed text-white italic">
-              {th ? '“เป้าหมายของฉันคือการช่วยชีวิตคน”' : '“My goal is to save lives.”'}
+              {tx(locale, '“เป้าหมายของฉันคือการช่วยชีวิตคน”', '“My goal is to save lives.”')}
             </p>
             <cite className="mt-4 block not-italic">
               <span className="block font-bold text-white text-sm">
-                {th ? 'ปฏิมา ตั้งปรัชญากูล' : 'Patima Tungpuchayakul'}
+                {tx(locale, 'ปฏิมา ตั้งปรัชญากูล', 'Patima Tungpuchayakul')}
               </span>
               <span className="block text-xs text-white/70">
-                {th ? 'ผู้ร่วมก่อตั้งและผู้อำนวยการ LPN · ผู้ได้รับการเสนอชื่อชิงรางวัลโนเบลสันติภาพ 2017' : 'Co-Founder & Director, LPN · 2017 Nobel Peace Prize Nominee'}
+                {tx(locale, 'ผู้ร่วมก่อตั้งและผู้อำนวยการ LPN · ผู้ได้รับการเสนอชื่อชิงรางวัลโนเบลสันติภาพ 2017', 'Co-Founder & Director, LPN · 2017 Nobel Peace Prize Nominee')}
               </span>
             </cite>
           </blockquote>
@@ -324,15 +319,13 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       <Container>
         <div className="mx-auto max-w-3xl text-center">
           <p className="eyebrow text-white/70">
-            {th ? 'เครือข่ายแรงงานร่วมขับเคลื่อน' : 'Worker-Led Community Networks'}
+            {tx(locale, 'เครือข่ายแรงงานร่วมขับเคลื่อน', 'Worker-Led Community Networks')}
           </p>
           <h2 className="t-h2 mt-4 text-white">
-            {th ? 'พลังของแรงงานข้ามชาติในการรวมกลุ่มและพึ่งพาตนเอง' : 'Migrant Workers Organizing for Collective Strength'}
+            {tx(locale, 'พลังของแรงงานข้ามชาติในการรวมกลุ่มและพึ่งพาตนเอง', 'Migrant Workers Organizing for Collective Strength')}
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-white/80 sm:text-base">
-            {th
-              ? 'LPN ทำงานเคียงข้างเครือข่ายผู้นำแรงงาน 5 กลุ่ม เพื่อส่งต่อข้อมูล คุ้มครองสิทธิ และสร้างความเข้มแข็งจากภายในชุมชน'
-              : 'LPN works alongside five organized migrant leadership groups to share verified information, monitor conditions, and build community resilience.'}
+            {tx(locale, 'LPN ทำงานเคียงข้างเครือข่ายผู้นำแรงงาน 5 กลุ่ม เพื่อส่งต่อข้อมูล คุ้มครองสิทธิ และสร้างความเข้มแข็งจากภายในชุมชน', 'LPN works alongside five organized migrant leadership groups to share verified information, monitor conditions, and build community resilience.')}
           </p>
         </div>
 
@@ -368,9 +361,9 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     {/* --------------------------------------------------------- DATED EVIDENCE */}
     <Section tone="paper"><Container>
       <SectionHeading
-        eyebrow={th ? 'หลักฐานที่มีช่วงเวลา' : 'Dated evidence'}
-        title={featuredMetrics.length ? (th ? 'ผลการทำงานที่ตรวจทานแล้ว' : 'Reviewed results') : (th ? 'ผลการทำงานปี 2024' : 'LPN’s 2024 results')}
-        lede={featuredMetrics.length ? (th ? 'ตัวเลขแต่ละชุดมีนิยาม ช่วงเวลา และแหล่งที่มาในหน้ารายงาน' : 'Each figure has a definition, period, and source in Impact & Reports.') : (th ? 'ตัวเลขแต่ละชุดนับคนละสิ่ง และมาจากรายงานประจำปีของ LPN' : 'Each number measures something different and comes from LPN’s annual report.')}
+        eyebrow={tx(locale, 'หลักฐานที่มีช่วงเวลา', 'Dated evidence')}
+        title={featuredMetrics.length ? (tx(locale, 'ผลการทำงานที่ตรวจทานแล้ว', 'Reviewed results')) : (tx(locale, 'ผลการทำงานปี 2024', 'LPN’s 2024 results'))}
+        lede={featuredMetrics.length ? (tx(locale, 'ตัวเลขแต่ละชุดมีนิยาม ช่วงเวลา และแหล่งที่มาในหน้ารายงาน', 'Each figure has a definition, period, and source in Impact & Reports.')) : (tx(locale, 'ตัวเลขแต่ละชุดนับคนละสิ่ง และมาจากรายงานประจำปีของ LPN', 'Each number measures something different and comes from LPN’s annual report.'))}
       />
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-start">
@@ -381,19 +374,19 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
                 <strong className="block text-4xl sm:text-5xl font-bold tracking-tight text-black">{m.value}</strong>
                 <p className="mt-3 text-base sm:text-lg font-bold text-black">{m.label}</p>
                 <p className="mt-1.5 text-xs sm:text-sm text-black/70">{m.detail}</p>
-                {featuredMetrics.length > 0 && m.source && <a href={m.source} className="mt-4 inline-block text-xs font-bold underline underline-offset-4">{th ? 'ดูแหล่งที่มา' : 'View source'}</a>}
+                {featuredMetrics.length > 0 && m.source && <a href={m.source} className="mt-4 inline-block text-xs font-bold underline underline-offset-4">{tx(locale, 'ดูแหล่งที่มา', 'View source')}</a>}
               </div>
             ))}
           </div>
           {featuredMetrics.length === 0 && <p className="mt-6 text-sm text-black/75">
-            {th ? 'ช่วงเวลา: ปี 2024 · ที่มา: รายงานประจำปี LPN เผยแพร่ปี 2025' : 'Period: 2024 · Source: LPN annual report, published in 2025'}{' · '}
+            {tx(locale, 'ช่วงเวลา: ปี 2024 · ที่มา: รายงานประจำปี LPN เผยแพร่ปี 2025', 'Period: 2024 · Source: LPN annual report, published in 2025')}{' · '}
             <a href={REPORT_2024} className="font-bold underline decoration-brand-yellow underline-offset-4" target="_blank" rel="noopener noreferrer">
-              {th ? 'อ่านรายงานต้นฉบับ (PDF)' : 'Read the source report (PDF)'}
+              {tx(locale, 'อ่านรายงานต้นฉบับ (PDF)', 'Read the source report (PDF)')}
             </a>
           </p>}
           <div className="mt-8">
             <ButtonLink href="/impact" variant="solidDark">
-              {th ? 'ดูผลการทำงานและรายงานทั้งหมด' : 'Explore impact and reports'}
+              {tx(locale, 'ดูผลการทำงานและรายงานทั้งหมด', 'Explore impact and reports')}
             </ButtonLink>
           </div>
         </div>
@@ -404,15 +397,13 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
             <div className="relative aspect-4/3 w-full overflow-hidden bg-black/5">
               <MediaImage
                 media={mediaMap.projectLaunch}
-                alt={th ? 'ผู้แทนหลายหน่วยงานในงานเปิดโครงการ LPN' : 'Representatives at an LPN project launch'}
+                alt={tx(locale, 'ผู้แทนหลายหน่วยงานในงานเปิดโครงการ LPN', 'Representatives at an LPN project launch')}
                 sizes="(min-width: 1024px) 360px, 100vw"
                 className="h-full w-full object-cover"
               />
             </div>
             <figcaption className="mt-3 text-xs leading-relaxed text-black/70">
-              {th
-                ? 'ภาพจากงานเปิดโครงการของ LPN ในอดีต'
-                : 'A historical LPN project launch.'}
+              {tx(locale, 'ภาพจากงานเปิดโครงการของ LPN ในอดีต', 'A historical LPN project launch.')}
             </figcaption>
           </figure>
         )}
@@ -423,11 +414,11 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     <Section tone="light"><Container>
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <SectionHeading
-          eyebrow={th ? 'เรื่องล่าสุด' : 'Recent updates'}
-          title={th ? 'ข่าวและเรื่องราวจากงานของเรา' : 'News from the work'}
+          eyebrow={tx(locale, 'เรื่องล่าสุด', 'Recent updates')}
+          title={tx(locale, 'ข่าวและเรื่องราวจากงานของเรา', 'News from the work')}
         />
         <Link href="/blog" className="link-mark self-start text-black">
-          {th ? 'ดูข่าวทั้งหมด' : 'All updates'} →
+          {tx(locale, 'ดูข่าวทั้งหมด', 'All updates')} →
         </Link>
       </div>
 
@@ -450,14 +441,14 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
             <div className="flex flex-1 flex-col p-6">
               {post.publishedAt && (
                 <time dateTime={post.publishedAt} className="t-label text-black/70">
-                  {new Date(post.publishedAt).toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' })}
+                  {new Date(post.publishedAt).toLocaleDateString(dateLocale(locale), { year: 'numeric', month: 'short', day: 'numeric' })}
                 </time>
               )}
-              <h3 className="t-h3 mt-3 group-hover:text-black line-clamp-2">{post.title}</h3>
+              <h3 className="t-h3 mt-3 group-hover:text-black line-clamp-2" lang={isDraftLocale(locale) ? (post.language ?? undefined) : undefined}>{post.title}</h3>
               {post.excerpt && (
-                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-black/75">{post.excerpt}</p>
+                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-black/75" lang={isDraftLocale(locale) ? (post.language ?? undefined) : undefined}>{post.excerpt}</p>
               )}
-              <span className="link-mark mt-auto pt-6 text-black">{th ? 'อ่านต่อ' : 'Read story'} →</span>
+              <span className="link-mark mt-auto pt-6 text-black">{tx(locale, 'อ่านต่อ', 'Read story')} →</span>
             </div>
           </Link>
         ))}
@@ -467,12 +458,12 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
     {/* ------------------------------------------------------- SUPPORT CTA BAND */}
     <Section tone="dark"><Container className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
       <SectionHeading
-        eyebrow={th ? 'ร่วมสร้างการเปลี่ยนแปลง' : 'Support the work'}
-        title={th ? 'ช่วยให้การคุ้มครองเข้าถึงคนได้มากขึ้น' : 'Help protection reach more people.'}
-        lede={th ? 'การสนับสนุนของคุณช่วยให้งานช่วยเหลือ การศึกษา และการสร้างหลักฐานดำเนินต่อไปได้' : 'Support helps sustain direct assistance, education, and evidence-building.'}
+        eyebrow={tx(locale, 'ร่วมสร้างการเปลี่ยนแปลง', 'Support the work')}
+        title={tx(locale, 'ช่วยให้การคุ้มครองเข้าถึงคนได้มากขึ้น', 'Help protection reach more people.')}
+        lede={tx(locale, 'การสนับสนุนของคุณช่วยให้งานช่วยเหลือ การศึกษา และการสร้างหลักฐานดำเนินต่อไปได้', 'Support helps sustain direct assistance, education, and evidence-building.')}
         tone="light"
       />
-      <ButtonLink href="/donate" variant="primary">{th ? 'ร่วมสนับสนุน LPN' : 'Support LPN'}</ButtonLink>
+      <ButtonLink href="/donate" variant="primary">{tx(locale, 'ร่วมสนับสนุน LPN', 'Support LPN')}</ButtonLink>
     </Container></Section>
   </>
 }

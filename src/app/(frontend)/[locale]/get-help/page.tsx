@@ -8,6 +8,7 @@ import { getHelpChannels } from '@/lib/help-channels'
 import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
 import HelpIntakeForm, { type HelpChannel } from '@/components/HelpIntakeForm'
 import QuickExitButton from '@/components/QuickExitButton'
+import { tx } from '@/i18n/tx'
 
 const GUIDE = 'https://www.lpnrightguide.site/'
 
@@ -16,25 +17,22 @@ export async function generateMetadata(props: { params: Promise<{ locale: Locale
   return buildMetadata({
     locale,
     path: '/get-help',
-    title: locale === 'th' ? 'ขอความช่วยเหลือ — LPN' : 'Get Help — LPN',
-    description: locale === 'th'
-      ? 'ติดต่อ LPN โดยตรง หรือเรียนรู้สิทธิของคุณในคู่มือรู้สิทธิ ติดกระเป๋า'
-      : 'Contact LPN directly or learn about your rights with the LPN Rights Guide.',
+    title: tx(locale, 'ขอความช่วยเหลือ — LPN', 'Get Help — LPN'),
+    description: tx(locale, 'ติดต่อ LPN โดยตรง หรือเรียนรู้สิทธิของคุณในคู่มือรู้สิทธิ ติดกระเป๋า', 'Contact LPN directly or learn about your rights with the LPN Rights Guide.'),
   })
 }
 
 export default async function GetHelpPage(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
   setRequestLocale(locale)
-  const th = locale === 'th'
   const hotlines = await getHelpChannels(locale)
   const tForm = await getTranslations({ locale, namespace: 'helpForm' })
   const issues = [
-    { title: th ? 'ค่าจ้างและงาน' : 'Pay and work', icon: HandCoins },
-    { title: th ? 'เอกสารและการเดินทาง' : 'Documents and migration', icon: IdentificationCard },
-    { title: th ? 'ความปลอดภัย' : 'Safety and exploitation', icon: ShieldWarning },
-    { title: th ? 'สุขภาพ' : 'Health and care', icon: Heartbeat },
-    { title: th ? 'เด็กและครอบครัว' : 'Children and family', icon: UsersThree },
+    { title: tx(locale, 'ค่าจ้างและงาน', 'Pay and work'), icon: HandCoins },
+    { title: tx(locale, 'เอกสารและการเดินทาง', 'Documents and migration'), icon: IdentificationCard },
+    { title: tx(locale, 'ความปลอดภัย', 'Safety and exploitation'), icon: ShieldWarning },
+    { title: tx(locale, 'สุขภาพ', 'Health and care'), icon: Heartbeat },
+    { title: tx(locale, 'เด็กและครอบครัว', 'Children and family'), icon: UsersThree },
   ]
   const nativeLanguages: Record<string, { label: string; lang: string }> = {
     TH: { label: 'ภาษาไทย', lang: 'th' },
@@ -46,7 +44,7 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
   // Hotline channels for the form's fallback panel — same CMS-backed list as the cards above.
   const formChannels: HelpChannel[] = hotlines.map((h) => ({
     code: h.code,
-    label: th ? h.langTh : h.langEn,
+    label: tx(locale, h.langTh, h.langEn),
     native: h.code === 'TH' ? undefined : nativeLanguages[h.code]?.label,
     nativeLang: nativeLanguages[h.code]?.lang,
     phone: h.phone,
@@ -61,7 +59,7 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/field-action.jpg"
-          alt={th ? 'การลงพื้นที่ช่วยเหลือแรงงานของ LPN' : 'LPN frontline field assistance'}
+          alt={tx(locale, 'การลงพื้นที่ช่วยเหลือแรงงานของ LPN', 'LPN frontline field assistance')}
           fill
           priority
           sizes="100vw"
@@ -76,47 +74,43 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow/15 border border-current/30 text-brand-yellow">
             <ShieldWarning size={20} aria-hidden="true" />
           </div>
-          <p className="eyebrow text-white/70">{th ? 'ขอความช่วยเหลือ' : 'Get help'}</p>
+          <p className="eyebrow text-white/70">{tx(locale, 'ขอความช่วยเหลือ', 'Get help')}</p>
         </div>
-        <h1 className="t-display mt-5 max-w-4xl text-white">{th ? 'ต้องการความช่วยเหลือ?' : 'Need help?'}</h1>
-        <p className="t-lede mt-4 max-w-2xl text-white/90">{th
-          ? 'เลือกติดต่อ LPN หรือเปิดคู่มือรู้สิทธิ'
-          : 'Choose how you want to start.'}</p>
+        <h1 className="t-display mt-5 max-w-4xl text-white">{tx(locale, 'ต้องการความช่วยเหลือ?', 'Need help?')}</h1>
+        <p className="t-lede mt-4 max-w-2xl text-white/90">{tx(locale, 'เลือกติดต่อ LPN หรือเปิดคู่มือรู้สิทธิ', 'Choose how you want to start.')}</p>
         <div className="mt-8 grid max-w-3xl gap-3 sm:grid-cols-2">
           <a href="#contact" className="group flex min-h-40 flex-col justify-between border-2 border-current bg-brand-yellow p-5 text-black transition-colors hover:bg-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow">
             <Phone size={40} aria-hidden="true" />
-            <span className="mt-5 flex items-end justify-between gap-3 text-xl font-bold leading-tight sm:text-2xl">{th ? 'โทรหา LPN' : 'Call LPN'} <span aria-hidden="true">↗</span></span>
-            <span className="mt-1 text-sm font-semibold">{th ? 'เลือกภาษาของคุณ' : 'Choose your language'}</span>
+            <span className="mt-5 flex items-end justify-between gap-3 text-xl font-bold leading-tight sm:text-2xl">{tx(locale, 'โทรหา LPN', 'Call LPN')} <span aria-hidden="true">↗</span></span>
+            <span className="mt-1 text-sm font-semibold">{tx(locale, 'เลือกภาษาของคุณ', 'Choose your language')}</span>
           </a>
           <a href={GUIDE} className="group flex min-h-40 flex-col justify-between border-2 border-white bg-black/75 p-5 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow">
             <BookOpen size={40} weight="duotone" className="pictogram-duotone" aria-hidden="true" />
-            <span className="mt-5 flex items-end justify-between gap-3 text-xl font-bold leading-tight sm:text-2xl">{th ? 'รู้สิทธิของฉัน' : 'Know my rights'} <span aria-hidden="true">↗</span></span>
-            <span className="mt-1 text-sm font-semibold">{th ? 'เปิดคู่มือรู้สิทธิ' : 'Open the Rights Guide'}</span>
+            <span className="mt-5 flex items-end justify-between gap-3 text-xl font-bold leading-tight sm:text-2xl">{tx(locale, 'รู้สิทธิของฉัน', 'Know my rights')} <span aria-hidden="true">↗</span></span>
+            <span className="mt-1 text-sm font-semibold">{tx(locale, 'เปิดคู่มือรู้สิทธิ', 'Open the Rights Guide')}</span>
           </a>
         </div>
       </Container>
     </section>
 
     <Section tone="yellow" id="contact"><Container>
-      <SectionHeading eyebrow={th ? 'ติดต่อโดยตรง' : 'Direct contact'} title={th ? 'เลือกภาษาที่ต้องการ' : 'Choose your language'} />
+      <SectionHeading eyebrow={tx(locale, 'ติดต่อโดยตรง', 'Direct contact')} title={tx(locale, 'เลือกภาษาที่ต้องการ', 'Choose your language')} />
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{hotlines.map((h) => <a
         key={h.code} href={telHref(h.phone)}
         className="flex min-h-36 flex-col justify-between border-2 border-black bg-white p-5 transition-colors hover:bg-black hover:text-white focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black"
-        aria-label={`${th ? h.langTh : h.langEn}: ${h.phone}`}
+        aria-label={`${tx(locale, h.langTh, h.langEn)}: ${h.phone}`}
       >
         <span className="flex items-start justify-between gap-2 font-bold">
-          <span>{h.code === 'TH' ? (th ? h.langTh : h.langEn) : <>
+          <span>{h.code === 'TH' ? (tx(locale, h.langTh, h.langEn)) : <>
             <span className="block text-lg" lang={nativeLanguages[h.code]?.lang}>{nativeLanguages[h.code]?.label}</span>
-            <span className="mt-1 block text-sm font-semibold">{th ? h.langTh : h.langEn}</span>
+            <span className="mt-1 block text-sm font-semibold">{tx(locale, h.langTh, h.langEn)}</span>
           </>}</span>
           <Phone size={24} aria-hidden="true" />
         </span>
         <span className="mt-6 font-mono text-xl font-bold break-all">{h.phone}</span>
       </a>)}</div>
-      <p className="mt-6 max-w-3xl text-sm leading-relaxed text-black/80">{th
-        ? 'โทรไม่ติด? ดูช่องทางอื่นในหน้าติดต่อ'
-        : 'Call not connecting? See other ways to contact LPN.'}{' '}
-        <a className="font-bold underline underline-offset-4" href={`/${locale}/contact`}>{th ? 'ดูหน้าติดต่อ' : 'View contact page'}</a>
+      <p className="mt-6 max-w-3xl text-sm leading-relaxed text-black/80">{tx(locale, 'โทรไม่ติด? ดูช่องทางอื่นในหน้าติดต่อ', 'Call not connecting? See other ways to contact LPN.')}{' '}
+        <a className="font-bold underline underline-offset-4" href={`/${locale}/contact`}>{tx(locale, 'ดูหน้าติดต่อ', 'View contact page')}</a>
       </p>
     </Container></Section>
 
@@ -129,19 +123,19 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
     </Container></Section>
 
     <Section tone="light"><Container>
-      <SectionHeading eyebrow={th ? 'เรื่องที่ช่วยได้' : 'What we can discuss'} title={th ? 'เริ่มจากเรื่องของคุณ' : 'Start with your situation'} />
+      <SectionHeading eyebrow={tx(locale, 'เรื่องที่ช่วยได้', 'What we can discuss')} title={tx(locale, 'เริ่มจากเรื่องของคุณ', 'Start with your situation')} />
       <ul className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{issues.map(({ title, icon: Icon }) => <li key={title} className="flex min-h-36 flex-col justify-between border-t-4 border-current bg-paper p-4 sm:p-5">
         <Icon size={36} weight="duotone" className="pictogram-duotone" aria-hidden="true" />
         <span className="mt-5 text-base font-bold leading-snug">{title}</span>
       </li>)}</ul>
-      <p className="mt-6 text-sm text-black/75">{th ? 'ไม่ต้องเลือกหมวดหมู่ก่อนโทร' : 'You do not need to choose a topic before calling.'}</p>
+      <p className="mt-6 text-sm text-black/75">{tx(locale, 'ไม่ต้องเลือกหมวดหมู่ก่อนโทร', 'You do not need to choose a topic before calling.')}</p>
     </Container></Section>
 
     <Section tone="paper"><Container className="grid gap-9 lg:grid-cols-[auto_1fr_auto] lg:items-center">
       <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-black/10 bg-white p-3 shadow-xs">
         <Image
           src="/logos/right-guide/favicon-rightguild-new.svg"
-          alt={th ? 'โลโก้ รู้สิทธิ ติดกระเป๋า' : 'LPN Rights Guide Logo'}
+          alt={tx(locale, 'โลโก้ รู้สิทธิ ติดกระเป๋า', 'LPN Rights Guide Logo')}
           width={80}
           height={80}
           unoptimized
@@ -149,11 +143,9 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
         />
       </div>
       <div>
-        <SectionHeading eyebrow={th ? 'เรียนรู้ด้วยตัวเอง' : 'Learn at your own pace'} title={th ? 'รู้สิทธิ ติดกระเป๋า' : 'LPN Rights Guide'} lede={th
-          ? 'คู่มือเรื่องงาน เอกสาร สุขภาพ และครอบครัว มีภาษาไทย อังกฤษ และพม่า ติดต่อ LPN ได้ทันทีโดยไม่ต้องอ่านคู่มือก่อน'
-          : 'Practical guidance on work, documents, health, and family in Thai, English, and Burmese. You can contact LPN without reading it first.'} />
+        <SectionHeading eyebrow={tx(locale, 'เรียนรู้ด้วยตัวเอง', 'Learn at your own pace')} title={tx(locale, 'รู้สิทธิ ติดกระเป๋า', 'LPN Rights Guide')} lede={tx(locale, 'คู่มือเรื่องงาน เอกสาร สุขภาพ และครอบครัว มีภาษาไทย อังกฤษ และพม่า ติดต่อ LPN ได้ทันทีโดยไม่ต้องอ่านคู่มือก่อน', 'Practical guidance on work, documents, health, and family in Thai, English, and Burmese. You can contact LPN without reading it first.')} />
       </div>
-      <ButtonLink href={GUIDE} variant="solidDark">{th ? 'เปิดคู่มือรู้สิทธิ' : 'Open the Rights Guide'}</ButtonLink>
+      <ButtonLink href={GUIDE} variant="solidDark">{tx(locale, 'เปิดคู่มือรู้สิทธิ', 'Open the Rights Guide')}</ButtonLink>
     </Container></Section>
   </>
 }

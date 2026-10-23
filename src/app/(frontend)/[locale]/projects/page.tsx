@@ -17,6 +17,8 @@ import {
   ButtonLink,
   EditorialRow,
 } from '@/components/ui'
+import { tx, draftDict } from '@/i18n/tx'
+import { TxProvider } from '@/i18n/tx-client'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -49,38 +51,33 @@ function PartnerEntry({ p }: { p: Partner }) {
 export default async function ProjectsPage(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
   setRequestLocale(locale)
-  const isThai = locale === 'th'
-  const copy: ProjectsCopy = isThai ? projectsTh : projectsEn
+  const copy: ProjectsCopy = tx(locale, projectsTh, projectsEn)
 
-  const stats = isThai
-    ? [
+  const stats = tx(locale, [
         { value: '7', label: 'ผู้ให้ทุนหลัก' },
         { value: '6', label: 'ประเด็นที่ทำงาน' },
         { value: '2', label: 'เครือข่ายแรงงานที่หนุนเสริม' },
-      ]
-    : [
+      ], [
         { value: '7', label: 'core funders' },
         { value: '6', label: 'priority issues' },
         { value: '2', label: 'worker networks supported' },
-      ]
+      ])
 
-  const issues = isThai
-    ? [
+  const issues = tx(locale, [
         { number: '01', title: 'สิทธิมนุษยชน & แรงงาน', body: 'ปกป้องและขยายสิทธิของแรงงานข้ามชาติทั้งบนบกและในทะเล' },
         { number: '02', title: 'การฟื้นฟูผู้รอด & บ้านพัก', body: 'การฟื้นฟูจิตใจ บ้านพักปลอดภัย และการกลับคืนสู่ชุมชนอย่างมีศักดิ์ศรี' },
         { number: '03', title: 'การป้องกันการค้ามนุษย์', body: 'ระบบเฝ้าระวัง สายด่วน และความร่วมมือกับหน่วยงานรัฐและเอกชน' },
         { number: '04', title: 'สุขภาพทั่วไปและอนามัยเจริญพันธุ์', body: 'การเข้าถึงบริการสุขภาพและสิทธิอนามัยเจริญพันธุ์สำหรับแรงงานข้ามชาติ' },
         { number: '05', title: 'การป้องกันแรงงานเด็ก', body: 'หยุดยั้งการใช้แรงงานเด็กในห่วงโซ่อุปทานและชุมชนแรงงานข้ามชาติ' },
         { number: '06', title: 'การศึกษาสำหรับเด็กข้ามชาติ', body: 'เปิดเส้นทางการเรียนรู้และการเข้าถึงการศึกษาภาครัฐของไทย' },
-      ]
-    : [
+      ], [
         { number: '01', title: 'Human & labour rights', body: 'Defend and expand the rights of migrant workers — both onshore and at sea.' },
         { number: '02', title: 'Trauma recovery & shelter', body: 'Psychosocial healing, safe shelters, and dignified reintegration with families and communities.' },
         { number: '03', title: 'Anti-trafficking prevention', body: 'Hotlines, early-warning networks, and cooperation with state and private actors.' },
         { number: '04', title: 'Health & reproductive rights', body: 'Access to general and reproductive health services for migrant worker communities.' },
         { number: '05', title: 'Child labour prevention', body: 'Stop child labour in supply chains and in migrant-worker communities.' },
         { number: '06', title: 'Education for migrant children', body: 'Open pathways into Thai public education and tutoring support.' },
-      ]
+      ])
 
   const partners = [
     'JTIP',
@@ -99,12 +96,10 @@ export default async function ProjectsPage(props: { params: Promise<{ locale: Lo
         backgroundImage={HERO_IMAGES.projects}
         backgroundAlt="กิจกรรมอบรมเยาวชนของ LPN"
         compact
-        eyebrow={isThai ? 'ความร่วมมือและพันธมิตร' : 'Partnerships'}
-        title={isThai ? 'การเปลี่ยนแปลงที่ยั่งยืนเกิดจากการทำงานร่วมกัน' : 'Lasting change is built in coalition.'}
+        eyebrow={tx(locale, 'ความร่วมมือและพันธมิตร', 'Partnerships')}
+        title={tx(locale, 'การเปลี่ยนแปลงที่ยั่งยืนเกิดจากการทำงานร่วมกัน', 'Lasting change is built in coalition.')}
         lede={
-          isThai
-            ? 'LPN ทำงานร่วมกับผู้ให้ทุน ภาคประชาสังคม เครือข่ายแรงงาน และพันธมิตรระหว่างประเทศ เพื่อขับเคลื่อนงานต้านการค้ามนุษย์และพัฒนาสิทธิแรงงานในไทย'
-            : 'LPN works with funders, civic groups, worker networks, and international partners to drive anti-trafficking action and improve labour rights in Thailand.'
+          tx(locale, 'LPN ทำงานร่วมกับผู้ให้ทุน ภาคประชาสังคม เครือข่ายแรงงาน และพันธมิตรระหว่างประเทศ เพื่อขับเคลื่อนงานต้านการค้ามนุษย์และพัฒนาสิทธิแรงงานในไทย', 'LPN works with funders, civic groups, worker networks, and international partners to drive anti-trafficking action and improve labour rights in Thailand.')
         }
         stats={stats}
       />
@@ -113,8 +108,8 @@ export default async function ProjectsPage(props: { params: Promise<{ locale: Lo
       <Section tone="light" className="on-light">
         <Container>
           <SectionHeading
-            eyebrow={isThai ? 'ประเด็นที่เราขับเคลื่อน' : 'Areas of focus'}
-            title={isThai ? 'ประเด็นที่เราขับเคลื่อน' : 'Priority issues we drive'}
+            eyebrow={tx(locale, 'ประเด็นที่เราขับเคลื่อน', 'Areas of focus')}
+            title={tx(locale, 'ประเด็นที่เราขับเคลื่อน', 'Priority issues we drive')}
           />
           <div className="mt-12">
             {issues.map((i) => (
@@ -129,8 +124,8 @@ export default async function ProjectsPage(props: { params: Promise<{ locale: Lo
         <Container>
           <SectionHeading
             tone="light"
-            eyebrow={isThai ? 'พันธมิตรของเรา' : 'Our partners'}
-            title={isThai ? 'ผู้ให้ทุน องค์กรประชาสังคม และพันธมิตรระหว่างประเทศ' : 'Funders, civil society, and international allies.'}
+            eyebrow={tx(locale, 'พันธมิตรของเรา', 'Our partners')}
+            title={tx(locale, 'ผู้ให้ทุน องค์กรประชาสังคม และพันธมิตรระหว่างประเทศ', 'Funders, civil society, and international allies.')}
           />
           <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden border border-white/15 bg-white/10 sm:grid-cols-3 lg:grid-cols-7">
             {partners.map((p) => (
@@ -148,10 +143,12 @@ export default async function ProjectsPage(props: { params: Promise<{ locale: Lo
       {/* HISTORICAL FUNDERS */}
       <Section tone="paper" className="on-light">
         <Container>
-          <SectionHeading title={isThai ? 'โครงการและความร่วมมือที่ผ่านมา' : 'Past projects and collaborations'} lede={isThai ? 'สำรวจความร่วมมือที่บันทึกไว้บนเว็บไซต์เดิมตามปี ข้อมูลนี้เป็นประวัติการทำงาน ไม่ใช่รายชื่อโครงการที่กำลังดำเนินอยู่' : 'Explore collaborations documented on the former website by year. These are historical projects, not a list of current grants.'} />
-          <PartnerTimeline locale={locale} projects={getPartnerProjects(locale)} />
-          <a href={isThai ? 'https://www.lpnfoundation.org/th/projects' : 'https://www.lpnfoundation.org/projects'} target="_blank" rel="noreferrer" className="mt-8 inline-block text-sm font-bold underline decoration-brand-yellow decoration-2 underline-offset-4">
-            {isThai ? 'ดูข้อมูลต้นฉบับบนเว็บไซต์เดิม' : 'View the original project page'} ↗
+          <SectionHeading title={tx(locale, 'โครงการและความร่วมมือที่ผ่านมา', 'Past projects and collaborations')} lede={tx(locale, 'สำรวจความร่วมมือที่บันทึกไว้บนเว็บไซต์เดิมตามปี ข้อมูลนี้เป็นประวัติการทำงาน ไม่ใช่รายชื่อโครงการที่กำลังดำเนินอยู่', 'Explore collaborations documented on the former website by year. These are historical projects, not a list of current grants.')} />
+          <TxProvider dict={draftDict(locale)}>
+            <PartnerTimeline locale={locale} projects={tx(locale, getPartnerProjects('th'), getPartnerProjects('en'))} />
+          </TxProvider>
+          <a href={tx(locale, 'https://www.lpnfoundation.org/th/projects', 'https://www.lpnfoundation.org/projects')} target="_blank" rel="noreferrer" className="mt-8 inline-block text-sm font-bold underline decoration-brand-yellow decoration-2 underline-offset-4">
+            {tx(locale, 'ดูข้อมูลต้นฉบับบนเว็บไซต์เดิม', 'View the original project page')} ↗
           </a>
         </Container>
       </Section>
@@ -192,10 +189,10 @@ export default async function ProjectsPage(props: { params: Promise<{ locale: Lo
         actions={
           <>
             <ButtonLink href="/contact" variant="solidDark">
-              {isThai ? 'ติดต่อร่วมงาน' : 'Get in touch'}
+              {tx(locale, 'ติดต่อร่วมงาน', 'Get in touch')}
             </ButtonLink>
             <ButtonLink href="/donate" variant="ghostDark">
-              {isThai ? 'สนับสนุนโครงการ' : 'Fund a project'}
+              {tx(locale, 'สนับสนุนโครงการ', 'Fund a project')}
             </ButtonLink>
           </>
         }

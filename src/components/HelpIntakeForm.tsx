@@ -47,6 +47,10 @@ const LANGUAGES: { value: IntakeLanguage; label: string }[] = [
   { value: 'km', label: 'ភាសាខ្មែរ' },
 ]
 
+// Default "your language" choice per page locale. The intake API takes th/en/my/km;
+// Lao readers default to Thai (closest supported language) and can change it.
+const INTAKE_DEFAULT: Record<'th' | 'en' | 'my' | 'km' | 'lo', IntakeLanguage> = { th: 'th', en: 'en', my: 'my', km: 'km', lo: 'th' }
+
 /* ------------------------------------------------------------ Turnstile */
 
 type TurnstileApi = {
@@ -182,7 +186,8 @@ function TurnstileSlot({
             appearance: 'interaction-only',
             size: 'flexible',
             theme: 'auto',
-            language: locale,
+            // Turnstile has no Burmese/Khmer/Lao UI; let it follow the browser there.
+            language: locale === 'th' || locale === 'en' ? locale : 'auto',
             callback: (tok) => {
               tokenRef.current = tok
               flushToken()
@@ -242,15 +247,17 @@ export default function HelpIntakeForm({
   channels,
   messengerUrl,
 }: {
-  locale: 'th' | 'en'
+  locale: 'th' | 'en' | 'my' | 'km' | 'lo'
   channels: HelpChannel[]
   messengerUrl: string
 }) {
   const t = useTranslations('helpForm')
   const id = useId()
+  // Latin digits on my/km/lo: Node and browser ICU disagree on native digits (hydration mismatch).
+  const numberLocale = locale === 'th' || locale === 'en' ? locale : 'en'
 
   const [text, setText] = useState('')
-  const [language, setLanguage] = useState<IntakeLanguage>(locale)
+  const [language, setLanguage] = useState<IntakeLanguage>(INTAKE_DEFAULT[locale])
   const [province, setProvince] = useState('')
   const [contact, setContact] = useState('')
   const [consent, setConsent] = useState(false)
@@ -499,7 +506,7 @@ export default function HelpIntakeForm({
           <div className="mt-1 flex flex-wrap justify-between gap-2">
             {errors.text ? <p id={`${id}-text-error`} className="field-error">{errors.text}</p> : <span />}
             <span id={`${id}-text-count`} className={`text-sm tabular-nums ${textLen > TEXT_MAX ? 'text-critical-ink font-semibold' : 'text-black/60'}`}>
-              {textLen.toLocaleString(locale)} / {TEXT_MAX.toLocaleString(locale)}
+              {textLen.toLocaleString(numberLocale)} / {TEXT_MAX.toLocaleString(numberLocale)}
             </span>
           </div>
         </div>

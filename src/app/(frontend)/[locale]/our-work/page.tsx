@@ -7,6 +7,7 @@ import { getSiteMedia } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
 import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
 import { MediaImage } from '@/components/MediaImage'
+import { tx } from '@/i18n/tx'
 
 const GUIDE = 'https://www.lpnrightguide.site/'
 
@@ -15,21 +16,18 @@ export async function generateMetadata(props: { params: Promise<{ locale: Locale
   return buildMetadata({
     locale,
     path: '/our-work',
-    title: locale === 'th' ? 'งานของเรา — LPN' : 'Our Work — LPN',
-    description: locale === 'th'
-      ? 'LPN เชื่อมการช่วยเหลือแรงงาน การเสริมความรู้ในชุมชน และการสร้างหลักฐานเพื่อเปลี่ยนระบบ'
-      : 'LPN connects worker assistance, community learning, and evidence for systems change.',
+    title: tx(locale, 'งานของเรา — LPN', 'Our Work — LPN'),
+    description: tx(locale, 'LPN เชื่อมการช่วยเหลือแรงงาน การเสริมความรู้ในชุมชน และการสร้างหลักฐานเพื่อเปลี่ยนระบบ', 'LPN connects worker assistance, community learning, and evidence for systems change.'),
   })
 }
 
 export default async function OurWorkPage(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
   setRequestLocale(locale)
-  const th = locale === 'th'
 
   const mediaMap = await getSiteMedia()
 
-  const work = th ? [
+  const work = tx(locale, [
     {
       id: 'respond', number: '01', label: 'ตอบสนองและคุ้มครอง',
       icon: Lifebuoy,
@@ -60,7 +58,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
       media: mediaMap.trainingCentre,
       alt: 'การขับเคลื่อนเชิงนโยบายและความร่วมมือเพื่อสิทธิแรงงาน',
     },
-  ] : [
+  ], [
     {
       id: 'respond', number: '01', label: 'Respond and protect',
       icon: Lifebuoy,
@@ -91,7 +89,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
       media: mediaMap.trainingCentre,
       alt: 'Policy advocacy and multi-stakeholder partnership',
     },
-  ]
+  ])
 
   return <>
     <section className="relative overflow-hidden bg-black text-white">
@@ -99,7 +97,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/fisher-protection.jpg"
-          alt={th ? 'การปฏิบัติงานคุ้มครองแรงงานประมง LPN' : 'LPN maritime worker protection'}
+          alt={tx(locale, 'การปฏิบัติงานคุ้มครองแรงงานประมง LPN', 'LPN maritime worker protection')}
           fill
           priority
           sizes="100vw"
@@ -110,19 +108,17 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
       </div>
 
       <Container className="relative z-10 py-16 md:py-24">
-        <p className="eyebrow text-white/70">{th ? 'งานของเรา' : 'Our work'}</p>
-        <h1 className="t-display mt-6 max-w-5xl text-white">{th ? 'ช่วยเหลือวันนี้ สร้างความปลอดภัยในวันหน้า' : 'Protection today. Safer systems tomorrow.'}</h1>
-        <p className="t-lede mt-7 max-w-3xl text-white/80">{th
-          ? 'งานช่วยเหลือ การเรียนรู้กับชุมชน และการสร้างหลักฐานเชื่อมกันผ่านความต้องการและเสียงของแรงงานข้ามชาติ'
-          : 'Direct assistance, community learning, and evidence-building are connected by the needs and voices of migrant workers.'}</p>
-        <div className="mt-9"><ButtonLink href="/get-help" variant="primary">{th ? 'ต้องการความช่วยเหลือ?' : 'Need help?'}</ButtonLink></div>
+        <p className="eyebrow text-white/70">{tx(locale, 'งานของเรา', 'Our work')}</p>
+        <h1 className="t-display mt-6 max-w-5xl text-white">{tx(locale, 'ช่วยเหลือวันนี้ สร้างความปลอดภัยในวันหน้า', 'Protection today. Safer systems tomorrow.')}</h1>
+        <p className="t-lede mt-7 max-w-3xl text-white/80">{tx(locale, 'งานช่วยเหลือ การเรียนรู้กับชุมชน และการสร้างหลักฐานเชื่อมกันผ่านความต้องการและเสียงของแรงงานข้ามชาติ', 'Direct assistance, community learning, and evidence-building are connected by the needs and voices of migrant workers.')}</p>
+        <div className="mt-9"><ButtonLink href="/get-help" variant="primary">{tx(locale, 'ต้องการความช่วยเหลือ?', 'Need help?')}</ButtonLink></div>
       </Container>
     </section>
 
     {work.map((item, i) => <Section key={item.id} id={item.id} tone={i === 1 ? 'paper' : 'light'}><Container>
       <div className="grid gap-9 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
         <div>
-          <p className="t-label text-black/70">{item.number} / {th ? 'งานหลัก' : 'Workstream'}</p>
+          <p className="t-label text-black/70">{item.number} / {tx(locale, 'งานหลัก', 'Workstream')}</p>
           <div className="mt-3 flex items-center gap-3.5">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-black text-brand-yellow">
               <item.icon className="h-6 w-6" aria-hidden="true" />
@@ -135,7 +131,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-black/10 bg-white p-1.5 shadow-2xs">
                 <Image
                   src="/logos/right-guide/favicon-rightguild-new.svg"
-                  alt={th ? 'คู่มือรู้สิทธิ ติดกระเป๋า' : 'LPN Rights Guide'}
+                  alt={tx(locale, 'คู่มือรู้สิทธิ ติดกระเป๋า', 'LPN Rights Guide')}
                   width={48}
                   height={48}
                   unoptimized
@@ -143,8 +139,8 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
                 />
               </div>
               <div>
-                <h4 className="font-bold text-black text-sm">{th ? 'คู่มือรู้สิทธิ ติดกระเป๋า' : 'LPN Rights Guide Companion'}</h4>
-                <p className="text-xs text-black/70 mt-0.5">{th ? 'สถานการณ์จำลอง 8 หมวด และสิทธิ 12 เรื่อง (ไทย / อังกฤษ / พม่า)' : '8 situation paths & 12 rights topics (TH / EN / MY)'}</p>
+                <h4 className="font-bold text-black text-sm">{tx(locale, 'คู่มือรู้สิทธิ ติดกระเป๋า', 'LPN Rights Guide Companion')}</h4>
+                <p className="text-xs text-black/70 mt-0.5">{tx(locale, 'สถานการณ์จำลอง 8 หมวด และสิทธิ 12 เรื่อง (ไทย / อังกฤษ / พม่า)', '8 situation paths & 12 rights topics (TH / EN / MY)')}</p>
               </div>
             </div>
           )}
@@ -162,7 +158,7 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
             </div>
           )}
           <div className="border-l-4 border-current p-6 sm:p-7">
-            <h3 className="t-h3">{th ? 'สิ่งที่ทำ' : 'What this includes'}</h3>
+            <h3 className="t-h3">{tx(locale, 'สิ่งที่ทำ', 'What this includes')}</h3>
             <ul className="mt-5 space-y-3 text-sm leading-relaxed text-black/80">{item.examples.map((e) => <li key={e} className="border-b border-black/10 pb-3">{e}</li>)}</ul>
             <p className="mt-6 text-sm leading-relaxed text-black/70">{item.note}</p>
           </div>
@@ -171,11 +167,11 @@ export default async function OurWorkPage(props: { params: Promise<{ locale: Loc
     </Container></Section>)}
 
     <Section tone="dark"><Container>
-      <SectionHeading eyebrow={th ? 'ดูรายละเอียดเพิ่มเติม' : 'Explore further'} title={th ? 'เรื่องราวและโครงการของ LPN' : 'LPN programmes and history'} tone="light" lede={th ? 'รายละเอียดบริการ โครงการ และความร่วมมือในอดีตยังคงอ่านได้ในเว็บไซต์ใหม่' : 'The detailed services, projects, and past partnerships remain available on the new site.'} />
+      <SectionHeading eyebrow={tx(locale, 'ดูรายละเอียดเพิ่มเติม', 'Explore further')} title={tx(locale, 'เรื่องราวและโครงการของ LPN', 'LPN programmes and history')} tone="light" lede={tx(locale, 'รายละเอียดบริการ โครงการ และความร่วมมือในอดีตยังคงอ่านได้ในเว็บไซต์ใหม่', 'The detailed services, projects, and past partnerships remain available on the new site.')} />
       <div className="mt-8 flex flex-wrap gap-4">
-        <Link href="/services" className="link-mark text-white">{th ? 'บริการและแนวทางทำงาน' : 'Services and approach'} →</Link>
-        <Link href="/projects" className="link-mark text-white">{th ? 'โครงการและความร่วมมือ' : 'Projects and partnerships'} →</Link>
-        <Link href="/blog" className="link-mark text-white">{th ? 'ข่าวล่าสุด' : 'Recent updates'} →</Link>
+        <Link href="/services" className="link-mark text-white">{tx(locale, 'บริการและแนวทางทำงาน', 'Services and approach')} →</Link>
+        <Link href="/projects" className="link-mark text-white">{tx(locale, 'โครงการและความร่วมมือ', 'Projects and partnerships')} →</Link>
+        <Link href="/blog" className="link-mark text-white">{tx(locale, 'ข่าวล่าสุด', 'Recent updates')} →</Link>
       </div>
     </Container></Section>
   </>

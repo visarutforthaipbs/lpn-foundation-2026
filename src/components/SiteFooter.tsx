@@ -3,13 +3,12 @@ import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getFooter } from '@/lib/api'
 import { HOTLINES, OFFICE, SOCIALS, telHref } from '@/lib/content'
+import { tx, txCms } from '@/i18n/tx'
 
 export async function SiteFooter({ locale }: { locale: Locale }) {
   const footer = await getFooter(locale)
-  const isThai = locale === 'th'
 
-  const navLinks = isThai
-    ? [
+  const navLinks = tx(locale, [
         { label: 'ขอความช่วยเหลือ', href: '/get-help' },
         { label: 'รู้สิทธิ ติดกระเป๋า', href: 'https://www.lpnrightguide.site/' },
         { label: 'งานของเรา', href: '/our-work' },
@@ -18,8 +17,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         { label: 'ข่าวสาร', href: '/blog' },
         { label: 'ติดต่อ', href: '/contact' },
         { label: 'บริจาค', href: '/donate' },
-      ]
-    : [
+      ], [
         { label: 'Get Help', href: '/get-help' },
         { label: 'Rights Guide', href: 'https://www.lpnrightguide.site/' },
         { label: 'Our Work', href: '/our-work' },
@@ -28,11 +26,11 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         { label: 'News', href: '/blog' },
         { label: 'Contact', href: '/contact' },
         { label: 'Donate', href: '/donate' },
-      ]
+      ])
 
   const linkCls = 'inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow'
   const hotlines = footer?.hotlines?.length
-    ? footer.hotlines.map((h) => ({ key: h.id ?? h.phone, label: h.language ?? '', phone: h.phone }))
+    ? footer.hotlines.map((h) => ({ key: h.id ?? h.phone, label: txCms(locale, h.language ?? ''), phone: h.phone }))
     : HOTLINES.map((h) => ({ key: h.code, label: h.langNative, phone: h.phone }))
   const socials = footer?.socials?.length
     ? footer.socials.map((s) => ({ key: s.id ?? s.url, platform: s.platform, url: s.url }))
@@ -43,7 +41,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
       {/* Hotline strip — the one safety-critical block; kept, but on one compact row */}
       <div className="border-y border-black/10 bg-paper text-black on-light">
         <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 md:flex-row md:items-center md:gap-6">
-          <span className="t-label shrink-0">{isThai ? 'สายด่วน LPN' : 'LPN hotlines'}</span>
+          <span className="t-label shrink-0">{tx(locale, 'สายด่วน LPN', 'LPN hotlines')}</span>
           <ul className="grid md:flex md:flex-wrap md:gap-x-6">
             {hotlines.map((h) => (
               <li key={h.key}>
@@ -64,7 +62,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
           <Link href="/" className="flex min-h-11 shrink-0 items-center text-base font-bold">
             LPN Foundation
           </Link>
-          <nav aria-label={isThai ? 'แผนผังเว็บไซต์' : 'Sitemap'}>
+          <nav aria-label={tx(locale, 'แผนผังเว็บไซต์', 'Sitemap')}>
             <ul className="grid grid-cols-2 gap-x-6 text-sm md:flex md:flex-wrap md:justify-end md:gap-x-5">
               {navLinks.map((l) => (
                 <li key={l.href}>
@@ -82,7 +80,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         <div className="mt-6 flex flex-col gap-x-6 border-t border-white/10 pt-4 text-sm md:flex-row md:flex-wrap md:items-center">
           <address className="flex min-h-11 items-center gap-2 not-italic text-white/70">
             <MapPin size={18} className="shrink-0 text-brand-yellow" aria-hidden="true" />
-            <span>{isThai ? OFFICE.addressTh : OFFICE.addressEn}</span>
+            <span>{tx(locale, OFFICE.addressTh, OFFICE.addressEn)}</span>
           </address>
           {OFFICE.emails.map((e) => (
             <a key={e} href={`mailto:${e}`} className={`${linkCls} gap-2 font-mono`}>
@@ -100,7 +98,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         </div>
 
         <p className="mt-4 text-xs text-white/60">
-          © {new Date().getFullYear()} {isThai ? OFFICE.nameTh : OFFICE.nameEn} · {isThai ? 'ปทุมธานี ประเทศไทย' : 'Pathum Thani, Thailand'}
+          © {new Date().getFullYear()} {tx(locale, OFFICE.nameTh, OFFICE.nameEn)} · {tx(locale, 'ปทุมธานี ประเทศไทย', 'Pathum Thani, Thailand')}
         </p>
       </div>
     </footer>
