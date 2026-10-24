@@ -38,7 +38,7 @@ export function Reveal({
   children: React.ReactNode
   className?: string
   delay?: number
-  as?: 'div' | 'li' | 'section' | 'p' | 'dl'
+  as?: 'div' | 'li' | 'section' | 'p' | 'dl' | 'article'
 }) {
   const ref = useRef<HTMLElement | null>(null)
   const reduce = useReducedMotion()
@@ -106,6 +106,28 @@ export function CountUp({ value, className }: { value: string; className?: strin
     <span ref={ref} className={className}>
       {value}
     </span>
+  )
+}
+
+/**
+ * Hero text entrance: children rise in once, in order, on first paint (heroes are above the fold, so this is load-time
+ * not scroll-time). Server HTML is fully visible; JS only plays a 0.5 s settle. Reduced motion → no movement.
+ */
+export function HeroIn({ children, className }: { children: React.ReactNode; className?: string }) {
+  // `initial={false}` on BOTH server and client (no useReducedMotion branch → no hydration mismatch). The entrance is
+  // started after mount only when motion is allowed; with reduced motion the element simply stays in its final state.
+  const reduce = useReducedMotion()
+  const ref = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || reduce) return
+    const c = animate(el, { opacity: [0.001, 1], transform: ['translateY(14px)', 'translateY(0px)'] }, { duration: 0.5, ease: EASE })
+    return () => c.stop()
+  }, [reduce])
+  return (
+    <div ref={ref} className={className}>
+      {children}
+    </div>
   )
 }
 

@@ -150,6 +150,15 @@ bilingual draft notice and stay out of hreflang/sitemap. After any copy change: 
 language (badge + notice on my/km/lo). Noto Sans Myanmar/Khmer/Lao load only under `html:lang(my|km|lo)`. Use Latin digits
 (`-u-nu-latn`) for my/km/lo numbers/dates — native digits differ between Node and browser and break hydration.
 
+## Motion (2026-10-24)
+Library `motion` (Framer Motion's successor). All primitives live in `src/components/motion.tsx`; `MotionProvider` wraps `<main>`
+in `[locale]/layout.tsx` (`reducedMotion="user"`). Rules: motion plays ONCE on scroll-into-view, never on hover, never loops
+(DESIGN-GUARDRAILS: "motion should signal change, not ornament"). Primitives: `Reveal` (fade + 12 px rise, `as=` div/li/
+article…, `delay` for stagger — already inside `SectionHeading`, `StatBand`, `TeamCard`), `CountUp` (plain integers only;
+years like 2560 and text like "7 ใน 10" stay static), `DrawLine` (timeline axis), `HeroIn` (hero text, load-time).
+Content must be fully visible in server HTML and without JS: elements are hidden only after hydration and only if they start
+below the fold. Check with a scroll-through at 390/1280 × motion/reduced: nothing may stay at opacity < 1.
+
 ## Local development DB (2026-10-24)
 `.env.local` points `DATABASE_URL` at a local Postgres clone `lpn_website_dev` (prod Neon lines are commented; backup of
 the prod env at `~/.hermes/profiles/lpn-website/audit/env.local-prod-backup-20261024`). Pages load in ~1 s instead of
@@ -207,6 +216,9 @@ so local media uploads create real blob files but only local DB rows. Refresh th
   `#e6ac00`) is the one accent: primary action, selection, focus. Never yellow
   text on white. Type floor 13 px, body 17 px, font weights ≤ 700 (Plex ships
   400–700), controls ≥ 44 px, no hover motion, glass only in the sticky header.
+- Motion hydration: never branch the FIRST render on `useReducedMotion()` (server can't know it → "tree hydrated but some
+  attributes didn't match", only for reduced-motion users). Render identically on server/client, start the animation in
+  `useEffect` after mount (see `HeroIn`). Count-up must skip years, or it counts "2560" up from 0.
 - `create-payload-app` needs a TTY; corepack pnpm is broken here (use the
   global pnpm). pnpm's native-build allowlist lives in `pnpm-workspace.yaml`.
 - Hermes browser tool fails when Chrome holds the real profile; use the

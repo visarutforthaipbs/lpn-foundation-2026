@@ -1,7 +1,6 @@
 import React from 'react'
-import Image from 'next/image'
 import { HeroBackdrop } from '@/components/HeroBackdrop'
-import { Reveal, CountUp } from '@/components/motion'
+import { Reveal, CountUp, HeroIn } from '@/components/motion'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Link } from '@/i18n/navigation'
 
@@ -259,7 +258,7 @@ export function PageHero({
       {!backgroundImage && <div className="pointer-events-none absolute right-0 top-0 z-1 h-full w-[42%] border-l border-white/10 bg-[linear-gradient(135deg,transparent_0%,rgba(255,199,0,0.12)_100%)]" aria-hidden="true" />}
 
       <div className={`container-page relative z-10 ${compact ? 'py-20 md:py-24' : 'py-24 md:py-32'}`}>
-        <div className="max-w-4xl">
+        <HeroIn className="max-w-4xl">
           {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
           <h1 className={`mt-6 ${compact ? 't-display-sm' : 't-display'}`}>{title}</h1>
           {lede && <p className="t-lede mt-7 max-w-2xl text-white/85">{lede}</p>}
@@ -268,7 +267,7 @@ export function PageHero({
           {stats && stats.length > 0 && (
             <StatBand stats={stats} tone="dark" className="mt-14 max-w-2xl border-l-4 border-current pl-6" />
           )}
-        </div>
+        </HeroIn>
       </div>
     </section>
   )

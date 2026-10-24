@@ -157,8 +157,8 @@ export default async function TeamPage(props: { params: Promise<{ locale: Locale
             </p>
           ) : (
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {team.map((m) => (
-                <TeamCard key={m.id} member={m} />
+              {team.map((m, i) => (
+                <TeamCard key={m.id} member={m} index={i} />
               ))}
             </div>
           )}

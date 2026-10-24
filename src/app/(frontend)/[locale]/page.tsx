@@ -9,6 +9,7 @@ import { buildMetadata } from '@/lib/seo'
 import { telHref } from '@/lib/content'
 import { getHelpChannels } from '@/lib/help-channels'
 import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
+import { Reveal } from '@/components/motion'
 import { MediaImage } from '@/components/MediaImage'
 import { tx } from '@/i18n/tx'
 
@@ -229,7 +230,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
 
       <div className="mt-12 grid gap-6 lg:grid-cols-3">
         {streams.map((s) => (
-          <article key={s.id} className="group flex flex-col border border-black/15 bg-paper transition-all hover:border-black hover:shadow-md">
+          <Reveal as="article" delay={Math.min(streams.indexOf(s), 5) * 0.08} key={s.id} className="group flex flex-col border border-black/15 bg-paper transition-all hover:border-black hover:shadow-md">
             {s.media && (
               <div className="relative aspect-16/10 w-full overflow-hidden bg-black/10 border-b border-black/10">
                 <MediaImage
@@ -255,7 +256,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
                 {tx(locale, 'ดูงานด้านนี้', 'Explore this work')} →
               </Link>
             </div>
-          </article>
+          </Reveal>
         ))}
       </div>
     </Container></Section>
@@ -272,11 +273,11 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         <div>
           <ol className="grid gap-6">
             {steps.map(([title, body], i) => (
-              <li key={title} className="border-l-2 border-current pl-6">
+              <Reveal as="li" delay={i * 0.08} key={title} className="border-l-2 border-current pl-6">
                 <span className="t-label text-current/70">0{i + 1}</span>
                 <h3 className="t-h3 mt-2 text-white">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/80">{body}</p>
-              </li>
+              </Reveal>
             ))}
           </ol>
           <p className="mt-8 text-sm text-white/70">
@@ -331,7 +332,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
 
         <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {networks.map((net) => (
-            <div
+            <Reveal delay={Math.min(networks.indexOf(net), 9) * 0.05}
               key={net.abbr}
               className="flex flex-col items-center justify-center border border-white/15 bg-white/5 p-6 text-center transition-all hover:border-current/50 hover:bg-white/10"
             >
@@ -352,7 +353,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
               <span className="mt-1 text-xs text-white/60">
                 {net.sub}
               </span>
-            </div>
+            </Reveal>
           ))}
         </div>
       </Container>
@@ -370,12 +371,12 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
         <div>
           <div className="grid gap-4 sm:grid-cols-3">
             {metrics.map((m) => (
-              <div key={m.value} className="border-t-4 border-current bg-white p-6 sm:p-7 shadow-xs">
+              <Reveal delay={Math.min(metrics.indexOf(m), 5) * 0.08} key={m.value} className="border-t-4 border-current bg-white p-6 sm:p-7 shadow-xs">
                 <strong className="block text-4xl sm:text-5xl font-bold tracking-tight text-black">{m.value}</strong>
                 <p className="mt-3 text-base sm:text-lg font-bold text-black">{m.label}</p>
                 <p className="mt-1.5 text-xs sm:text-sm text-black/70">{m.detail}</p>
                 {featuredMetrics.length > 0 && m.source && <a href={m.source} className="mt-4 inline-block text-xs font-bold underline underline-offset-4">{tx(locale, 'ดูแหล่งที่มา', 'View source')}</a>}
-              </div>
+              </Reveal>
             ))}
           </div>
           {featuredMetrics.length === 0 && <p className="mt-6 text-sm text-black/75">
@@ -423,11 +424,11 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
       </div>
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">
-        {posts.map((post) => (
+        {posts.map((post, pi) => (
+          <Reveal key={post.id} delay={Math.min(pi, 5) * 0.08} className="flex">
           <Link
             href={`/post/${post.slug}`}
-            key={post.id}
-            className="group flex flex-col border border-black/15 bg-white transition-all hover:border-black hover:shadow-md"
+            className="group flex w-full flex-col border border-black/15 bg-white transition-all hover:border-black hover:shadow-md"
           >
             {post.coverImage && (
               <div className="relative aspect-16/10 w-full overflow-hidden bg-black/5 border-b border-black/10">
@@ -451,6 +452,7 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
               <span className="link-mark mt-auto pt-6 text-black">{tx(locale, 'อ่านต่อ', 'Read story')} →</span>
             </div>
           </Link>
+          </Reveal>
         ))}
       </div>
     </Container></Section>

@@ -5,6 +5,7 @@ import { getPosts, getCategories } from '@/lib/api'
 import { HERO_IMAGES } from '@/lib/hero-images'
 import { HeroBackdrop } from '@/components/HeroBackdrop'
 import { MediaImage } from '@/components/MediaImage'
+import { Reveal } from '@/components/motion'
 import { Container, Section, StatBand, ButtonLink, CtaBand, Eyebrow } from '@/components/ui'
 import { tx, fmt } from '@/i18n/tx'
 import { dateLocale, isDraftLocale } from '@/i18n/locales'
@@ -179,13 +180,13 @@ export default async function BlogIndex(props: {
               {/* Post grid — cards without a cover render as text cards, never a grey box. */}
               {rest.length > 0 && (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {rest.map((post) => {
+                  {rest.map((post, pi) => {
                     const cover = post.coverImage && typeof post.coverImage !== 'number' ? post.coverImage : null
                     return (
+                      <Reveal key={post.id} delay={(pi % 3) * 0.07} className="flex">
                       <Link
-                        key={post.id}
                         href={`/post/${post.slug}`}
-                        className={`card group flex flex-col ${cover ? '' : 'bg-paper'}`}
+                        className={`card group flex w-full flex-col ${cover ? '' : 'bg-paper'}`}
                       >
                         {cover && (
                           <div className="relative aspect-video overflow-hidden">
@@ -224,6 +225,7 @@ export default async function BlogIndex(props: {
                           </div>
                         </div>
                       </Link>
+                      </Reveal>
                     )
                   })}
                 </div>
