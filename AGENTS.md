@@ -186,6 +186,11 @@ so local media uploads create real blob files but only local DB rows. Refresh th
 
 ## 8. Traps (learned the hard way)
 
+- **Any standalone script calling `getPayload()` runs a dev schema PUSH when `NODE_ENV !== 'production'`** — against
+  whatever `DATABASE_URL` it has. 2026-10-24 the password-reset script with `--prod` pushed my/km/lo enum values onto
+  Neon (additive, harmless, but unplanned). Every script that may touch prod must set `NODE_ENV=production` before
+  importing the config (see `scripts/reset-admin-password.mts`).
+
 - **`/admin` does not work under `pnpm dev` (webpack)**: 500 `Can't resolve 'worker_threads'` — storage-vercel-blob's client
   upload handler pulls payload's pino logger into the browser bundle; stubbing Node built-ins only moves the error
   (`node:sqlite` next). And `next dev --turbopack` still forks ~1,000 node processes (tried 2026-10-24, killed at 22 %

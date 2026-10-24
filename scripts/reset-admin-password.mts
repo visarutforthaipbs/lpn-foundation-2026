@@ -32,6 +32,11 @@ for (const line of [...(existsSync('.env') ? readFileSync('.env', 'utf8').split(
   process.env[m[1]] = m[2].replace(/^"(.*)"$/, '$1')
 }
 
+// CRITICAL: Payload's postgres adapter runs a dev schema PUSH on init when NODE_ENV !== 'production' — against whatever
+// DATABASE_URL is set. With --prod that silently altered the live schema (2026-10-24: added my/km/lo locale enum values).
+// Force production mode so init never pushes; schema changes go through committed migrations only.
+;(process.env as Record<string, string>).NODE_ENV = 'production'
+
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
 const password = Array.from({ length: 20 }, () => ALPHABET[randomInt(ALPHABET.length)]).join('')
 
