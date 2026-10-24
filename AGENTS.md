@@ -186,6 +186,12 @@ so local media uploads create real blob files but only local DB rows. Refresh th
 
 ## 8. Traps (learned the hard way)
 
+- **`/admin` does not work under `pnpm dev` (webpack)**: 500 `Can't resolve 'worker_threads'` — storage-vercel-blob's client
+  upload handler pulls payload's pino logger into the browser bundle; stubbing Node built-ins only moves the error
+  (`node:sqlite` next). And `next dev --turbopack` still forks ~1,000 node processes (tried 2026-10-24, killed at 22 %
+  free memory). To look at the CMS: use the Vercel preview `/admin` (production data!) or `next build && next start`
+  locally (one heavy job). Front-end pages are fine under webpack dev.
+
 - `TRUNCATE media CASCADE` wipes pages, team, globals (FK web). Never.
 - **`pnpm dev` is pinned to `next dev --webpack`.** Next 16.2.6 Turbopack runs
   Tailwind's PostCSS in an unbounded pool of `node .next/dev/build/postcss.js`
