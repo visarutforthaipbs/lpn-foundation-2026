@@ -13,6 +13,11 @@ at `lpn-foundation-2026.vercel.app` (One CI shipped 23 Oct; help form PR #4 pend
 - [ ] intake links: Get Help page "ส่งเสียง" → `https://www.lpnrightguide.site/voice-report` (later guide.lpnfoundation.org)
 - [ ] run `scripts/health_check.py` + HIG matrix one last time on the preview; Lighthouse mobile ≥ 90 perf on /th
 
+## Donate page — status 2026-10-25
+- Bank details CONFIRMED by Patima (Messenger, 25 Oct): เครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน · Krungthai · Chamchuri Square · 162-0-09432-0 · SWIFT KRTHTHBK. Entered in the footer global (local DB; replay on prod at ship).
+- WAITING (Patima, "next week"): PromptPay ID (tax ID or phone) → I generate the QR on the page; receipts + tax-deduction wording.
+- Then: rebuild /donate from "design preview" to real page (QR + account + copy buttons; foreign donors: SWIFT + contact for receipt), remove the preview banner and the "decisions to review" box.
+
 ## Phase B — LPN gates (not code; from docs/PRD-IMPLEMENTATION-STATUS.md "Before public-domain cutover")
 1. Help numbers + language coverage + response expectations confirmed (same list as E6)
 2. Bank/provider details verified → donate page unblocked (today withheld)
