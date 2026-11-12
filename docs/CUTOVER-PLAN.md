@@ -8,6 +8,18 @@ at `lpn-foundation-2026.vercel.app` (One CI shipped 23 Oct; help form PR #4 pend
 ## Phase A — finish the site (code: this week)
 - [ ] merge website PR #4 (help form → intake API) — owner "merge"
 - [ ] legacy Wix URL map: crawl the live Wix sitemap, add 301s for anything not already covered (DEPLOY.md §5 URL continuity)
+      Checked 2026-11-06 (66 legacy paths vs preview): all pages + posts resolve EXCEPT
+      `/blog/categories/{press,publications,whats-new}` (Wix 200, new 404 → 301 to /en/blog or a filter) and
+      `/th/post/17-seriously-inspiring-mission-and-vision-statement-of-lpn` (Wix 200, new 404 → 301 to its EN post).
+      Unprefixed legacy paths (`/ghost-fleet`, `/post/x`) currently 307 → `/en/…`: make them permanent (308/301) —
+      Wix served English at the root, so Google should see a permanent move, not a temporary one.
+- [ ] SEO keep-list for traffic pages (Ghost Fleet first): keep the exact URL `/th/ghost-fleet` + `/en/ghost-fleet`;
+      meta description at least as rich as Wix's (names Patima, Shannon Service, Vulcan); og:image = the film still,
+      not the generic share card; JSON-LD (Movie/CreativeWork + Organization); link the Ghost Fleet blog posts (ghost-fleet-th-01, ghostfleetinjapan, …) and
+      /get-help /donate from the page. Baseline the top pages/queries (Wix Analytics or Search Console export) BEFORE cutover.
+- [ ] Vercel production env `NEXT_PUBLIC_SERVER_URL=https://www.lpnfoundation.org` set + redeployed IN the cutover —
+      canonical, hreflang, sitemap and robots all derive from it (today they say lpn-foundation-2026.vercel.app;
+      leaving that = telling Google the real site is the vercel.app copy).
 - [ ] hotline block = the 4 numbers Wix shows today (TH 084-121-1609, KM 085-534-1595, LO 092-321-1516, MY 034-434-726)
       — the Payload `help channels` global currently shows Burmese 0963812069; LPN to confirm which is right (NEEDS E6)
 - [ ] intake links: Get Help page "ส่งเสียง" → `https://www.lpnrightguide.site/voice-report` (later guide.lpnfoundation.org)
