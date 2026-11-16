@@ -37,11 +37,13 @@ Vercel) and `intake` (sev02 tunnel + Access). Renew it ONE last year (~US$30) so
 - guide — does NOT wait for cutover (a CNAME/A in Wix DNS is enough):
   - [x] Vercel: `guide.lpnfoundation.org` added to project `rfid-rights-lpn-2025` (CLI, 2026-11-16)
   - [x] sev02 `CORS_ORIGINS` += `https://guide.lpnfoundation.org` (backup `.env.bak-20261116-cors`; preflight 204 verified)
-  - [ ] owner, Wix DNS: `A  guide  76.76.21.21` → Vercel issues the certificate
-  - [ ] owner, Cloudflare Turnstile widget → hostnames += `guide.lpnfoundation.org` (else /voice-report fails on the new host)
-  - [ ] Vercel env `NEXT_PUBLIC_SITE_URL=https://guide.lpnfoundation.org` (prod) → merge Right Guide PR #4 → redeploy
-  - [ ] Vercel: `www.lpnrightguide.site` + apex → 308 redirect to `guide.lpnfoundation.org` (keep 12 months)
-  - [ ] test /voice-report + /track on a real phone on the new host
+  - [x] owner, Wix DNS: `A  guide  76.76.21.21` → cert issued (https 200, 2026-11-16)
+  - [x] Turnstile widget `lpn-intake` (CF account visarutforlpn@gmail.com) already lists `lpnfoundation.org` since 23 Oct — covers guide/www.
+        Proof: widget rendered on guide → 600010 (bot check, automation) vs lpn-foundation-2026.vercel.app → 110200 (host not allowed)
+  - [x] Vercel env `NEXT_PUBLIC_SITE_URL` www.lpnrightguide.site → https://guide.lpnfoundation.org; PR #4 merged (8a8ffba); prod ● Ready; canonical/robots/sitemap = guide
+  - [x] Vercel: `www.lpnrightguide.site` + apex → 308 to `guide.lpnfoundation.org`, path + query kept (`?uid=` RFID links survive). Keep 12 months
+  - [ ] test /voice-report + /track on a real phone on the new host (owner)
+  - NOTE: website preview lpn-foundation-2026.vercel.app is NOT a Turnstile hostname → the /get-help form can't pass there; fine after cutover (www.lpnfoundation.org is covered)
 - intake — needs the lpnfoundation.org zone on Cloudflare (tunnel hostnames only work on a Cloudflare zone) = Phase C:
   - [ ] pre-create in the pending zone: tunnel public hostname `intake.lpnfoundation.org` → `http://127.0.0.1:3100`;
         copy the Access app/policies from intake.lpnrightguide.site to the new host
