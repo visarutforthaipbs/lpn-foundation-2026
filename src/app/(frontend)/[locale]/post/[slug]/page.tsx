@@ -14,6 +14,15 @@ import { legacyPostDestination } from '@/lib/legacy-posts'
 import { ButtonLink, MarkLink } from '@/components/ui'
 import { tx } from '@/i18n/tx'
 
+// True if the rich-text body already contains an uploaded image (Lexical `upload` node, at any depth).
+function hasInlineImage(node: unknown): boolean {
+  if (!node || typeof node !== 'object') return false
+  const n = node as { type?: string; children?: unknown[]; root?: unknown }
+  if (n.type === 'upload') return true
+  if (n.root && hasInlineImage(n.root)) return true
+  return Array.isArray(n.children) && n.children.some(hasInlineImage)
+}
+
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale; slug: string }>
 }) {
@@ -126,7 +135,8 @@ export default async function PostPage(props: {
         </header>
 
         {/* Featured image */}
-        {post.coverImage && typeof post.coverImage !== 'number' ? (
+        {/* Cover is shown only when the body has no image of its own, so a post never shows the same photo twice. */}
+        {post.coverImage && typeof post.coverImage !== 'number' && !hasInlineImage(post.content) ? (
           <div className="relative my-10 overflow-hidden rounded shadow-md">
             {/* No tint overlay: the design-system token layer maps bg-black/5 to an opaque surface colour,
                 which painted over the whole cover (2026-11-16). No hover motion either (guardrails). */}
