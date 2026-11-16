@@ -113,14 +113,12 @@ export default async function PostPage(props: {
 
         {/* Featured image */}
         {post.coverImage && typeof post.coverImage !== 'number' ? (
-          <div className="group relative my-10 overflow-hidden rounded shadow-md">
-            <div
-              className="absolute inset-0 z-10 bg-black/5 transition duration-300 group-hover:bg-transparent"
-              aria-hidden="true"
-            />
+          <div className="relative my-10 overflow-hidden rounded shadow-md">
+            {/* No tint overlay: the design-system token layer maps bg-black/5 to an opaque surface colour,
+                which painted over the whole cover (2026-11-16). No hover motion either (guardrails). */}
             <MediaImage
               media={post.coverImage}
-              className="max-h-[480px] w-full object-cover transition-transform duration-700 group-hover:scale-[1.01]"
+              className="max-h-[480px] w-full object-cover"
               sizes="(max-width:768px) 100vw, 1200px"
               priority
             />
