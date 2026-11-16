@@ -6,7 +6,7 @@ at `lpn-foundation-2026.vercel.app` (One CI shipped 23 Oct; help form PR #4 pend
 "assigned" to the Wix site → **the DNS move IS the website cutover.** No half-way state exists.
 
 ## Wix billing facts (owner screenshot + RDAP, 2026-11-16)
-- Wix Premium Plan "Core": 2-year billing, last paid 24 Jan 2025, **next charge 5 Jan 2027** → cut over and cancel before then, or Wix renews for 2 more years.
+- Wix Premium Plan "Core": US$264 + 7% VAT = US$282.48 per 2 years (invoice #1158697051, 24 Jan 2025, billed to Visarut Sankham, Visa ••••8693) ≈ 9,500 THB/2 yr ≈ 4,750 THB/yr at 33.64. 2-year billing, last paid 24 Jan 2025, **next charge 5 Jan 2027** → cut over and cancel before then, or Wix renews for 2 more years.
 - Domain lpnfoundation.org: separate bill (registrar Network Solutions via Wix, card ••••8693). Renewal due 15 Oct 2026 FAILED
   ("payment problem"); registry expiry was 2026-11-14 → on 2026-11-16 www/apex resolve to Wix 199.15.163.139 and 302 to
   expiredwixdomain.com — **site down**. RDAP status "auto renew period" (grace). Owner fixes the card + renews in Wix; LPN keeps
