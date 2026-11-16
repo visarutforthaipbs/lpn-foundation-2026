@@ -174,7 +174,7 @@ async function main() {
     if (!ADMIN_PASSWORD) throw new Error('No users exist yet. Set SEED_ADMIN_PASSWORD to create the first admin.')
     await payload.create({
       collection: 'users',
-      data: { email: ADMIN_EMAIL, password: ADMIN_PASSWORD },
+      data: { email: ADMIN_EMAIL, password: ADMIN_PASSWORD, role: 'admin' },
     })
     payload.logger.info(`Created admin user: ${ADMIN_EMAIL}`)
   }

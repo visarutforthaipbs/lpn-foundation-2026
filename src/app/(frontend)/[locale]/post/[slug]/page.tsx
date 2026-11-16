@@ -1,3 +1,4 @@
+import { draftMode } from 'next/headers'
 import { notFound, permanentRedirect } from 'next/navigation'
 import { setRequestLocale } from 'next-intl/server'
 import { dateLocale, isDraftLocale } from '@/i18n/locales'
@@ -43,7 +44,8 @@ export default async function PostPage(props: {
   const slug = decodeURIComponent(raw)
   setRequestLocale(locale)
 
-  const post = await getPost(slug, locale)
+  const { isEnabled: previewing } = await draftMode()
+  const post = await getPost(slug, locale, previewing)
   if (!post) {
     const destination = legacyPostDestination(slug, locale)
     if (destination) permanentRedirect(destination)
@@ -57,6 +59,18 @@ export default async function PostPage(props: {
 
   return (
     <div className="bg-paper py-10 on-light">
+      {previewing && (
+        <div role="status" className="container-page mb-6">
+          <p className="rounded bg-black px-4 py-3 text-base text-white">
+            {tx(locale, 'โหมดตัวอย่าง: นี่คือฉบับร่างล่าสุด ยังไม่เผยแพร่', 'Preview mode: this is the latest draft, not published yet.')}{' '}
+            {/* Plain <a>: this is a route handler, and <Link> would prefetch it and switch preview off. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a href="/api/preview/exit" className="inline-flex min-h-11 items-center underline">
+              {tx(locale, 'ออกจากโหมดตัวอย่าง', 'Exit preview')}
+            </a>
+          </p>
+        </div>
+      )}
       <article className="container-page">
         {/* Breadcrumb */}
         <nav aria-label={tx(locale, 'เส้นทางนำทาง', 'Breadcrumb')} className="mb-8">

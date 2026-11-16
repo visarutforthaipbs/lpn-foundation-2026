@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { approverOnly } from '../access/roles'
 import { revalidateEvidence } from '../hooks/revalidate'
 
 export const ImpactMetrics: CollectionConfig = {
@@ -9,6 +10,7 @@ export const ImpactMetrics: CollectionConfig = {
     group: 'Evidence',
   },
   access: {
+    delete: approverOnly,
     read: ({ req: { user } }) => user ? true : { _status: { equals: 'published' } },
   },
   versions: { drafts: true },

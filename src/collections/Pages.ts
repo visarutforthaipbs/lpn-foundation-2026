@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { approverOnly } from '../access/roles'
 import { slugField } from '../fields/slug'
 import { metaField } from '../fields/meta'
 import { pageBlocks } from '../blocks'
@@ -12,6 +13,7 @@ export const Pages: CollectionConfig = {
     group: 'Content',
   },
   access: {
+    delete: approverOnly,
     read: ({ req: { user } }) => {
       if (user) return true
       return { _status: { equals: 'published' } }

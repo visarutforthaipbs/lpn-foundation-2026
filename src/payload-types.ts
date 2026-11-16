@@ -534,6 +534,9 @@ export interface Story {
    */
   imageUseApproved?: boolean | null;
   safetyReviewedAt?: string | null;
+  /**
+   * Filled in automatically with the approver who publishes.
+   */
   approvedBy?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -576,6 +579,14 @@ export interface TeamMember {
  */
 export interface User {
   id: number;
+  /**
+   * Display name, e.g. Thai first name.
+   */
+  name?: string | null;
+  /**
+   * Only an admin can change this.
+   */
+  role: 'admin' | 'approver' | 'editor';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -948,6 +959,8 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

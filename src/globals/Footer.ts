@@ -1,9 +1,11 @@
 import type { GlobalConfig } from 'payload'
 import { revalidateLayout } from '../hooks/revalidate'
+import { approverOnlyField } from '../access/roles'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
   access: { read: () => true },
+  versions: { max: 25 },
   admin: { group: 'Site' },
   hooks: {
     afterChange: [revalidateLayout],
@@ -35,6 +37,7 @@ export const Footer: GlobalConfig = {
     {
       name: 'hotlines',
       type: 'array',
+      access: { create: approverOnlyField, update: approverOnlyField },
       labels: { singular: 'Hotline', plural: 'Hotlines' },
       admin: { description: 'Multilingual support phone numbers.' },
       fields: [
@@ -62,17 +65,18 @@ export const Footer: GlobalConfig = {
     {
       name: 'bankDetails',
       type: 'richText',
+      access: { create: approverOnlyField, update: approverOnlyField },
       localized: true,
       admin: { description: 'Donation / bank transfer details shown in the footer or donate page.' },
     },
-    { name: 'bankVerifiedAt', type: 'date', admin: { description: 'Confirm current account details before public promotion.' } },
-    { name: 'bankVerifiedBy', type: 'text' },
-    { name: 'bankAccountName', type: 'text', admin: { description: 'Published only when all bank fields and verification fields are complete.' } },
-    { name: 'bankName', type: 'text', localized: true },
-    { name: 'bankAccountNumber', type: 'text' },
-    { name: 'bankSwift', type: 'text' },
-    { name: 'globalGivingProjectUrl', type: 'text', admin: { description: 'Only add LPN’s live GlobalGiving project URL after approval. Payment integration must be connected separately; the current donation flow is a design preview.' } },
-    { name: 'globalGivingVerifiedAt', type: 'date', admin: { description: 'Date LPN confirmed this project page receives gifts for LPN.' } },
-    { name: 'globalGivingVerifiedBy', type: 'text', admin: { description: 'LPN staff member who verified the project page.' } },
+    { name: 'bankVerifiedAt', type: 'date', access: { create: approverOnlyField, update: approverOnlyField }, admin: { description: 'Confirm current account details before public promotion.' } },
+    { name: 'bankVerifiedBy', type: 'text', access: { create: approverOnlyField, update: approverOnlyField } },
+    { name: 'bankAccountName', type: 'text', access: { create: approverOnlyField, update: approverOnlyField }, admin: { description: 'Published only when all bank fields and verification fields are complete.' } },
+    { name: 'bankName', type: 'text', access: { create: approverOnlyField, update: approverOnlyField }, localized: true },
+    { name: 'bankAccountNumber', type: 'text', access: { create: approverOnlyField, update: approverOnlyField } },
+    { name: 'bankSwift', type: 'text', access: { create: approverOnlyField, update: approverOnlyField } },
+    { name: 'globalGivingProjectUrl', type: 'text', access: { create: approverOnlyField, update: approverOnlyField }, admin: { description: 'Only add LPN’s live GlobalGiving project URL after approval. Payment integration must be connected separately; the current donation flow is a design preview.' } },
+    { name: 'globalGivingVerifiedAt', type: 'date', access: { create: approverOnlyField, update: approverOnlyField }, admin: { description: 'Date LPN confirmed this project page receives gifts for LPN.' } },
+    { name: 'globalGivingVerifiedBy', type: 'text', access: { create: approverOnlyField, update: approverOnlyField }, admin: { description: 'LPN staff member who verified the project page.' } },
   ],
 }

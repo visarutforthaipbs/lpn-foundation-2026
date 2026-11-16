@@ -1,10 +1,11 @@
 import type { CollectionConfig } from 'payload'
+import { approverOnly } from '../access/roles'
 
 export const TeamMembers: CollectionConfig = {
   slug: 'teamMembers',
   labels: { singular: 'Team Member', plural: 'Team Members' },
   admin: { useAsTitle: 'name', defaultColumns: ['name', 'role', 'order'], group: 'Content' },
-  access: { read: () => true },
+  access: { read: () => true, delete: approverOnly },
   defaultSort: 'order',
   fields: [
     { name: 'name', type: 'text', required: true, localized: true },

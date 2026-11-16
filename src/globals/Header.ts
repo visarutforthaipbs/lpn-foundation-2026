@@ -1,9 +1,11 @@
 import type { GlobalConfig } from 'payload'
 import { revalidateLayout } from '../hooks/revalidate'
+import { adminOnly } from '../access/roles'
 
 export const Header: GlobalConfig = {
   slug: 'header',
-  access: { read: () => true },
+  access: { read: () => true, update: adminOnly },
+  versions: { max: 25 },
   admin: { group: 'Site' },
   hooks: { afterChange: [revalidateLayout] },
   fields: [

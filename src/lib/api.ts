@@ -90,14 +90,16 @@ export async function getPosts(locale: Locale, opts: { categorySlug?: string; li
   return result
 }
 
-export async function getPost(slug: string, locale: Locale) {
+export async function getPost(slug: string, locale: Locale, draft = false) {
   const payload = await getPayloadClient()
+  // draft = true only from the editor Preview (Next.js draft mode, set after a staff login): latest saved draft.
   const { docs } = await payload.find({
     collection: 'posts',
     ...postLocale(locale),
     depth: 2,
     limit: 1,
-    where: { and: [{ slug: { equals: slug } }, published] },
+    draft,
+    where: draft ? { slug: { equals: slug } } : { and: [{ slug: { equals: slug } }, published] },
   })
   return docs[0] ?? null
 }

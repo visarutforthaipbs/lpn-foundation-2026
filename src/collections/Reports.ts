@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { approverOnly } from '../access/roles'
 import { slugField } from '../fields/slug'
 import { revalidateEvidence } from '../hooks/revalidate'
 
@@ -10,6 +11,7 @@ export const Reports: CollectionConfig = {
     group: 'Evidence',
   },
   access: {
+    delete: approverOnly,
     read: ({ req: { user } }) => user ? true : { _status: { equals: 'published' } },
   },
   versions: { drafts: true },

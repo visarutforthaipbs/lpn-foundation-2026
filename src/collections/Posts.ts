@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { approverOnly } from '../access/roles'
 import { slugField } from '../fields/slug'
 import { metaField } from '../fields/meta'
 import { revalidatePost, revalidatePostDelete } from '../hooks/revalidate'
@@ -10,8 +11,12 @@ export const Posts: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'publishedAt', '_status'],
     group: 'Blog',
+    // “Preview” button in the editor: shows the latest draft on the real page (login required).
+    preview: (doc) =>
+      doc?.slug ? `/api/preview?slug=${encodeURIComponent(String(doc.slug))}&locale=${doc.language === 'th' ? 'th' : 'en'}` : null,
   },
   access: {
+    delete: approverOnly,
     // Public can read published docs; drafts stay private to the admin.
     read: ({ req: { user } }) => {
       if (user) return true
