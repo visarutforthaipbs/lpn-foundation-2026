@@ -26,11 +26,11 @@ export default async function DonatePage({ params }: { params: Promise<{ locale:
   const streams = tx(locale, [
     [Lifebuoy, 'ช่วยเหลือและคุ้มครอง', '/images/fisher-protection.jpg'],
     [GraduationCap, 'เรียนรู้กับชุมชน', '/images/field-action.jpg'],
-    [Scales, 'เปลี่ยนแปลงระบบ', null],
+    [Scales, 'เปลี่ยนแปลงระบบ', '/images/mou-signing.jpg'],
   ] as const, [
     [Lifebuoy, 'Respond and protect', '/images/fisher-protection.jpg'],
     [GraduationCap, 'Learn with communities', '/images/field-action.jpg'],
-    [Scales, 'Build fairer systems', null],
+    [Scales, 'Build fairer systems', '/images/mou-signing.jpg'],
   ] as const)
 
   return <>
