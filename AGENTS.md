@@ -60,7 +60,7 @@ src/
                                   per-locale `language` filter on posts
   lib/content.ts                  hard-coded fallbacks: HOTLINES, OFFICE, SOCIALS, FACEBOOK_URL
   content/*.ts                    static copy for about/services/projects (not in CMS)
-  migrations/                     Payload migrations (5, 2026-09-30 → 10-01) — prod uses these
+  migrations/                     Payload migrations (8, latest 20261116_230000 roles) — prod uses these
   seed/                           one-off scripts: seed.ts, migrate-blog.ts (Wix), repair-media.ts,
                                   seed-prd-*.ts, clean-blog-posts.ts; loadenv.ts loads .env+.env.local
   i18n/                           routing.ts, request.ts, navigation.ts (use ITS Link, not next/link)
@@ -182,7 +182,8 @@ so local media uploads create real blob files but only local DB rows. Refresh th
   Needs Vercel env `NEXT_PUBLIC_INTAKE_URL` + `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (site key `0x4AAAAAAFiesoYJtBQ3kfRB`,
   public) before merge; posts to the intake API (sev02), never to Payload.
 - 13 of 64 Thai posts have no cover image → grey box in the blog grid.
-- Donate page bank details are withheld in Payload until LPN verifies them.
+- Donate page bank details: verified by Patima (Messenger, 2026-10-25) and live on prod since 2026-11-16. PromptPay ID + receipt wording still pending from LPN.
+- CMS roles live on prod since 2026-11-16 (migration applied to Neon via psql + recorded in payload_migrations; Neon still carries the `dev` batch -1 marker, so `pnpm payload migrate` prompts — use the psql route). Only `admin@lpnfoundation.org` exists (role admin); editor/approver accounts wait for names from LPN.
 - `PROJECT.md` / `current.md` are stale handoffs; this file supersedes them.
 
 ## 8. Traps (learned the hard way)
