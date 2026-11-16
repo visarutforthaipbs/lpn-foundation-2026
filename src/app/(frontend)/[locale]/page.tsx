@@ -164,22 +164,24 @@ export default async function HomePage(props: { params: Promise<{ locale: Locale
   return <>
     {/* ------------------------------------------------------------- HERO */}
     <section className="relative overflow-hidden bg-black text-white">
-      {/* Authentic field photography backdrop */}
+      {/* Authentic field photography backdrop. On desktop the photo sits in the right ~2/3 so the
+          smiling woman lands clear of the headline; on mobile it is full-bleed under a flat scrim. */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/trawler-hero.jpg"
-          alt={tx(locale, 'การปฏิบัติงานภาคสนามคุ้มครองสิทธิแรงงานประมง LPN', 'LPN frontline operations protecting fisher rights')}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-65 brightness-90 contrast-105"
-        />
-        {/* Protective gradient scrim ensuring 100% WCAG AAA readability */}
-        <div className="absolute inset-0 bg-linear-to-r from-black via-black/75 to-black/30 pointer-events-none" />
-        <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-full lg:w-[68%]">
+          <Image
+            src="/images/hero-class.jpg"
+            alt={tx(locale, 'แรงงานข้ามชาติในชุดเครื่องแบบ LPN นั่งฟังกิจกรรมในห้องเรียนและยิ้มให้กล้อง', 'Migrant workers in LPN uniforms listening together in a classroom, one smiling at the camera')}
+            fill
+            priority
+            sizes="(min-width: 1024px) 68vw, 100vw"
+            className="object-cover object-[46%_center] opacity-85"
+          />
+        </div>
+        {/* Scrims keep the headline AAA-readable: flat on mobile, left-to-right fade on desktop */}
+        <div className="pointer-events-none absolute inset-0 bg-black/60 lg:hidden" />
+        <div className="pointer-events-none absolute inset-0 hidden bg-linear-to-r from-black from-32% via-black/55 via-48% to-transparent lg:block" />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40" />
       </div>
-
-      <div className="pointer-events-none absolute right-0 top-0 z-1 h-full w-[42%] border-l border-white/10 bg-[linear-gradient(135deg,transparent_0%,rgba(255,199,0,0.08)_100%)]" aria-hidden="true" />
 
       <Container className="relative z-10 py-20 md:py-28 lg:py-36">
         <p className="eyebrow text-white/70">{tx(locale, 'มูลนิธิเครือข่ายส่งเสริมคุณภาพชีวิตแรงงาน', 'Labour Rights Promotion Network Foundation')}</p>
