@@ -28,7 +28,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         { label: 'Donate', href: '/donate' },
       ])
 
-  const linkCls = 'inline-flex min-h-11 items-center text-white/70 transition-colors hover:text-brand-yellow'
+  const linkCls = 'inline-flex min-h-11 min-w-11 items-center justify-center text-white/70 transition-colors hover:text-brand-yellow'
   const hotlines = footer?.hotlines?.length
     ? footer.hotlines.map((h) => ({ key: h.id ?? h.phone, label: txCms(locale, h.language ?? ''), phone: h.phone }))
     : HOTLINES.map((h) => ({ key: h.code, label: h.langNative, phone: h.phone }))
