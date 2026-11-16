@@ -29,7 +29,25 @@ at `lpn-foundation-2026.vercel.app` (One CI shipped 23 Oct; help form PR #4 pend
       leaving that = telling Google the real site is the vercel.app copy).
 - [ ] hotline block = the 4 numbers Wix shows today (TH 084-121-1609, KM 085-534-1595, LO 092-321-1516, MY 034-434-726)
       — the Payload `help channels` global currently shows Burmese 0963812069; LPN to confirm which is right (NEEDS E6)
-- [ ] intake links: Get Help page "ส่งเสียง" → `https://www.lpnrightguide.site/voice-report` (later guide.lpnfoundation.org)
+- [x] Right Guide links (home, our-work, get-help, footer) → `https://guide.lpnfoundation.org/` (2026-11-16, local)
+
+## Subdomains guide + intake — owner decision 2026-11-16 (drop lpnrightguide.site)
+`lpnrightguide.site`: Namecheap, expires **2026-12-09**, NS Cloudflare (adi/cody); it carries BOTH `www` (Right Guide,
+Vercel) and `intake` (sev02 tunnel + Access). Renew it ONE last year (~US$30) so redirects + RFID cards keep working.
+- guide — does NOT wait for cutover (a CNAME/A in Wix DNS is enough):
+  - [x] Vercel: `guide.lpnfoundation.org` added to project `rfid-rights-lpn-2025` (CLI, 2026-11-16)
+  - [x] sev02 `CORS_ORIGINS` += `https://guide.lpnfoundation.org` (backup `.env.bak-20261116-cors`; preflight 204 verified)
+  - [ ] owner, Wix DNS: `A  guide  76.76.21.21` → Vercel issues the certificate
+  - [ ] owner, Cloudflare Turnstile widget → hostnames += `guide.lpnfoundation.org` (else /voice-report fails on the new host)
+  - [ ] Vercel env `NEXT_PUBLIC_SITE_URL=https://guide.lpnfoundation.org` (prod) → merge Right Guide PR #4 → redeploy
+  - [ ] Vercel: `www.lpnrightguide.site` + apex → 308 redirect to `guide.lpnfoundation.org` (keep 12 months)
+  - [ ] test /voice-report + /track on a real phone on the new host
+- intake — needs the lpnfoundation.org zone on Cloudflare (tunnel hostnames only work on a Cloudflare zone) = Phase C:
+  - [ ] pre-create in the pending zone: tunnel public hostname `intake.lpnfoundation.org` → `http://127.0.0.1:3100`;
+        copy the Access app/policies from intake.lpnrightguide.site to the new host
+  - [ ] cutover night: sev02 `AUTH_URL` + `PUBLIC_DASHBOARD_URL` → `https://intake.lpnfoundation.org`; recreate app+worker
+        (staff log in once again); Right Guide + website `NEXT_PUBLIC_INTAKE_URL` → new host, redeploy both
+  - [ ] keep `intake.lpnrightguide.site` serving the public API until 2027-12 (old cached app builds still post there)
 - [ ] run `scripts/health_check.py` + HIG matrix one last time on the preview; Lighthouse mobile ≥ 90 perf on /th
 
 ## Donate page — status 2026-10-25

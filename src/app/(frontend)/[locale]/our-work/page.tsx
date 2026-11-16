@@ -9,7 +9,7 @@ import { ButtonLink, Container, Section, SectionHeading } from '@/components/ui'
 import { MediaImage } from '@/components/MediaImage'
 import { tx } from '@/i18n/tx'
 
-const GUIDE = 'https://www.lpnrightguide.site/'
+const GUIDE = 'https://guide.lpnfoundation.org/'
 
 export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params

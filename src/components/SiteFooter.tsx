@@ -10,7 +10,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
   const navLinks = tx(locale, [
         { label: 'ขอความช่วยเหลือ', href: '/get-help' },
-        { label: 'รู้สิทธิ ติดกระเป๋า', href: 'https://www.lpnrightguide.site/' },
+        { label: 'รู้สิทธิ ติดกระเป๋า', href: 'https://guide.lpnfoundation.org/' },
         { label: 'งานของเรา', href: '/our-work' },
         { label: 'ผลการทำงานและรายงาน', href: '/impact' },
         { label: 'เกี่ยวกับเรา', href: '/about' },
@@ -19,7 +19,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         { label: 'บริจาค', href: '/donate' },
       ], [
         { label: 'Get Help', href: '/get-help' },
-        { label: 'Rights Guide', href: 'https://www.lpnrightguide.site/' },
+        { label: 'Rights Guide', href: 'https://guide.lpnfoundation.org/' },
         { label: 'Our Work', href: '/our-work' },
         { label: 'Impact & Reports', href: '/impact' },
         { label: 'About', href: '/about' },

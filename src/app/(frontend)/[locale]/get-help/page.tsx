@@ -10,7 +10,7 @@ import HelpIntakeForm, { type HelpChannel } from '@/components/HelpIntakeForm'
 import QuickExitButton from '@/components/QuickExitButton'
 import { tx } from '@/i18n/tx'
 
-const GUIDE = 'https://www.lpnrightguide.site/'
+const GUIDE = 'https://guide.lpnfoundation.org/'
 
 export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params

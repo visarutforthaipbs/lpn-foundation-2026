@@ -14,7 +14,7 @@ import { MediaImage } from '@/components/MediaImage'
 import { tx } from '@/i18n/tx'
 
 const REPORT_2024 = 'https://d90624d9-477d-4d0e-8335-c4795fa13a13.usrfiles.com/ugd/d90624_78b68c9d8aff4a41856fc475cd1d5c37.pdf'
-const RIGHT_GUIDE = 'https://www.lpnrightguide.site/'
+const RIGHT_GUIDE = 'https://guide.lpnfoundation.org/'
 
 export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await props.params
