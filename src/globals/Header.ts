@@ -1,12 +1,12 @@
 import type { GlobalConfig } from 'payload'
 import { revalidateLayout } from '../hooks/revalidate'
-import { adminOnly } from '../access/roles'
+import { adminOnly, isAdmin, type Role } from '../access/roles'
 
 export const Header: GlobalConfig = {
   slug: 'header',
   access: { read: () => true, update: adminOnly },
   versions: { max: 25 },
-  admin: { group: 'Site' },
+  admin: { group: 'Site', hidden: ({ user }) => !isAdmin(user as { role?: Role | null } | null) },
   hooks: { afterChange: [revalidateLayout] },
   fields: [
     { name: 'logo', type: 'upload', relationTo: 'media' },

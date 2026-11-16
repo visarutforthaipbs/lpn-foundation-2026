@@ -1,52 +1,110 @@
-# Editor Guide — LPN Foundation site
+# คู่มือบรรณาธิการ — เว็บไซต์มูลนิธิ LPN
 
-A short how-to for managing content. No coding required.
+คู่มือฉบับสั้นสำหรับคนที่ดูแลเนื้อหาเว็บ ไม่ต้องเขียนโค้ด (อัปเดต 16 พ.ย. 2569)
+English summary at the bottom of this file.
 
-## Logging in
-Go to **`/admin`** (e.g. `https://www.lpnfoundation.org/admin`) and sign in.
-Seeded dev login: `admin@lpnfoundation.org` / `changeme123!` — **change this password** under your user.
+## 0. ก่อนเริ่ม: สามบทบาท
 
-## Switching language (Thai / English)
-Every content field that can differ by language has a **locale selector at the top
-of the edit screen** (English / ไทย). Edit one language, switch, edit the other, then
-**Save**. If you leave Thai blank, the site shows the English text as a fallback —
-so nothing is ever empty.
+ทุกบัญชีมี "บทบาท" ที่ผู้ดูแลระบบเป็นคนตั้ง บรรณาธิการเปลี่ยนบทบาทของตัวเองไม่ได้
 
-## Writing a blog post
-1. **Blog → Posts → Create New**.
-2. Fill **Title**, **Excerpt**, **Content** (rich text). Set the **Slug** (the URL) in
-   the sidebar — for Thai-only titles, type a Latin slug yourself.
-3. Pick an **Author** and **Category** (What's New / Press / Publications).
-4. Upload a **Cover Image**, set **Published At**.
-5. Set status to **Published** (top of the sidebar) and **Save**.
-   - Save as **Draft** to keep it hidden until ready.
-6. The blog index and the post page update within seconds — no deploy needed.
+| บทบาท | ใคร | ทำได้ | ทำไม่ได้ |
+|---|---|---|---|
+| บรรณาธิการ (Editor) | เจ้าหน้าที่สื่อสาร | เขียน/แก้บทความ หน้า รายงาน ตัวเลขผลงาน รูป ทีมงาน เซฟร่างเรื่องเล่า แก้ที่อยู่และโซเชียลท้ายเว็บ | เผยแพร่เรื่องเล่า, ลบเนื้อหา, แก้เมนู, แก้เบอร์สายด่วน/บัญชีธนาคาร/ลิงก์บริจาค, จัดการผู้ใช้ |
+| ผู้อนุมัติ (Approver) | ผู้ที่ LPN มอบหมาย เช่น ผู้อำนวยการ | ทุกอย่างของบรรณาธิการ + เผยแพร่เรื่องเล่า + แก้สายด่วน/ธนาคาร/ลิงก์บริจาค + ลบเนื้อหา | แก้เมนู, จัดการผู้ใช้ |
+| ผู้ดูแลระบบ (Admin) | ผู้ดูแลเทคนิค | ทุกอย่าง รวมถึงเมนูและบัญชีผู้ใช้ | — |
 
-## Editing a page
-**Content → Pages**. Pages are built from **blocks** — add/remove/reorder blocks in
-the **Layout** field:
-- **Hero** — big banner with heading + button
-- **Stats** — number callouts (e.g. "71%")
-- **Rich Text** — formatted text
-- **Image + Text** — image beside text
-- **Call to Action** — coloured band with a button
-- **Team Grid** — shows everyone from Team Members
-- **Contact Info** / **Donation Details** — for the contact & donate pages
+เหตุผล: เบอร์สายด่วนคือเบอร์ที่แรงงานโทรหาตอนเดือดร้อน เรื่องเล่าคือเรื่องของคนจริง สองอย่างนี้จึงต้องมีคนที่ LPN มอบหมายเป็นผู้ยืนยัน
 
-The page URL is its **slug** (`about` → `/about`). The home page has slug `home`.
+## 1. เข้าสู่ระบบ
 
-## Team members
-**Content → Team Members**. Add name, role, photo, and an **order** number (lower =
-shown first). They appear automatically on the Team page's Team Grid block.
+1. ไปที่ `/admin` ของเว็บ (เช่น `https://www.lpnfoundation.org/admin`)
+2. ใส่อีเมลและรหัสผ่านที่ผู้ดูแลระบบให้
+3. เข้าครั้งแรกให้เปลี่ยนรหัสผ่านทันที: คลิกอีเมลมุมซ้ายล่าง แล้วเลือก Account
+4. หนึ่งคนหนึ่งบัญชี ห้ามแชร์รหัสผ่าน ถ้าใครลาออก แจ้งผู้ดูแลระบบให้ลบบัญชี
 
-## Site-wide settings
-**Site → Header** (nav menu, logo, donate button) and **Site → Footer** (address,
-hotline numbers, social links, bank/donation details). Changes apply to every page.
+## 2. ภาษา
 
-## Images
-Uploaded under **Media**. Always fill the **Alt text** (localized) — it matters for
-accessibility and SEO.
+ช่องที่มีหลายภาษาจะมีตัวเลือกภาษาที่มุมบนของหน้าแก้ไข: English / ไทย / မြန်မာ / ខ្មែរ / ລາວ
+เลือกภาษา → แก้ → Save → สลับภาษาถัดไป ถ้าภาษาไหนว่าง เว็บจะแสดงภาษาอังกฤษแทน (ไม่มีหน้าว่าง)
 
-## SEO
-Each post/page has an **SEO** section (meta title, description, social image). Leave
-blank to fall back to the title/excerpt automatically.
+## 3. งานที่ทำบ่อย
+
+### 3.1 เขียนบทความใหม่
+1. เมนูซ้าย Blog → Posts → Create New
+2. กรอก Title, Excerpt, Content เลือก Language ของบทความ (th หรือ en) เลือก Author และ Category
+3. อัปโหลดภาพปก (ต้องใส่ Alt text ทุกครั้ง) ตั้ง Published At
+4. ช่อง Slug คือที่อยู่หน้า ถ้าชื่อบทความเป็นไทยล้วน พิมพ์ slug ภาษาอังกฤษสั้น ๆ เอง
+5. กด **Save Draft** ก่อน แล้วกด **Preview** (ดูข้อ 4) ตรวจหน้าจริง
+6. พร้อมแล้วกด **Publish** เว็บอัปเดตภายในไม่กี่วินาที ไม่ต้องรอใคร
+
+### 3.2 แก้บทความที่เผยแพร่แล้ว
+เปิดบทความ → แก้ → **Save Draft** (คนอ่านยังเห็นฉบับเดิมจนกว่าจะกด Publish) → Preview → Publish
+
+### 3.3 ถอนบทความออกชั่วคราว
+เปิดบทความ → เปลี่ยนสถานะเป็น Draft (Unpublish) เนื้อหายังอยู่ครบ กู้กลับได้ บรรณาธิการลบบทความไม่ได้ ตั้งใจให้เป็นแบบนี้
+
+### 3.4 ย้อนกลับเมื่อแก้ผิด
+บทความ หน้า รายงาน ตัวเลขผลงาน เรื่องเล่า **เมนู และท้ายเว็บ** เก็บประวัติทุกครั้งที่เซฟ
+เปิดรายการ → แท็บ **Versions** → เลือกเวอร์ชันก่อนหน้า → Restore
+
+### 3.5 แก้หน้า (Content → Pages)
+หน้าประกอบด้วย **บล็อก** เพิ่ม ลบ สลับลำดับได้ในช่อง **Layout**:
+- **Hero** — แบนเนอร์ใหญ่ มีหัวข้อและปุ่ม
+- **Stats** — ตัวเลขเด่น (เช่น "71%")
+- **Rich Text** — ข้อความจัดรูปแบบ
+- **Image + Text** — รูปคู่ข้อความ
+- **Call to Action** — แถบสีพร้อมปุ่ม
+- **Team Grid** — แสดงทุกคนจาก Team Members
+- **Contact Info** / **Donation Details** — สำหรับหน้าติดต่อและบริจาค
+
+ที่อยู่หน้าคือ **slug** (`about` → `/about`) หน้าแรกมี slug `home`
+
+### 3.6 ทีมงาน (Content → Team Members)
+ใส่ชื่อ ตำแหน่ง รูป และเลข **order** (น้อยขึ้นก่อน) ขึ้นอัตโนมัติในบล็อก Team Grid
+
+### 3.7 ผลงานและรายงาน (Evidence)
+**Evidence → Impact Metrics** คือตัวเลขผลงาน ต้องระบุช่วงเวลาและแหล่งที่มา อย่านำตัวเลขที่นับคนละสิ่งมารวมกัน **Evidence → Reports** คือรายงาน แนบไฟล์และเลือกหัวข้อ
+
+### 3.8 รูปภาพ
+เมนู Media → Upload ต้องกรอก **Alt text** (บอกว่าในรูปมีอะไร) อย่างน้อยภาษาไทย ใช้เฉพาะภาพที่มีสิทธิ์ใช้และได้รับความยินยอมจากผู้ที่ปรากฏในภาพ ห้ามใช้ภาพที่เห็นหน้าผู้เสียหายโดยไม่มีหลักฐานความยินยอม
+
+### 3.9 เรื่องเล่า (Content → Stories)
+เรื่องเล่าคือเรื่องของคนจริง จึงมีด่านกันพลาด:
+- บรรณาธิการเขียนและเซฟเป็น **Draft** ได้เท่านั้น
+- ก่อนเผยแพร่ต้องกรอก: ความยินยอม = Approved, ขอบเขตที่ได้รับความยินยอม (Consent scope), วันที่ตรวจความปลอดภัย, วันที่ของเรื่อง และถ้ามีภาพปกต้องติ๊กว่าได้รับอนุญาตให้ใช้ภาพ
+- **ผู้อนุมัติ** เป็นผู้กด Publish ระบบบันทึกชื่อผู้อนุมัติให้เอง (แก้เองไม่ได้)
+- ห้ามใส่ชื่อจริง สถานที่ หรือรายละเอียดที่ระบุตัวบุคคลได้ ถ้าไม่มีความยินยอมเป็นลายลักษณ์อักษร
+
+## 4. ปุ่ม Preview (ดูตัวอย่างก่อนเผยแพร่)
+
+ในหน้าแก้ไขบทความ กดปุ่ม **Preview** ระบบเปิดหน้าจริงของบทความ แสดง "ฉบับร่างล่าสุด" พร้อมแถบดำด้านบนบอกว่าเป็นโหมดตัวอย่าง คนทั่วไปไม่เห็นหน้านี้ ถ้ายังไม่ได้ล็อกอิน ระบบจะบอกให้ล็อกอินก่อน กด "ออกจากโหมดตัวอย่าง" เมื่อดูเสร็จ (ตอนนี้ปุ่มนี้ใช้กับบทความเท่านั้น หน้าอื่นให้ตรวจหลัง Publish)
+
+## 5. เมนูและท้ายเว็บ (Site)
+
+- **Header (เมนูบน)**: ผู้ดูแลระบบเท่านั้น
+- **Footer (ท้ายเว็บ)**: ที่อยู่และโซเชียลบรรณาธิการแก้ได้ ส่วน **เบอร์สายด่วน ข้อมูลบัญชีธนาคาร และลิงก์ GlobalGiving** แก้ได้เฉพาะผู้อนุมัติและผู้ดูแลระบบ
+- ก่อนเปลี่ยนเบอร์สายด่วน: โทรทดสอบเบอร์จริงก่อน แล้วกรอกวันที่และผู้ยืนยันในช่อง Verified at / Verified by
+- ข้อมูลบัญชีธนาคารจะแสดงบนเว็บสาธารณะต่อเมื่อกรอกครบทุกช่องรวมวันที่และผู้ตรวจ
+- Header และ Footer ไม่มีระบบร่าง บันทึกแล้วขึ้นเว็บทันที แต่ย้อนกลับได้จากแท็บ Versions
+
+## 6. SEO
+
+แต่ละบทความและหน้ามีส่วน SEO (meta title, description, รูปแชร์) ถ้าเว้นว่าง ระบบใช้ชื่อเรื่องและบทคัดย่อให้เอง
+
+## 7. ข้อควรระวัง
+
+- `/admin` ของเว็บจริงใช้ฐานข้อมูลจริง ทุกการเซฟเห็นผลบนเว็บจริงทันที (ยกเว้นที่เป็น Draft)
+- ระบบยังไม่มีการยืนยันตัวตนสองชั้น ใช้รหัสผ่านยาวและไม่ซ้ำกับที่อื่น (ทางเสริม: ใส่ Cloudflare Access หน้า `/admin` ต้องให้เจ้าของโดเมนตั้งค่า)
+- ปัญหาที่แก้เองไม่ได้ (หน้าเว็บพัง เข้า `/admin` ไม่ได้ รูปไม่ขึ้นทั้งที่อัปโหลดแล้ว): แจ้งผู้ดูแลระบบพร้อมลิงก์หน้าและภาพหน้าจอ
+
+---
+
+## English summary
+
+Three roles, set by an admin (nobody can change their own role):
+
+- **Editor**: writes and edits posts, pages, reports, impact metrics, media, team members, footer address and socials; saves stories as draft only; cannot delete content, edit the menu, hotlines, bank details, donation links or users.
+- **Approver**: everything an editor can do, plus publishes stories (the approver's name is recorded automatically), edits hotlines / bank / GlobalGiving fields, and deletes content.
+- **Admin**: everything, including the Header menu and user accounts.
+
+Workflow: **Save Draft → Preview → Publish**. The Preview button on a post opens the real page showing the latest draft (login required; nobody else can see it). Posts, pages, reports, metrics, stories, Header and Footer keep version history: open the item → Versions → Restore. Every save on the live `/admin` writes to the live database; only drafts are hidden from the public.

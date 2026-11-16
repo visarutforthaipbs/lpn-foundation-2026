@@ -50,7 +50,8 @@ src/
   app/sitemap.ts, robots.ts       dynamic sitemap (~111 URLs), robots
   collections/                    Users Media Pages Posts Authors Categories TeamMembers
                                   ImpactMetrics Reports Stories   (all localized en/th)
-  globals/Header.ts, Footer.ts    nav + hotlines + socials (editable in /admin)
+  globals/Header.ts, Footer.ts    nav + hotlines + socials (editable in /admin; both keep version history)
+  access/roles.ts                 3 roles: admin / approver / editor (users.role, saved in the JWT) — see docs/EDITOR-GUIDE.md
   blocks/index.ts                 page-builder blocks; rendered by components/RenderBlocks.tsx
   components/                     SiteHeader, SiteFooter, MobileMenu, LocaleSwitcher, ui.tsx
                                   (Section/Container/ButtonLink/StatBand/CtaBand/Eyebrow),
@@ -196,6 +197,12 @@ so local media uploads create real blob files but only local DB rows. Refresh th
   (`node:sqlite` next). And `next dev --turbopack` still forks ~1,000 node processes (tried 2026-10-24, killed at 22 %
   free memory). To look at the CMS: use the Vercel preview `/admin` (production data!) or `next build && next start`
   locally (one heavy job). Front-end pages are fine under webpack dev.
+
+- **`next build` / `next start` read `.env.production.local` = the PRODUCTION Neon database**, incl. `PGUSER/PGPASSWORD/PGHOST`
+  (the `pg` library uses those even when `DATABASE_URL` is overridden → "role neondb_owner does not exist"). 2026-11-16 a local
+  `next start` returned 500 on login only because Neon did not have the new migration yet. To test the real `/admin` locally,
+  override ALL of them: `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `PGUSER`, `PGPASSWORD=`, `PGHOST=localhost`, `PGDATABASE`,
+  `POSTGRES_URL*=` — for the build too, or its prerender reads Neon. Test the local admin with a cookie from `POST /api/users/login`.
 
 - `TRUNCATE media CASCADE` wipes pages, team, globals (FK web). Never.
 - **`pnpm dev` is pinned to `next dev --webpack`.** Next 16.2.6 Turbopack runs

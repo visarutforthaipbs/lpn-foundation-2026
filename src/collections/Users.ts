@@ -1,11 +1,13 @@
 import type { CollectionConfig } from 'payload'
-import { adminOnly, adminOnlyField, isAdmin } from '../access/roles'
+import { adminOnly, adminOnlyField, isAdmin, type Role } from '../access/roles'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   admin: {
     useAsTitle: 'email',
     group: 'Site',
+    // Editors/approvers manage only their own password (Account page); the user list is for admins.
+    hidden: ({ user }) => !isAdmin(user as { role?: Role | null } | null),
     defaultColumns: ['email', 'name', 'role'],
   },
   auth: true,
