@@ -201,7 +201,7 @@ export default async function PostPage(props: {
                       </span>
                       <span>{tx(locale, h.langTh, h.langEn)}</span>
                     </span>
-                    <span className="font-mono text-xs font-bold text-black">{h.phone}</span>
+                    <span className="text-xs font-bold text-black">{h.phone}</span>
                   </a>
                 ))}
               </div>

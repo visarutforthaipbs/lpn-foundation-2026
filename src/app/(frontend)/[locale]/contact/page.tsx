@@ -86,7 +86,7 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
                 </div>
                 <div className="mt-5 text-xs font-bold text-black/80">{LANG_LABELS[h.code]}</div>
                 <div className="tactile-well mt-3 w-full px-3 py-2 text-center">
-                  <span className="font-mono text-base font-bold tracking-tight text-black transition-colors group-hover:underline group-hover:decoration-brand-yellow group-hover:decoration-2 group-hover:underline-offset-4">
+                  <span className="text-base font-bold tracking-tight text-black transition-colors group-hover:underline group-hover:decoration-brand-yellow group-hover:decoration-2 group-hover:underline-offset-4">
                     {h.phone}
                   </span>
                 </div>
@@ -96,13 +96,13 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
           {/* General lines printed on the live contact page */}
           <p className="mt-8 text-sm text-black/75">
             {tx(locale, 'โทรศัพท์สำนักงาน: ', 'Office lines: ')}
-            <a href={telHref(ALT_LINES.office1)} className="font-mono font-bold text-black underline decoration-brand-yellow underline-offset-4">
+            <a href={telHref(ALT_LINES.office1)} className="font-bold text-black underline decoration-brand-yellow underline-offset-4">
               {ALT_LINES.office1}
             </a>
             {' · '}
             <a
               href={telHref(tx(locale, ALT_LINES.office3, ALT_LINES.office2))}
-              className="font-mono font-bold text-black underline decoration-brand-yellow underline-offset-4"
+              className="font-bold text-black underline decoration-brand-yellow underline-offset-4"
             >
               {tx(locale, ALT_LINES.office3, ALT_LINES.office2)}
             </a>
@@ -143,7 +143,7 @@ export default async function ContactPage(props: { params: Promise<{ locale: Loc
               <address className="mt-4 text-sm leading-relaxed text-white/75 not-italic">
                 {tx(locale, OFFICE.addressTh, OFFICE.addressEn)}
               </address>
-              <p className="mt-4 font-mono text-sm text-white/85">
+              <p className="mt-4 text-sm text-white/85">
                 {tx(locale, OFFICE.phoneTh, OFFICE.phoneEn)}
               </p>
               <ul className="mt-3">

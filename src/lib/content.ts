@@ -3,7 +3,9 @@ import type { Locale } from '@/i18n/routing'
 
 /**
  * Single source of truth for organisational contact content shown in the UI.
- * Values follow the LIVE lpnfoundation.org site (checked 2026-09-30):
+ * Values follow the LIVE lpnfoundation.org site (checked 2026-09-30).
+ * Display format is local Thai (0xx-xxx-xxxx) to match the Right Guide app
+ * (One CI consistency, owner audit 2026-11-16):
  *   - HQ: Pathum Thani (not Samut Sakhon — older materials say Samut Sakhon)
  *   - Emails: somponglpn@gmail.com / patimalpn2012@gmail.com (no info@ on live)
  *   - The live site is internally inconsistent on the Burmese line
@@ -26,37 +28,37 @@ export const HOTLINES: Hotline[] = [
     langEn: 'Thai',
     langTh: 'ภาษาไทย',
     langNative: 'ภาษาไทย',
-    phone: '+66 84 121 1609',
+    phone: '084-121-1609',
   },
   {
     code: 'MM',
     langEn: 'Burmese',
     langTh: 'ภาษาพม่า',
     langNative: 'မြန်မာလိုပြောသည်။',
-    phone: '0963812069',
+    phone: '096-381-2069',
   },
   {
     code: 'KH',
     langEn: 'Khmer',
     langTh: 'ภาษาเขมร',
     langNative: 'និយាយជាមួយនរណាម្នាក់ជាភាសាខ្មែរ',
-    phone: '+66 85 534 1595',
+    phone: '085-534-1595',
   },
   {
     code: 'LA',
     langEn: 'Lao',
     langTh: 'ภาษาลาว',
     langNative: 'ເວົ້າກັບຄົນອື່ນໃນລາວ',
-    phone: '+66 92 321 1516',
+    phone: '092-321-1516',
   },
 ]
 
 /** Secondary numbers printed on the live contact page / alternate footer. */
 export const ALT_LINES = {
-  burmeseAlt: '+66 34 434 726',
-  office1: '034 434 726',
-  office2: '085 534 1595', // listed on the English contact page
-  office3: '086 16 31 390', // listed on the Thai contact page
+  burmeseAlt: '034-434-726',
+  office1: '034-434-726',
+  office2: '085-534-1595', // listed on the English contact page
+  office3: '086-163-1390', // listed on the Thai contact page
 }
 
 export const OFFICE = {
@@ -95,7 +97,7 @@ export const FACEBOOK_URL = 'https://www.facebook.com/LPN-Foundation-14063973360
  */
 export const MESSENGER_URL = 'https://m.me/1406397336075427'
 
-/** Dial-ready href for a display phone number like "+66 84 121 1609". */
+/** Dial-ready href for a display phone number like "084-121-1609". */
 export const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, '')}`
 
 /**

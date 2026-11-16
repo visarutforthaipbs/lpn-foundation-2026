@@ -57,7 +57,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
             >
               <Phone size={20} className="shrink-0" aria-hidden="true" />
               <span className="t-label">{tx(locale, 'สายด่วน', 'Hotline')}</span>
-              <span className="font-mono text-sm text-white/85 group-hover:text-white">
+              <span className="text-sm font-semibold text-white/85 group-hover:text-white">
                 {primaryHotline.phone}
               </span>
             </a>

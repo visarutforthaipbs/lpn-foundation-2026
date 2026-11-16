@@ -48,7 +48,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
                 <a href={telHref(h.phone)} className="group flex min-h-11 items-center gap-2">
                   <Phone size={18} className="shrink-0 text-black/70" aria-hidden="true" />
                   <span className="flex-1 text-sm text-black/65 md:flex-none">{h.label}</span>
-                  <span className="whitespace-nowrap border-b border-black/30 font-mono text-sm font-bold group-hover:border-black">{h.phone}</span>
+                  <span className="whitespace-nowrap border-b border-black/30 text-sm font-bold group-hover:border-black">{h.phone}</span>
                 </a>
               </li>
             ))}

@@ -444,7 +444,7 @@ export default function HelpIntakeForm({
                     )}
                   </span>
                 </span>
-                <span className="font-mono text-base">{c.phone}</span>
+                <span className="text-base font-semibold">{c.phone}</span>
               </a>
             </li>
           ))}

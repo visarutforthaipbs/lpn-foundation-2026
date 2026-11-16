@@ -107,7 +107,7 @@ export default async function GetHelpPage(props: { params: Promise<{ locale: Loc
           </>}</span>
           <Phone size={24} aria-hidden="true" />
         </span>
-        <span className="mt-6 font-mono text-xl font-bold break-all">{h.phone}</span>
+        <span className="mt-6 text-xl font-bold break-all">{h.phone}</span>
       </a>)}</div>
       <p className="mt-6 max-w-3xl text-sm leading-relaxed text-black/80">{tx(locale, 'โทรไม่ติด? ดูช่องทางอื่นในหน้าติดต่อ', 'Call not connecting? See other ways to contact LPN.')}{' '}
         <a className="font-bold underline underline-offset-4" href={`/${locale}/contact`}>{tx(locale, 'ดูหน้าติดต่อ', 'View contact page')}</a>
