@@ -2,9 +2,9 @@ import Image from 'next/image'
 import { setRequestLocale } from 'next-intl/server'
 import { ArrowDown, GraduationCap, Lifebuoy, Scales } from '@phosphor-icons/react/ssr'
 import type { Locale } from '@/i18n/routing'
-import { DonationChannelPreview } from '@/components/DonationChannelPreview'
+import { DonationChannelPreview, type BankAccount } from '@/components/DonationChannelPreview'
 import { ButtonLink, Container, Section } from '@/components/ui'
-import { getPage } from '@/lib/api'
+import { getFooter, getPage } from '@/lib/api'
 import { buildMetadata } from '@/lib/seo'
 import { tx, draftDict } from '@/i18n/tx'
 import { TxProvider } from '@/i18n/tx-client'
@@ -20,9 +20,31 @@ export async function generateMetadata(props: { params: Promise<{ locale: Locale
   })
 }
 
+// Bank transfer details come from the CMS (Site → Footer, approver-only fields). The Footer afterRead hook
+// returns them only when every bank + verification field is filled, so an unverified account never shows.
+// The branch lives inside `bankName` ("ธนาคารกรุงไทย สาขาจามจุรีสแควร์" / "Krungthai Bank, Chamchuri Square branch").
+function splitBranch(bankName: string): { bank: string; branch?: string } {
+  const th = bankName.match(/^(.*?)\s*สาขา\s*(.+)$/)
+  if (th) return { bank: th[1].trim(), branch: th[2].trim() }
+  const en = bankName.match(/^(.*?),\s*(.+?)\s+branch$/i)
+  if (en) return { bank: en[1].trim(), branch: en[2].trim() }
+  return { bank: bankName }
+}
+
+async function bankAccount(locale: Locale): Promise<BankAccount | null> {
+  try {
+    const f = await getFooter(locale)
+    if (!f?.bankAccountName || !f.bankName || !f.bankAccountNumber) return null
+    return { accountName: f.bankAccountName, ...splitBranch(f.bankName), accountNumber: f.bankAccountNumber, swift: f.bankSwift ?? undefined }
+  } catch {
+    return null
+  }
+}
+
 export default async function DonatePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params
   setRequestLocale(locale)
+  const bank = await bankAccount(locale)
   const streams = tx(locale, [
     [Lifebuoy, 'ช่วยเหลือและคุ้มครอง', '/images/fisher-protection.jpg'],
     [GraduationCap, 'เรียนรู้กับชุมชน', '/images/field-action.jpg'],
@@ -45,7 +67,7 @@ export default async function DonatePage({ params }: { params: Promise<{ locale:
       <div className="relative min-h-60 lg:my-8"><Image src="/images/community-outreach.jpg" alt={tx(locale, 'การทำงานกับชุมชนของ LPN', 'LPN working with communities')} fill priority sizes="(max-width: 1023px) 100vw, 45vw" className="object-cover" /></div>
     </Container></section>
 
-    <Section tone="paper"><Container><TxProvider dict={draftDict(locale)}><DonationChannelPreview locale={locale} /></TxProvider></Container></Section>
+    <Section tone="paper"><Container><TxProvider dict={draftDict(locale)}><DonationChannelPreview locale={locale} bank={bank} /></TxProvider></Container></Section>
 
     <Section><Container>
       <div className="flex flex-wrap items-end justify-between gap-5"><h2 className="t-h2 max-w-2xl">{tx(locale, 'การสนับสนุนหนึ่งครั้ง เชื่อมงานสามด้าน', 'One mission. Three connected strands.')}</h2><ButtonLink href="/impact" variant="ghostDark">{tx(locale, 'ดูผลการทำงานและรายงาน', 'Explore impact and reports')}</ButtonLink></div>

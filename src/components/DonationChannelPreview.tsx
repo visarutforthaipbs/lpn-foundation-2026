@@ -1,14 +1,24 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowLeft, Bank, Buildings, CaretRight, Check, CreditCard, Globe, Lock, QrCode } from '@phosphor-icons/react'
+import { ArrowLeft, Bank, Buildings, CaretRight, Check, Copy, CreditCard, Globe, Lock, QrCode } from '@phosphor-icons/react'
 import { buttonVariants } from '@/components/ui'
 import { useTx, fmt } from '@/i18n/tx-client'
 import type { Locale } from '@/i18n/routing'
 
 type Channel = 'thailand' | 'international'
 
-export function DonationChannelPreview({ locale }: { locale: Locale }) {
+/** Verified foundation account from the CMS (see donate/page.tsx → bankAccount). null = not verified yet. */
+export type BankAccount = { accountName: string; bank: string; branch?: string; accountNumber: string; swift?: string }
+
+function CopyButton({ text, label, copiedLabel }: { text: string; label: string; copiedLabel: string }) {
+  const [copied, setCopied] = useState(false)
+  return <button type="button" onClick={() => { void navigator.clipboard?.writeText(text.replace(/[^0-9A-Za-z]/g, '')).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) }) }} className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-1.5 border border-black/25 px-3 text-sm font-semibold" aria-live="polite">
+    {copied ? <Check size={18} aria-hidden="true" /> : <Copy size={18} aria-hidden="true" />}{copied ? copiedLabel : label}
+  </button>
+}
+
+export function DonationChannelPreview({ locale, bank }: { locale: Locale; bank?: BankAccount | null }) {
   const tx = useTx()
   const [channel, setChannel] = useState<Channel>('thailand')
   const [method, setMethod] = useState<'qr' | 'bank'>('qr')
@@ -50,12 +60,18 @@ export function DonationChannelPreview({ locale }: { locale: Locale }) {
         <div className="mb-8 flex items-center gap-3 text-xs font-semibold  tracking-wider text-black/60"><span className="flex h-7 w-7 items-center justify-center bg-black text-white">{paymentStep ? '2' : '1'}</span>{paymentStep ? (tx(locale, 'ดูขั้นตอนการชำระเงิน', 'Payment step preview')) : (tx(locale, 'เลือกการบริจาค', 'Choose your gift'))}<span className="ml-auto">{currency}</span></div>
         {paymentStep ? <div>
           <h3 className="t-h3">{domestic ? (method === 'qr' ? (tx(locale, 'ชำระผ่านแอปธนาคาร', 'Pay with your banking app')) : (tx(locale, 'โอนเข้าบัญชีมูลนิธิ', 'Transfer to the foundation'))) : (tx(locale, 'ไปยังหน้าชำระเงินของพันธมิตร', 'Continue to our partner’s checkout'))}</h3>
-          <p className="mt-4 text-black/65">{tx(locale, 'ตัวอย่างขั้นตอนสำหรับตรวจแบบ ช่องทางชำระเงินจริงยังไม่ได้เปิดใช้งาน', 'This is a design preview. The payment channel has not been activated.')}</p>
+          <p className="mt-4 text-black/65">{domestic && method === 'bank' && bank ? tx(locale, 'โอนผ่านแอปธนาคารหรือตู้ ATM เข้าบัญชีของมูลนิธิด้านล่าง', 'Transfer from your banking app or an ATM to the foundation account below.') : tx(locale, 'ตัวอย่างขั้นตอนสำหรับตรวจแบบ ช่องทางชำระเงินจริงยังไม่ได้เปิดใช้งาน', 'This is a design preview. The payment channel has not been activated.')}</p>
           {domestic && method === 'qr' ? <div className="mt-7 flex flex-col items-center border border-dashed border-black/25 bg-paper px-5 py-9 text-center">
             <QrCode size={64} className="text-black/35" aria-hidden="true" />
             <p className="mt-4 font-semibold">{tx(locale, 'พื้นที่แสดง QR ที่ LPN ยืนยันแล้ว', 'Space for LPN’s verified payment QR')}</p>
             <p className="mt-2 text-sm text-black/60">{tx(locale, 'ภาพนี้ใช้สแกนชำระเงินไม่ได้', 'This illustration cannot be scanned for payment.')}</p>
-          </div> : domestic ? <dl className="mt-7 divide-y divide-black/10 border-y border-black/10">{[
+          </div> : domestic && bank ? <dl className="mt-7 divide-y divide-black/10 border-y border-black/10">{([
+            [tx(locale, 'ชื่อบัญชี', 'Account name'), bank.accountName],
+            [tx(locale, 'ชื่อธนาคาร', 'Bank'), bank.bank],
+            ...(bank.branch ? [[tx(locale, 'สาขา', 'Branch'), bank.branch]] : []),
+            [tx(locale, 'เลขที่บัญชี', 'Account number'), bank.accountNumber, 'copy'],
+            ...(bank.swift ? [[tx(locale, 'SWIFT Code (โอนจากต่างประเทศ)', 'SWIFT code (international transfers)'), bank.swift, 'copy']] : []),
+          ] as string[][]).map(([label, value, copy]) => <div key={label} className="flex items-center justify-between gap-4 py-4"><div className="min-w-0"><dt className="text-sm text-black/60">{label}</dt><dd className={`mt-1 break-words font-semibold ${copy ? 'text-xl tabular-nums tracking-wide' : ''}`}>{value}</dd></div>{copy && <CopyButton text={value} label={tx(locale, 'คัดลอก', 'Copy')} copiedLabel={tx(locale, 'คัดลอกแล้ว', 'Copied')} />}</div>)}</dl> : domestic ? <dl className="mt-7 divide-y divide-black/10 border-y border-black/10">{[
             [tx(locale, 'ชื่อบัญชี', 'Account holder'), tx(locale, 'บัญชีมูลนิธิที่ LPN ยืนยัน', 'LPN’s verified foundation account')],
             [tx(locale, 'ธนาคาร / เลขบัญชี', 'Bank / Account number'), tx(locale, 'รอยืนยันจาก LPN', 'Awaiting LPN confirmation')],
           ].map(([label, value]) => <div key={label} className="py-4"><dt className="text-sm text-black/60">{label}</dt><dd className="mt-1 font-semibold">{value}</dd></div>)}</dl> : <div className="mt-7 border border-dashed border-black/25 bg-paper p-7">
