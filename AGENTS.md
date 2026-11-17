@@ -183,6 +183,8 @@ so local media uploads create real blob files but only local DB rows. Refresh th
   public) before merge; posts to the intake API (sev02), never to Payload.
 - 13 of 64 Thai posts have no cover image → grey box in the blog grid.
 - Donate page bank details: verified by Patima (Messenger, 2026-10-25) and live on prod since 2026-11-16. PromptPay ID + receipt wording still pending from LPN.
+  The donate page "โอนเงิน" panel (DonationChannelPreview) reads Site → Footer bank fields; the branch is part of `bankName`
+  (th `ธนาคารกรุงไทย สาขาจามจุรีสแควร์`, en `Krungthai Bank, Chamchuri Square branch`) and is split on `สาขา` / `, … branch`. Edit in /admin, not in code.
 - CMS roles live on prod since 2026-11-16 (migration applied to Neon via psql + recorded in payload_migrations; Neon still carries the `dev` batch -1 marker, so `pnpm payload migrate` prompts — use the psql route). Only `admin@lpnfoundation.org` exists (role admin); editor/approver accounts wait for names from LPN.
 - `PROJECT.md` / `current.md` are stale handoffs; this file supersedes them.
 
