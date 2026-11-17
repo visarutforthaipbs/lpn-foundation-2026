@@ -185,6 +185,12 @@ so local media uploads create real blob files but only local DB rows. Refresh th
 - Donate page bank details: verified by Patima (Messenger, 2026-10-25) and live on prod since 2026-11-16. PromptPay ID + receipt wording still pending from LPN.
   The donate page "โอนเงิน" panel (DonationChannelPreview) reads Site → Footer bank fields; the branch is part of `bankName`
   (th `ธนาคารกรุงไทย สาขาจามจุรีสแควร์`, en `Krungthai Bank, Chamchuri Square branch`) and is split on `สาขา` / `, … branch`. Edit in /admin, not in code.
+- Post text formatting (2026-11-17): Wix-import blank paragraphs removed from all 89 posts on Neon (1,114 empty
+  paragraphs + 31 empty headings; 6 spacing/quote fixes by local Typhoon behind a letters-identical guard).
+  Re-run for new imports: `/usr/bin/python3 scripts/clean_post_format.py --db <url> --report r.json --sql r.sql`
+  (writes nothing; apply r.sql with psql -1). Post pages are prerendered: a direct DB write needs a prod redeploy
+  (`vercel redeploy <prod-url>`) to show; /admin saves revalidate on their own. Neon is PG17: use
+  /opt/homebrew/opt/postgresql@17/bin/pg_dump (Homebrew default pg_dump 14 refuses).
 - CMS roles live on prod since 2026-11-16 (migration applied to Neon via psql + recorded in payload_migrations; Neon still carries the `dev` batch -1 marker, so `pnpm payload migrate` prompts — use the psql route). Only `admin@lpnfoundation.org` exists (role admin); editor/approver accounts wait for names from LPN.
 - `PROJECT.md` / `current.md` are stale handoffs; this file supersedes them.
 
